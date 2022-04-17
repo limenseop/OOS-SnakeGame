@@ -17,12 +17,15 @@ public class Gamewindow {
     private final int windowWidthSize = 1000;
     private final int windowHeightSize = 1000;
     public void run() {
+        //게임창 생성
         init();
+        //게임창 유지
         loop();
 
+        //메모리 복구
         glfwFreeCallbacks(window);
         glfwDestroyWindow(window);
-
+        //게임창 종료
         glfwTerminate();
         glfwSetErrorCallback(null).free();
     }
@@ -73,11 +76,23 @@ public class Gamewindow {
         GL.createCapabilities();
         glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 
+        //게임창 실행중 설정
         while ( !glfwWindowShouldClose(window) ) {
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-
             glfwSwapBuffers(window);
+
+            if (KeyListener.isKeyPressed(GLFW_KEY_UP)) {
+                System.out.println("You just pressed 상");
+            }
+            else if (KeyListener.isKeyPressed(GLFW_KEY_DOWN)) {
+                System.out.println("You just pressed 하");
+            }
+            else if (KeyListener.isKeyPressed(GLFW_KEY_LEFT)) {
+                System.out.println("You just pressed 좌");
+            }
+            else if (KeyListener.isKeyPressed(GLFW_KEY_RIGHT)) {
+                System.out.println("You just pressed 우");
+            }
             glfwPollEvents();
         }
     }
