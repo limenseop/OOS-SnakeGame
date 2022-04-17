@@ -1,2 +1,3 @@
-package src;public class Snake {
+package src;
+public class Snake {
 }
