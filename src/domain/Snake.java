@@ -17,9 +17,9 @@ public class Snake {
 
     public Snake(){
         body = new ArrayList<>();
-        body.add(new snakeBody(0,0,Direction.NORTH));
-        body.add(new snakeBody(0,-1,Direction.NORTH));
-        body.add(new snakeBody(0,-2,Direction.NORTH));
+        body.add(new snakeBody(20,20,Direction.NORTH));
+        body.add(new snakeBody(20,19,Direction.NORTH));
+        body.add(new snakeBody(20,18,Direction.NORTH));
         direction = Direction.NORTH;
         head = body.get(0);
     }
@@ -68,6 +68,10 @@ public class Snake {
         return true;
     }
 
+    public List<snakeBody> getBody() {
+        return body;
+    }
+
     public void move(){
         Direction prev = direction;
         Direction prev_buf = direction;
@@ -92,6 +96,14 @@ public class Snake {
                 System.out.println("collapse occurs!!");
                 return true;
             }
+        }
+        return false;
+    }
+
+    public boolean check_If_Overlap(int x, int y){
+        for (snakeBody snakeBody : body) {
+            if(x == snakeBody.getX() && y == snakeBody.getY())
+                return true;
         }
         return false;
     }
