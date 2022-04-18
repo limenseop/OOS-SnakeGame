@@ -31,11 +31,11 @@ public class snakeBody {
     public void move(){
         switch (direction){
             case EAST:{
-                positionX = positionX+1;
+                positionX = positionX - 1;
                 break;
             }
             case WEST:{
-                positionX = positionX-1;
+                positionX = positionX + 1;
                 break;
             }
             case NORTH:{
@@ -43,7 +43,7 @@ public class snakeBody {
                 break;
             }
             case SOUTH:{
-                positionY = positionY -1;
+                positionY = positionY - 1;
                 break;
             }
         }

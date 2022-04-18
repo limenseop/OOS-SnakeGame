@@ -15,6 +15,10 @@ public class Snake {
 
     private Direction direction;
 
+    public snakeBody getHead() {
+        return head;
+    }
+
     public Snake(){
         body = new ArrayList<>();
         body.add(new snakeBody(20,20,Direction.NORTH));
@@ -45,24 +49,29 @@ public class Snake {
                 break;
             }
             case EAST : {
-                new_X = x-1;
+                new_X = x+1;
                 new_Y = y;
                 break;
             }
             case WEST : {
-                new_X = x+1;
+                new_X = x-1;
                 new_Y = y;
                 break;
             }
         }
         System.out.println("new_X = " + new_X);
         System.out.println("new_Y = " + new_Y);
-        snakeBody newBody = new snakeBody(new_X,new_Y,tail.getDirection());
+        snakeBody newBody = new snakeBody(new_X,new_Y,direction);
         body.add(newBody);
         return true;
     }
 
     public boolean change_Direction(Direction direction){
+        if(this.direction == Direction.EAST && direction == Direction.WEST
+            || this.direction == Direction.WEST && direction == Direction.EAST
+            || this.direction == Direction.NORTH && direction == Direction.SOUTH
+            || this.direction == Direction.SOUTH && direction == Direction.NORTH)
+            return false;
         this.direction = direction;
         head.changeDirection(direction);
         return true;
@@ -73,6 +82,8 @@ public class Snake {
     }
 
     public void move(){
+        System.out.println("head.getx() = " + head.getY());
+        System.out.println("head.gety() = " + head.getX());
         Direction prev = direction;
         Direction prev_buf = direction;
         for (snakeBody snakeBody : body) {
