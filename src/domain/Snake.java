@@ -1,11 +1,8 @@
 package src.domain;
 
-import javax.swing.text.Position;
 import java.awt.*;
-import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
 
 public class Snake {
 
