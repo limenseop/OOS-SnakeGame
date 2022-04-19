@@ -42,9 +42,6 @@ public class Board {
         for (int y = 0;y<HEIGHT;y++){
             for(int x = 0;x<WIDTH;x++){
                 board[y][x] = false;
-                if(snake.check_If_collapse() || out_Of_Bounces(head_X,head_Y)){
-                    System.out.println("terminate game!");
-                }
                 if(snake.check_If_Overlap(x,y) || check_Fruit_Overlap(y,x,false)) board[y][x] = true;
             }
         }
@@ -53,16 +50,6 @@ public class Board {
     public void brief(){
         List<String> buffer = new ArrayList<>();
         int i = 0;
-        /*for (boolean[] booleans : board) {
-            i = i+1;
-            buffer.clear();
-            buffer.add(i +"");
-            for (boolean aBoolean : booleans) {
-                if(aBoolean) buffer.add("o");
-                else buffer.add(" ");
-            }
-            System.out.println(buffer);
-        }*/
 
         for (int y= 0;y<HEIGHT;y++) {
             i = i + 1;
@@ -91,7 +78,7 @@ public class Board {
             snake.grow();
             score = score + 100;
         }
-        if(out_Of_Bounces(heady,headx)) return false;
+        if(out_Of_Bounces(headx,heady)) return false;
         update();
         return true;
     }
@@ -100,6 +87,19 @@ public class Board {
         if(snake.change_Direction(direction)) return true;
         else return false;
     }
+
+    public boolean gameTermination(){
+
+        int headX = snake.getHead().getX();
+        int headY = snake.getHead().getY();
+
+        if(out_Of_Bounces(headX,headY) || snake.check_If_collapse()) {
+            return true;
+        }
+
+        return false;
+    }
+
 
     private boolean check_Fruit_Overlap(int x, int y,boolean option){
         for (Point point : fruitPosition) {
@@ -112,8 +112,12 @@ public class Board {
         return false;
     }
 
+    public int getScore() {
+        return score;
+    }
+
     private boolean out_Of_Bounces(int x, int y){
-        if(Math.abs(x)>=39 || Math.abs(y)>=39) return true;
+        if(x<0 || x>=40 || y<0 || y>=40) return true;
         return false;
     }
 
