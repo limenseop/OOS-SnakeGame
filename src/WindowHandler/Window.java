@@ -95,6 +95,7 @@ public class Window implements EventLister {
         double nexttime = getTime();
         double passedtime = nexttime - time;
         processedtime = passedtime;
+
         time = nexttime;
 
         while(processedtime > max_fps) {
