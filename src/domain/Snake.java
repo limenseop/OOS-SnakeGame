@@ -79,8 +79,6 @@ public class Snake {
     }
 
     public void move(){
-        System.out.println("head.getx() = " + head.getY());
-        System.out.println("head.gety() = " + head.getX());
         Direction prev = direction;
         Direction prev_buf = direction;
         for (snakeBody snakeBody : body) {
@@ -124,5 +122,13 @@ public class Snake {
         }
     }
 
-
+    public void setInit() {
+        body.clear();
+        System.out.println("Snake.setInit");
+        body.add(new snakeBody(20,20,Direction.NORTH));
+        body.add(new snakeBody(20,19,Direction.NORTH));
+        body.add(new snakeBody(20,18,Direction.NORTH));
+        head = body.get(0);
+        System.out.println("this.head = " + this.head);
+    }
 }
