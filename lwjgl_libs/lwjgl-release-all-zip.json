@@ -1,11 +1,17 @@
 {
   "build": "release",
   "mode": "zip",
-  "selectedAddons": [],
+  "selectedAddons": [
+    "lwjgl3-awt",
+    "lwjglx-debug",
+    "joml",
+    "steamworks4j-server",
+    "steamworks4j"
+  ],
   "platform": [
     "macos"
   ],
-  "descriptions": false,
+  "descriptions": true,
   "compact": false,
   "hardcoded": false,
   "javadoc": true,
