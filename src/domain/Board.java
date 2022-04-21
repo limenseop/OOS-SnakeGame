@@ -13,45 +13,52 @@ public class Board {
     private List<Point> fruitPosition;
     private boolean[][] board = new boolean[WIDTH][HEIGHT];
     private int score = 0;
+    private boolean running = true;
+    private List<Ranking> rankings;
 
     // board = 40 * 40 size (demo)
 
-    public Board(Snake snake){
+    public Board(Snake snake) {
         this.snake = snake;
         fruitPosition = new ArrayList<>();
+        rankings = new ArrayList<>();
+        int fruit_X = (int) (Math.random() * 40);
+        int fruit_Y = (int) (Math.random() * 40);
+        fruitPosition.add(new Point(fruit_X, fruit_Y));
     }
 
-    public boolean createFruit(){
+    public synchronized void createFruit() {
 
-        int fruit_X = (int)(Math.random()*40);
-        int fruit_Y = (int)(Math.random()*40);
+        int fruit_X = (int) (Math.random() * 40);
+        int fruit_Y = (int) (Math.random() * 40);
+        if (fruitPosition.isEmpty()) {
 
-        while(snake.check_If_Overlap(fruit_X,fruit_Y) && check_Fruit_Overlap(fruit_X,fruit_Y,false)){
-            fruit_X = (int)(Math.random()*40);
-            fruit_Y = (int)(Math.random()*40);
+            while (snake.check_If_Overlap(fruit_X, fruit_Y) && check_Fruit_Overlap(fruit_X, fruit_Y, false)) {
+
+                fruit_X = (int) (Math.random() * 40);
+                fruit_Y = (int) (Math.random() * 40);
+
+            }
+
+            fruitPosition.add(new Point(fruit_X, fruit_Y));
         }
-
-        fruitPosition.add(new Point(fruit_X,fruit_Y));
-
-        return true;
     }
 
-    public void update(){
-        int head_X = snake.getHead().getX();
-        int head_Y = snake.getHead().getY();
-        for (int y = 0;y<HEIGHT;y++){
-            for(int x = 0;x<WIDTH;x++){
+    public synchronized void update() {
+        for (int y = 0; y < HEIGHT; y++) {
+            for (int x = 0; x < WIDTH; x++) {
                 board[y][x] = false;
-                if(snake.check_If_Overlap(x,y) || check_Fruit_Overlap(y,x,false)) board[y][x] = true;
+                if (snake.check_If_Overlap(x, y) || check_Fruit_Overlap(y, x, false)) board[y][x] = true;
             }
         }
     }
 
-    public void brief(){
+    public void brief() {
+
         List<String> buffer = new ArrayList<>();
         int i = 0;
 
-        for (int y= 0;y<HEIGHT;y++) {
+        for (int y = 0; y < HEIGHT; y++) {
             i = i + 1;
             buffer.clear();
             buffer.add(i + "");
@@ -65,61 +72,110 @@ public class Board {
             }
             System.out.println("buffer = " + buffer);
         }
-
-
-        Point checkhead = new Point(snake.getHead().getY(),snake.getHead().getX());
+        Point checkhead = new Point(snake.getHead().getY(), snake.getHead().getX());
     }
 
-    public boolean move_Snake(){
+    public boolean move_Snake() {
+
         snake.move();
         int headx = snake.getHead().getX();
         int heady = snake.getHead().getY();
-        if(check_Fruit_Overlap(heady,headx,true)){
+
+        if (check_Fruit_Overlap(heady, headx, true)) {
             snake.grow();
             score = score + 100;
+            fruitPosition.clear();
+            createFruit();
         }
-        if(out_Of_Bounces(headx,heady)) return false;
+        if (out_Of_Bounces(headx, heady)) return false;
         update();
         return true;
     }
 
-    public boolean change_Direction_Snake(Direction direction){
-        if(snake.change_Direction(direction)) return true;
+    public boolean change_Direction_Snake(Direction direction) {
+        if (snake.change_Direction(direction)) return true;
         else return false;
     }
 
-    public boolean gameTermination(){
+    public boolean gameTermination() {
 
         int headX = snake.getHead().getX();
         int headY = snake.getHead().getY();
 
-        if(out_Of_Bounces(headX,headY) || snake.check_If_collapse()) {
+        if (out_Of_Bounces(headX, headY) || snake.check_If_collapse()) {
             return true;
         }
 
         return false;
     }
 
-
-    private boolean check_Fruit_Overlap(int x, int y,boolean option){
-        for (Point point : fruitPosition) {
-            if(point.getX() == x && point.getY() == y) {
-                if(option)
-                fruitPosition.remove(point);
-                return true;
+    public void re_Play(){
+        score = 0;
+        for (boolean[] booleans : board) {
+            for (boolean cell : booleans) {
+                cell = false;
             }
         }
-        return false;
+        fruitPosition.clear();
+        snake.setInit();
+        createFruit();
+    }
+
+    public synchronized boolean gamePause() {
+        if (running == true) {
+            this.running = false;
+            try {
+                wait();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        return running;
+    }
+
+    public synchronized boolean Re_Pause() {
+        if (running == false) {
+            notifyAll();
+            running = true;
+        } else System.out.println("kekw");
+        return running;
+    }
+
+    public void recordRanking(){
+        rankings.add(new Ranking("hello",score));
+    }
+
+    public boolean isRunning() {
+        return running;
     }
 
     public int getScore() {
         return score;
     }
 
-    private boolean out_Of_Bounces(int x, int y){
-        if(x<0 || x>=40 || y<0 || y>=40) return true;
-        return false;
+    public void showRanking(){
+        System.out.println("***************************");
+        System.out.println("rankings!");
+
+        for (Ranking ranking : rankings) {
+            System.out.println("Name : "  + ranking.getId() + "        Score : " + ranking.getScore());
+        }
     }
 
 
+    private boolean check_Fruit_Overlap(int x, int y, boolean option) {
+        for (Point point : fruitPosition) {
+            if (point.getX() == x && point.getY() == y) {
+                if (option)
+                    fruitPosition.remove(point);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean out_Of_Bounces(int x, int y) {
+        if (x < 0 || x >= 40 || y < 0 || y >= 40) return true;
+        return false;
+    }
 }
