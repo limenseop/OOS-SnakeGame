@@ -4,6 +4,9 @@ import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GL11;
+import src.Model.Model_with_texture;
+import src.Model.Texture;
+import src.maths.Vector3f;
 
 public class Window {
     private int width, height, fps_cap;
@@ -11,54 +14,37 @@ public class Window {
     private String windowtitle;
     private EventListener listener;
     private long window;
-    private float backgroundcolor[] = new float[3];
+    private Vector3f backgroundcolor = new Vector3f(0.0f, 0.0f, 0.0f);
+    private Model_with_texture model;
+    private Texture tex;
     private Window() {
 
     }
+
     public Window(int width, int height, int fps, String windowtitle) {
         this.width = width;
         this.height = height;
         this.fps_cap = fps;
         this.windowtitle = windowtitle;
-        for (int i = 0; i < 3; i++)
-            backgroundcolor[0] = 0.0f;
         createwindow();
     }
-    public int getFps() {
-        return fps_cap;
-    }
-    public String getWindowtitle() {
-        return windowtitle;
-    }
-    public long getWindow() {
-        return window;
-    }
-    public void setWindow(long window) {
-        this.window = window;
-    }
-    public void setWindowtitle(String windowtitle) {
-        this.windowtitle = windowtitle;
-    }
-    public int getWidth() {
-        return width;
-    }
-    public void setWidth(int width) {
-        this.width = width;
-    }
-    public int getHeight() {
-        return height;
-    }
-    public void setHeight(int height) {
-        this.height = height;
-    }
-    public void setFps(int fps_cap) {
-        this.fps_cap = fps_cap;
-    }
+
     public void setBackgroundcolor(float r, float g, float b) {
-        backgroundcolor[0] = r;
-        backgroundcolor[1] = g;
-        backgroundcolor[2] = b;
+        backgroundcolor.setAll(r, g, b);
     }
+    public void stop() {
+        GLFW.glfwTerminate();
+    }
+    public void loop() {
+        while(!closewindow()){
+            if (isUpdating()) {
+                update();
+                swapBuffer();
+            }
+        }
+    }
+
+
     private void createwindow() {
         if (!GLFW.glfwInit()) {
             System.err.println("Error!!: GLFW.glfwinit() doesn't work.");
@@ -75,6 +61,10 @@ public class Window {
 
         GLFW.glfwMakeContextCurrent(window);
         GL.createCapabilities();
+        GL11.glEnable(GL11.GL_TEXTURE_2D);
+
+        model = new Model_with_texture(0.5f);
+        tex = new Texture("imgfolder/Cute-Snake-Transparent-PNG.png");
 
         GLFWVidMode videomode = GLFW.glfwGetVideoMode(GLFW.glfwGetPrimaryMonitor());
         GLFW.glfwSetWindowPos(window, (videomode.width() - width) / 2, (videomode.height() - height) / 2);
@@ -83,44 +73,73 @@ public class Window {
         time = getTime();
         listener = new EventListener(window);
     }
-    public boolean closewindow() {
-        return GLFW.glfwWindowShouldClose(window);
+    private void swapBuffer() {
+        GLFW.glfwSwapBuffers(window);
     }
-    public void stop() {
-        GLFW.glfwTerminate();
-    }
-    public void update() {
-        listener.eventsUpdater();
-        GL11.glClearColor(backgroundcolor[0], backgroundcolor[1], backgroundcolor[2], 1.0f);
-        GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
+    private void update() {
         GLFW.glfwPollEvents();
+        listener.eventsUpdater();
+        GL11.glClearColor(backgroundcolor.getX(), backgroundcolor.getY(), backgroundcolor.getZ(), 1.0f);
+        GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
+
+        tex.bind();
+        model.render();
+
+/*
+        GL11.glBegin(GL11.GL_QUADS);
+
+        GL11.glTexCoord2f(0,0);
+        GL11.glVertex2f(-0.5f, 0.5f);
+
+        GL11.glTexCoord2f(1,0);
+        GL11.glVertex2f(0.5f, 0.5f);
+
+        GL11.glTexCoord2f(1,1);
+        GL11.glVertex2f(0.5f, -0.5f);
+
+        GL11.glTexCoord2f(0,1);
+        GL11.glVertex2f(-0.5f, -0.5f);
+
+        GL11.glEnd();
+*/
+
         if (listener.isKeyPressed(GLFW.GLFW_KEY_UP))
             System.out.println("You just pressed...UP");
     }
-    public void swapBuffer() {
-        GLFW.glfwSwapBuffers(window);
+    private boolean closewindow() {
+        return GLFW.glfwWindowShouldClose(window);
     }
-    public double getTime() {
-        return (double)System.nanoTime() / (double)1000000000;
+    private double getTime() {
+        return (double) System.nanoTime() / (double) 1000000000;
     }
-    public boolean isUpdating() {
+    private boolean isUpdating() {
         double nexttime = getTime();
         double passedtime = nexttime - time;
         processedtime += passedtime;
         time = nexttime;
-        while(processedtime > (1.0/fps_cap)) {
-            processedtime -= 1.0/fps_cap;
+        while (processedtime > (1.0 / fps_cap)) {
+            processedtime -= 1.0 / fps_cap;
             return true;
         }
         return false;
     }
+    public int getFps() {
+        return fps_cap;
+    }
 
-    public void loop() {
-        while(!closewindow()){
-            if (isUpdating()) {
-                update();
-                swapBuffer();
-            }
-        }
+    public String getWindowtitle() {
+        return windowtitle;
+    }
+
+    public long getWindow() {
+        return window;
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public int getHeight() {
+        return height;
     }
 }

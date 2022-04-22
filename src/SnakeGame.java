@@ -1,7 +1,5 @@
 package src;
 
-import src.Model.Model;
-import src.Model.Renderer;
 import src.WindowHandler.Window;
 
 public class SnakeGame {
@@ -12,7 +10,7 @@ public class SnakeGame {
 
     public static void main(String[] args){
         Window mainwindow = new Window(MAINWINDOWSIZE_WIDTH, MAINWINDOWSIZE_HEIGHT, MAXIMUM_FPS, GAME_TITLE);
-        mainwindow.setBackgroundcolor(1.0f, 0.0f, 0.0f);
+        mainwindow.setBackgroundcolor(0.0f, 0.0f, 0.0f);
         mainwindow.loop();
         mainwindow.stop();
     }

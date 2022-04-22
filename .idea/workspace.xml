@@ -1,0 +1,341 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="c5a2b340-f038-40bb-a225-6003ddfdd571" name="변경" comment="lwjgl 라이브러리 추가&#10;Eventlistener 추가(mouse와 key 작동)">
+      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/shelf/2022_04_21_2_27_PM,_체크아웃_전에_커밋되지_않은_변경_내용_[변경]/shelved.patch" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/shelf/2022_04_21_2_27_PM__________.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/imgfolder/Cute-Snake-Transparent-PNG.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Model/Model.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Model/Model_rectangle_with_texture.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Model/Texture.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/maths/Vector3f.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/codeStyles/Project.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/codeStyles/codeStyleConfig.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/OOS-SnakeGame.iml" beforeDir="false" afterPath="$PROJECT_DIR$/OOS-SnakeGame.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lwjgl_libs/lwjgl-assimp-javadoc.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lwjgl_libs/lwjgl-assimp-natives-macos.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lwjgl_libs/lwjgl-assimp-sources.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lwjgl_libs/lwjgl-assimp.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lwjgl_libs/lwjgl-bgfx-javadoc.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lwjgl_libs/lwjgl-bgfx-natives-macos.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lwjgl_libs/lwjgl-bgfx-sources.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lwjgl_libs/lwjgl-bgfx.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lwjgl_libs/lwjgl-cuda-javadoc.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lwjgl_libs/lwjgl-cuda-sources.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lwjgl_libs/lwjgl-cuda.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lwjgl_libs/lwjgl-egl-javadoc.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lwjgl_libs/lwjgl-egl-sources.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lwjgl_libs/lwjgl-egl.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lwjgl_libs/lwjgl-glfw-javadoc.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lwjgl_libs/lwjgl-glfw-natives-macos.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lwjgl_libs/lwjgl-glfw-sources.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lwjgl_libs/lwjgl-glfw.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lwjgl_libs/lwjgl-javadoc.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lwjgl_libs/lwjgl-jawt-javadoc.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lwjgl_libs/lwjgl-jawt-sources.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lwjgl_libs/lwjgl-jawt.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lwjgl_libs/lwjgl-jemalloc-javadoc.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lwjgl_libs/lwjgl-jemalloc-natives-macos.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lwjgl_libs/lwjgl-jemalloc-sources.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lwjgl_libs/lwjgl-jemalloc.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lwjgl_libs/lwjgl-libdivide-javadoc.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lwjgl_libs/lwjgl-libdivide-natives-macos.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lwjgl_libs/lwjgl-libdivide-sources.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lwjgl_libs/lwjgl-libdivide.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lwjgl_libs/lwjgl-llvm-javadoc.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lwjgl_libs/lwjgl-llvm-natives-macos.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lwjgl_libs/lwjgl-llvm-sources.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lwjgl_libs/lwjgl-llvm.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lwjgl_libs/lwjgl-lmdb-javadoc.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lwjgl_libs/lwjgl-lmdb-natives-macos.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lwjgl_libs/lwjgl-lmdb-sources.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lwjgl_libs/lwjgl-lmdb.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lwjgl_libs/lwjgl-lz4-javadoc.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lwjgl_libs/lwjgl-lz4-natives-macos.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lwjgl_libs/lwjgl-lz4-sources.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lwjgl_libs/lwjgl-lz4.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lwjgl_libs/lwjgl-meow-javadoc.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lwjgl_libs/lwjgl-meow-natives-macos.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lwjgl_libs/lwjgl-meow-sources.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lwjgl_libs/lwjgl-meow.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lwjgl_libs/lwjgl-meshoptimizer-javadoc.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lwjgl_libs/lwjgl-meshoptimizer-natives-macos.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lwjgl_libs/lwjgl-meshoptimizer-sources.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lwjgl_libs/lwjgl-meshoptimizer.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lwjgl_libs/lwjgl-nanovg-javadoc.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lwjgl_libs/lwjgl-nanovg-natives-macos.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lwjgl_libs/lwjgl-nanovg-sources.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lwjgl_libs/lwjgl-nanovg.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lwjgl_libs/lwjgl-natives-macos.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lwjgl_libs/lwjgl-nfd-javadoc.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lwjgl_libs/lwjgl-nfd-natives-macos.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lwjgl_libs/lwjgl-nfd-sources.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lwjgl_libs/lwjgl-nfd.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lwjgl_libs/lwjgl-nuklear-javadoc.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lwjgl_libs/lwjgl-nuklear-natives-macos.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lwjgl_libs/lwjgl-nuklear-sources.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lwjgl_libs/lwjgl-nuklear.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lwjgl_libs/lwjgl-odbc-javadoc.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lwjgl_libs/lwjgl-odbc-sources.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lwjgl_libs/lwjgl-odbc.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lwjgl_libs/lwjgl-openal-javadoc.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lwjgl_libs/lwjgl-openal-natives-macos.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lwjgl_libs/lwjgl-openal-sources.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lwjgl_libs/lwjgl-openal.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lwjgl_libs/lwjgl-opencl-javadoc.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lwjgl_libs/lwjgl-opencl-sources.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lwjgl_libs/lwjgl-opencl.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lwjgl_libs/lwjgl-opengl-javadoc.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lwjgl_libs/lwjgl-opengl-natives-macos.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lwjgl_libs/lwjgl-opengl-sources.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lwjgl_libs/lwjgl-opengl.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lwjgl_libs/lwjgl-opengles-javadoc.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lwjgl_libs/lwjgl-opengles-natives-macos.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lwjgl_libs/lwjgl-opengles-sources.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lwjgl_libs/lwjgl-opengles.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lwjgl_libs/lwjgl-openvr-javadoc.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lwjgl_libs/lwjgl-openvr-natives-macos.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lwjgl_libs/lwjgl-openvr-sources.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lwjgl_libs/lwjgl-openvr.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lwjgl_libs/lwjgl-opus-javadoc.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lwjgl_libs/lwjgl-opus-natives-macos.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lwjgl_libs/lwjgl-opus-sources.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lwjgl_libs/lwjgl-opus.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lwjgl_libs/lwjgl-par-javadoc.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lwjgl_libs/lwjgl-par-natives-macos.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lwjgl_libs/lwjgl-par-sources.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lwjgl_libs/lwjgl-par.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lwjgl_libs/lwjgl-release-all-zip.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lwjgl_libs/lwjgl-remotery-javadoc.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lwjgl_libs/lwjgl-remotery-natives-macos.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lwjgl_libs/lwjgl-remotery-sources.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lwjgl_libs/lwjgl-remotery.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lwjgl_libs/lwjgl-rpmalloc-javadoc.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lwjgl_libs/lwjgl-rpmalloc-natives-macos.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lwjgl_libs/lwjgl-rpmalloc-sources.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lwjgl_libs/lwjgl-rpmalloc.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lwjgl_libs/lwjgl-shaderc-javadoc.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lwjgl_libs/lwjgl-shaderc-natives-macos.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lwjgl_libs/lwjgl-shaderc-sources.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lwjgl_libs/lwjgl-shaderc.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lwjgl_libs/lwjgl-sources.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lwjgl_libs/lwjgl-spvc-javadoc.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lwjgl_libs/lwjgl-spvc-natives-macos.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lwjgl_libs/lwjgl-spvc-sources.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lwjgl_libs/lwjgl-spvc.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lwjgl_libs/lwjgl-sse-javadoc.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lwjgl_libs/lwjgl-sse-natives-macos.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lwjgl_libs/lwjgl-sse-sources.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lwjgl_libs/lwjgl-sse.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lwjgl_libs/lwjgl-stb-javadoc.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lwjgl_libs/lwjgl-stb-natives-macos.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lwjgl_libs/lwjgl-stb-sources.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lwjgl_libs/lwjgl-stb.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lwjgl_libs/lwjgl-tinyexr-javadoc.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lwjgl_libs/lwjgl-tinyexr-natives-macos.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lwjgl_libs/lwjgl-tinyexr-sources.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lwjgl_libs/lwjgl-tinyexr.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lwjgl_libs/lwjgl-tinyfd-javadoc.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lwjgl_libs/lwjgl-tinyfd-natives-macos.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lwjgl_libs/lwjgl-tinyfd-sources.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lwjgl_libs/lwjgl-tinyfd.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lwjgl_libs/lwjgl-tootle-javadoc.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lwjgl_libs/lwjgl-tootle-natives-macos.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lwjgl_libs/lwjgl-tootle-sources.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lwjgl_libs/lwjgl-tootle.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lwjgl_libs/lwjgl-vma-javadoc.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lwjgl_libs/lwjgl-vma-natives-macos.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lwjgl_libs/lwjgl-vma-sources.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lwjgl_libs/lwjgl-vma.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lwjgl_libs/lwjgl-vulkan-javadoc.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lwjgl_libs/lwjgl-vulkan-natives-macos.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lwjgl_libs/lwjgl-vulkan-sources.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lwjgl_libs/lwjgl-vulkan.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lwjgl_libs/lwjgl-xxhash-javadoc.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lwjgl_libs/lwjgl-xxhash-natives-macos.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lwjgl_libs/lwjgl-xxhash-sources.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lwjgl_libs/lwjgl-xxhash.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lwjgl_libs/lwjgl-yoga-javadoc.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lwjgl_libs/lwjgl-yoga-natives-macos.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lwjgl_libs/lwjgl-yoga-sources.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lwjgl_libs/lwjgl-yoga.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lwjgl_libs/lwjgl-zstd-javadoc.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lwjgl_libs/lwjgl-zstd-natives-macos.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lwjgl_libs/lwjgl-zstd-sources.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lwjgl_libs/lwjgl-zstd.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lwjgl_libs/lwjgl.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/OOS-SnakeGame/HowtouseLWJGL_libs.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/SnakeGame.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/SnakeGame.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/WindowHandler/Window.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/WindowHandler/Window.java" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="CodeStyleSettingsInfer">
+    <option name="done" value="true" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="PUSH_AUTO_UPDATE" value="true" />
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="main" />
+      </map>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="RESET_MODE" value="MIXED" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
+  </component>
+  <component name="ProjectCodeStyleSettingsMigration">
+    <option name="version" value="2" />
+  </component>
+  <component name="ProjectId" id="285u5eAmddUihF9dCwd1xmVIddB" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_ADD_EXTERNAL_FILES": "true",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "dart.analysis.tool.window.visible": "false",
+    "last_opened_file_path": "/Users/jeongjung-il/IdeaProjects/OOS-SnakeGame",
+    "project.structure.last.edited": "라이브러리",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.2",
+    "show.migrate.to.gradle.popup": "false"
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src" />
+    </key>
+  </component>
+  <component name="RunManager">
+    <configuration name="SnakeGame" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="ALTERNATIVE_JRE_PATH" value="openjdk-18" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
+      <option name="MAIN_CLASS_NAME" value="src.SnakeGame" />
+      <module name="OOS-SnakeGame" />
+      <option name="VM_PARAMETERS" value="-XstartOnFirstThread" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="src.Model.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="JetRunConfigurationType">
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
+      <option name="filePath" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="애플리케이션.src.SnakeGame" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="애플리케이션 수준" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="디폴트 작업">
+      <changelist id="c5a2b340-f038-40bb-a225-6003ddfdd571" name="변경" comment="" />
+      <created>1650518585287</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1650518585287</updated>
+    </task>
+    <task id="LOCAL-00001" summary="mousepressed 코드 수정&#10;게임 fps설정 추가">
+      <created>1650519821557</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1650519821557</updated>
+    </task>
+    <task id="LOCAL-00002" summary="lwjgl 라이브러리 추가&#10;Eventlistener 추가(mouse와 key 작동)">
+      <created>1650532630823</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1650532630823</updated>
+    </task>
+    <task id="LOCAL-00003" summary="lwjgl 라이브러리 추가&#10;Eventlistener 추가(mouse와 key 작동)">
+      <created>1650532859247</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1650532859247</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
+    <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="jci6665" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
+    <MESSAGE value="mousepressed 코드 수정&#10;게임 fps설정 추가" />
+    <MESSAGE value="lwjgl 라이브러리 추가&#10;Eventlistener 추가(mouse와 key 작동)" />
+    <option name="LAST_COMMIT_MESSAGE" value="lwjgl 라이브러리 추가&#10;Eventlistener 추가(mouse와 key 작동)" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <breakpoint enabled="true" type="java-exception">
+          <properties class="java.lang.NullPointerException" package="java.lang" />
+          <option name="timeStamp" value="1" />
+        </breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+</project>
