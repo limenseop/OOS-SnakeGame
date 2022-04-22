@@ -1,6 +1,9 @@
 package src.domain;
 
-public class snakeBody {
+import java.awt.*;
+import java.io.Serializable;
+
+public class snakeBody implements Serializable {
 
     private int positionX;
     private int positionY;
@@ -19,6 +22,8 @@ public class snakeBody {
     public int getY() {
         return positionY;
     }
+
+    public Point getPoint(){return new Point(positionX,positionY);}
 
     public Direction getDirection() {
         return direction;

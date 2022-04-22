@@ -1,16 +1,18 @@
 package src.domain;
 
 import java.awt.*;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Board {
+public class Board implements Serializable {
 
     public static final int WIDTH = 40;
     public static final int HEIGHT = 40;
 
     private Snake snake;
     private List<Point> fruitPosition;
+    private List<Point> snakePoisition;
     private boolean[][] board = new boolean[WIDTH][HEIGHT];
     private int score = 0;
     private boolean running = true;
@@ -51,6 +53,7 @@ public class Board {
                 if (snake.check_If_Overlap(x, y) || check_Fruit_Overlap(y, x, false)) board[y][x] = true;
             }
         }
+        snakePoisition = snake.getBody();
     }
 
     public void brief() {
@@ -97,7 +100,7 @@ public class Board {
         else return false;
     }
 
-    public boolean gameTermination() {
+    public synchronized boolean gameTermination() {
 
         int headX = snake.getHead().getX();
         int headY = snake.getHead().getY();
@@ -105,7 +108,6 @@ public class Board {
         if (out_Of_Bounces(headX, headY) || snake.check_If_collapse()) {
             return true;
         }
-
         return false;
     }
 
@@ -117,49 +119,50 @@ public class Board {
             }
         }
         fruitPosition.clear();
-        snake.setInit();
+        snake.re_Init();
+        update();
         createFruit();
     }
 
     public synchronized boolean gamePause() {
-        if (running == true) {
-            this.running = false;
-            try {
-                wait();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+        try {
+            wait();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
         return running;
     }
 
-    public synchronized boolean Re_Pause() {
-        if (running == false) {
+    public synchronized boolean switch_Pause() {
+        if(running == true){
+            running = false;
+        }
+        else if (running == false) {
             notifyAll();
             running = true;
-        } else System.out.println("kekw");
+        }
         return running;
     }
+
+    public boolean getRunning(){
+        return running;
+    }
+
 
     public void recordRanking(){
         rankings.add(new Ranking("hello",score));
     }
 
-    public boolean isRunning() {
-        return running;
+    public List<Point> getSnake(){
+        return snakePoisition;
     }
 
-    public int getScore() {
-        return score;
+    public List<Point> getFruit(){
+        return fruitPosition;
     }
 
-    public void showRanking(){
-        System.out.println("***************************");
-        System.out.println("rankings!");
-
-        for (Ranking ranking : rankings) {
-            System.out.println("Name : "  + ranking.getId() + "        Score : " + ranking.getScore());
-        }
+    public List<Ranking> showRanking(){
+        return rankings;
     }
 
 
