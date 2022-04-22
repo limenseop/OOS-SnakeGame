@@ -1,6 +1,8 @@
 package src.domain;
 
-public class Ranking {
+import java.io.Serializable;
+
+public class Ranking implements Serializable {
 
     private String id;
     private int score;

@@ -1,10 +1,11 @@
 package src.domain;
 
 import java.awt.*;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Snake {
+public class Snake implements Serializable {
 
     snakeBody head;
 
@@ -56,8 +57,6 @@ public class Snake {
                 break;
             }
         }
-        System.out.println("new_X = " + new_X);
-        System.out.println("new_Y = " + new_Y);
         snakeBody newBody = new snakeBody(new_X,new_Y,direction);
         body.add(newBody);
         return true;
@@ -72,10 +71,6 @@ public class Snake {
         this.direction = direction;
         head.changeDirection(direction);
         return true;
-    }
-
-    public List<snakeBody> getBody() {
-        return body;
     }
 
     public void move(){
@@ -114,15 +109,7 @@ public class Snake {
         return false;
     }
 
-    public void brief(){
-        int i = 0;
-        for (snakeBody snakeBody : body) {
-            i = i+1;
-            System.out.println("point[" + i+ "]     x = " + snakeBody.getX() + "    y = " + snakeBody.getY() + "  direction : "  + snakeBody.getDirection());
-        }
-    }
-
-    public void setInit() {
+    public void re_Init() {
         body.clear();
         System.out.println("Snake.setInit");
         body.add(new snakeBody(20,20,Direction.NORTH));
@@ -130,5 +117,13 @@ public class Snake {
         body.add(new snakeBody(20,18,Direction.NORTH));
         head = body.get(0);
         System.out.println("this.head = " + this.head);
+    }
+
+    public List<Point> getBody(){
+        List<Point> buffer = new ArrayList<>();
+        for (snakeBody snakeBody : body) {
+            buffer.add(snakeBody.getPoint());
+        }
+        return buffer;
     }
 }
