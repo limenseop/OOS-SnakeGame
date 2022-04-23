@@ -1,4 +1,4 @@
-package src.WindowHandler;
+package src.Model;
 
 import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.GLFW;

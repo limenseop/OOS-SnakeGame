@@ -4,23 +4,19 @@ import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GL11;
-import src.Model.Model_with_texture;
-import src.Model.Texture;
-import src.maths.Vector3f;
+import src.Model.Cute_snake;
 
 public class Window {
     private int width, height, fps_cap;
     private double time, processedtime = 0;
     private String windowtitle;
-    private EventListener listener;
     private long window;
-    private Vector3f backgroundcolor = new Vector3f(0.0f, 0.0f, 0.0f);
-    private Model_with_texture model;
-    private Texture tex;
+    private float[] backgroundcolor = new float[] {0.0f, 0.0f, 0.0f};
+    private Cute_snake snake;
+
     private Window() {
 
     }
-
     public Window(int width, int height, int fps, String windowtitle) {
         this.width = width;
         this.height = height;
@@ -28,9 +24,10 @@ public class Window {
         this.windowtitle = windowtitle;
         createwindow();
     }
-
     public void setBackgroundcolor(float r, float g, float b) {
-        backgroundcolor.setAll(r, g, b);
+            backgroundcolor[0] = r;
+            backgroundcolor[1] = g;
+            backgroundcolor[2] = b;
     }
     public void stop() {
         GLFW.glfwTerminate();
@@ -58,53 +55,26 @@ public class Window {
             System.err.println("Error!!: window doesn't created.");
             return;
         }
-
         GLFW.glfwMakeContextCurrent(window);
         GL.createCapabilities();
         GL11.glEnable(GL11.GL_TEXTURE_2D);
 
-        model = new Model_with_texture(0.3f);
-        tex = new Texture("imgfolder/Cute-Snake-Transparent-PNG.png");
+        snake = new Cute_snake(1, window, width, height);
 
         GLFWVidMode videomode = GLFW.glfwGetVideoMode(GLFW.glfwGetPrimaryMonitor());
         GLFW.glfwSetWindowPos(window, (videomode.width() - width) / 2, (videomode.height() - height) / 2);
         GLFW.glfwShowWindow(window);
 
         time = getTime();
-        listener = new EventListener(window);
     }
     private void swapBuffer() {
         GLFW.glfwSwapBuffers(window);
     }
     private void update() {
         GLFW.glfwPollEvents();
-        listener.eventsUpdater();
-        GL11.glClearColor(backgroundcolor.getX(), backgroundcolor.getY(), backgroundcolor.getZ(), 1.0f);
+        GL11.glClearColor(backgroundcolor[0], backgroundcolor[1], backgroundcolor[2], 1.0f);
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
-
-        tex.bind();
-        model.render();
-
-/*
-        GL11.glBegin(GL11.GL_QUADS);
-
-        GL11.glTexCoord2f(0,0);
-        GL11.glVertex2f(-0.5f, 0.5f);
-
-        GL11.glTexCoord2f(1,0);
-        GL11.glVertex2f(0.5f, 0.5f);
-
-        GL11.glTexCoord2f(1,1);
-        GL11.glVertex2f(0.5f, -0.5f);
-
-        GL11.glTexCoord2f(0,1);
-        GL11.glVertex2f(-0.5f, -0.5f);
-
-        GL11.glEnd();
-*/
-
-        if (listener.isKeyPressed(GLFW.GLFW_KEY_UP))
-            System.out.println("You just pressed...UP");
+        snake.run();
     }
     private boolean closewindow() {
         return GLFW.glfwWindowShouldClose(window);
@@ -122,24 +92,5 @@ public class Window {
             return true;
         }
         return false;
-    }
-    public int getFps() {
-        return fps_cap;
-    }
-
-    public String getWindowtitle() {
-        return windowtitle;
-    }
-
-    public long getWindow() {
-        return window;
-    }
-
-    public int getWidth() {
-        return width;
-    }
-
-    public int getHeight() {
-        return height;
     }
 }

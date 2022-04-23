@@ -1,7 +1,8 @@
 package src.Model;
 
 import org.lwjgl.BufferUtils;
-import org.lwjgl.opengl.GL11;
+import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL13.*;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -33,19 +34,21 @@ public class Texture {
                     pixels.put((byte)((pixel >> 24) & 0xFF)); //ALPHA
                 }
             }
-
             pixels.flip();
 
-            id = GL11.glGenTextures();
-            GL11.glBindTexture(GL11.GL_TEXTURE_2D, id);
-            GL11.glTexParameterf(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_NEAREST);
-            GL11.glTexParameterf(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_NEAREST);
-            GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA, width, height, 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, pixels);
+            id = glGenTextures();
+            glBindTexture(GL_TEXTURE_2D, id);
+            glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+            glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
         } catch(IOException e) {
             e.printStackTrace();
         }
     }
-    public void bind() {
-        GL11.glBindTexture(GL11.GL_TEXTURE_2D, id);
+    public void bind(int sampler) {
+        if (sampler >= 0 && sampler <= 31) {
+            glActiveTexture(GL_TEXTURE0 + sampler);
+            glBindTexture(GL_TEXTURE_2D, id);
+        }
     }
 }
