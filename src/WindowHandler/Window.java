@@ -63,7 +63,7 @@ public class Window {
         GL.createCapabilities();
         GL11.glEnable(GL11.GL_TEXTURE_2D);
 
-        model = new Model_with_texture(0.5f);
+        model = new Model_with_texture(0.3f);
         tex = new Texture("imgfolder/Cute-Snake-Transparent-PNG.png");
 
         GLFWVidMode videomode = GLFW.glfwGetVideoMode(GLFW.glfwGetPrimaryMonitor());
