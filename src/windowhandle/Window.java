@@ -1,10 +1,13 @@
-package src.WindowHandler;
+package src.windowhandle;
 
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GL11;
-import src.Model.Cute_snake;
+import src.Direction;
+
+import static org.lwjgl.glfw.GLFW.*;
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_RIGHT;
 
 public class Window {
     private int width, height, fps_cap;
@@ -12,7 +15,7 @@ public class Window {
     private String windowtitle;
     private long window;
     private float[] backgroundcolor = new float[] {0.0f, 0.0f, 0.0f};
-    private Cute_snake snake;
+    private EventListener listener;
 
     private Window() {
 
@@ -32,16 +35,6 @@ public class Window {
     public void stop() {
         GLFW.glfwTerminate();
     }
-    public void loop() {
-        while(!closewindow()){
-            if (isUpdating()) {
-                update();
-                swapBuffer();
-            }
-        }
-    }
-
-
     private void createwindow() {
         if (!GLFW.glfwInit()) {
             System.err.println("Error!!: GLFW.glfwinit() doesn't work.");
@@ -59,7 +52,7 @@ public class Window {
         GL.createCapabilities();
         GL11.glEnable(GL11.GL_TEXTURE_2D);
 
-        snake = new Cute_snake(1, window, width, height);
+        listener = new EventListener(window);
 
         GLFWVidMode videomode = GLFW.glfwGetVideoMode(GLFW.glfwGetPrimaryMonitor());
         GLFW.glfwSetWindowPos(window, (videomode.width() - width) / 2, (videomode.height() - height) / 2);
@@ -67,22 +60,21 @@ public class Window {
 
         time = getTime();
     }
-    private void swapBuffer() {
+    public void swapBuffer() {
         GLFW.glfwSwapBuffers(window);
     }
-    private void update() {
+    public void update() {
         GLFW.glfwPollEvents();
         GL11.glClearColor(backgroundcolor[0], backgroundcolor[1], backgroundcolor[2], 1.0f);
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
-        snake.run();
     }
-    private boolean closewindow() {
+    public boolean closewindow() {
         return GLFW.glfwWindowShouldClose(window);
     }
     private double getTime() {
         return (double) System.nanoTime() / (double) 1000000000;
     }
-    private boolean isUpdating() {
+    public boolean isUpdating() {
         double nexttime = getTime();
         double passedtime = nexttime - time;
         processedtime += passedtime;
@@ -93,4 +85,25 @@ public class Window {
         }
         return false;
     }
+    public int getWidth() {
+        return width;
+    }
+    public int getHeight() {
+        return height;
+    }
+    public long getWindow() {
+        return window;
+    }
+    public Direction getDirection() {
+        if (listener.isKeyPressed(GLFW_KEY_UP) && !listener.isKeyReleased(GLFW_KEY_UP))
+            return Direction.NORTH;
+        else if (listener.isKeyPressed(GLFW_KEY_DOWN) && !listener.isKeyReleased(GLFW_KEY_DOWN))
+            return Direction.SOUTH;
+        else if (listener.isKeyPressed(GLFW_KEY_LEFT) && !listener.isKeyReleased(GLFW_KEY_LEFT))
+            return Direction.WEST;
+        else if (listener.isKeyPressed(GLFW_KEY_RIGHT) && !listener.isKeyReleased(GLFW_KEY_RIGHT))
+            return Direction.EAST;
+        return null;
+    }
+
 }

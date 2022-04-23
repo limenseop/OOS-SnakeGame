@@ -1,4 +1,4 @@
-package src.Model;
+package src.models;
 
 import org.lwjgl.BufferUtils;
 import static org.lwjgl.opengl.GL11.*;

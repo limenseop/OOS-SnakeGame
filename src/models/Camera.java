@@ -1,4 +1,4 @@
-package src.WindowHandler;
+package src.models;
 
 import org.joml.Matrix4f;
 import org.joml.Vector3f;

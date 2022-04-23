@@ -1,4 +1,4 @@
-package src.Model;
+package src.models;
 
 import org.joml.Matrix4f;
 import org.lwjgl.BufferUtils;

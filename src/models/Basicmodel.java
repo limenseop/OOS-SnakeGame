@@ -1,7 +1,7 @@
-package src.Model;
+package src.models;
 
-public class Model_with_texture extends Model {
-    public Model_with_texture(float size) {
+public class Basicmodel extends Model {
+    public Basicmodel(float size) {
         super(new float[] {
                 -size, size, 0,  //TOP LEFT 0
                 size, size, 0,   //TOP RIGHT 1

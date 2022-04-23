@@ -1,5 +1,5 @@
 .DS_Store
-lwjgl_libs/
 out/
 /.idea/
 OOS-SnakeGame.iml
+/lwjgl_libs/

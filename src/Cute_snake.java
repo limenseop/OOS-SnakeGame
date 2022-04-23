@@ -1,11 +1,13 @@
-package src.Model;
+package src;
 
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
-import static org.lwjgl.glfw.GLFW.*;
+import src.Direction;
+import src.models.Basicmodel;
+import src.models.Shader;
+import src.models.Texture;
 
-public class Cute_snake extends Model_with_texture {
-    private EventListener listener;
+public class Cute_snake extends Basicmodel {
     private Texture tex;
     private Shader shader;
     private Matrix4f projection;
@@ -13,9 +15,11 @@ public class Cute_snake extends Model_with_texture {
     private Matrix4f target;
 
     private float x, y;
-    public Cute_snake(int size, long window, int window_width, int window_height) {
+    private float speed;
+
+    public Cute_snake(float size, float speed, int window_width, int window_height) {
         super(size);
-        listener = new EventListener(window);
+        this.speed = speed;
         shader = new Shader("shader");
         tex = new Texture("imgfolder/Cute-Snake-Transparent-PNG.png");
         projection = new Matrix4f()
@@ -27,40 +31,36 @@ public class Cute_snake extends Model_with_texture {
 
         projection.mul(scale,target);
     }
-    private void movements() {
-        if (listener.isKeyPressed(GLFW_KEY_LEFT) && !listener.isKeyReleased(GLFW_KEY_LEFT)) {
-            x = -0.1f;
+    private void direct(Direction direction) {
+        if (direction == Direction.WEST) {
+            x = -speed;
             y = 0.0f;
             System.out.println("LEFT");
         }
-        if (listener.isKeyPressed(GLFW_KEY_RIGHT) && !listener.isKeyReleased(GLFW_KEY_RIGHT)) {
-            x = 0.1f;
+        if (direction == Direction.EAST) {
+            x = speed;
             y = 0.0f;
             System.out.println("RIGHT");
         }
-        if (listener.isKeyPressed(GLFW_KEY_UP) && !listener.isKeyReleased(GLFW_KEY_UP)) {
+        if (direction == Direction.NORTH) {
             x = 0.0f;
-            y = 0.1f;
+            y = speed;
             System.out.println("UP");
         }
-        if (listener.isKeyPressed(GLFW_KEY_DOWN) && !listener.isKeyReleased(GLFW_KEY_DOWN)) {
+        if (direction == Direction.SOUTH) {
             x = 0.0f;
-            y = -0.1f;
+            y = -speed;
             System.out.println("DOWN");
         }
-    }
-    private void move() {
-        movements();
         scale.translate(new Vector3f(x, y, 0));
         projection.mul(scale,target);
     }
-    public void run() {
+    public void move(Direction direction) {
         shader.bind();
         shader.setUniform("sampler", 0);
         shader.setUniform("projection", target);
         tex.bind(0);
-        move();
-        listener.eventsUpdater();
+        direct(direction);
         super.render();
     }
 }
