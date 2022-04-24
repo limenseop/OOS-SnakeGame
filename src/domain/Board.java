@@ -16,6 +16,7 @@ public class Board implements Serializable {
     private boolean[][] board = new boolean[WIDTH][HEIGHT];
     private int score = 0;
     private boolean running = true;
+    private boolean paused = false;
     private List<Ranking> rankings;
 
     // board = 40 * 40 size (demo)
@@ -35,7 +36,7 @@ public class Board implements Serializable {
         int fruit_Y = (int) (Math.random() * 40);
         if (fruitPosition.isEmpty()) {
 
-            while (snake.check_If_Overlap(fruit_X, fruit_Y) && check_Fruit_Overlap(fruit_X, fruit_Y, false)) {
+            while (snake.check_If_Overlap(fruit_X, fruit_Y)) {
 
                 fruit_X = (int) (Math.random() * 40);
                 fruit_Y = (int) (Math.random() * 40);
@@ -50,7 +51,7 @@ public class Board implements Serializable {
         for (int y = 0; y < HEIGHT; y++) {
             for (int x = 0; x < WIDTH; x++) {
                 board[y][x] = false;
-                if (snake.check_If_Overlap(x, y) || check_Fruit_Overlap(y, x, false)) board[y][x] = true;
+                if (snake.check_If_Overlap(x, y) || (fruitPosition.get(0).getX() == x && fruitPosition.get(0).getY() == y)) board[y][x] = true;
             }
         }
         snakePoisition = snake.getBody();
@@ -81,34 +82,30 @@ public class Board implements Serializable {
     public boolean move_Snake() {
 
         snake.move();
-        int headx = snake.getHead().getX();
-        int heady = snake.getHead().getY();
-
-        if (check_Fruit_Overlap(heady, headx, true)) {
-            snake.grow();
-            score = score + 100;
-            fruitPosition.clear();
-            createFruit();
-        }
-        if (out_Of_Bounces(headx, heady)) return false;
         update();
         return true;
+
     }
 
     public boolean change_Direction_Snake(Direction direction) {
+
         if (snake.change_Direction(direction)) return true;
         else return false;
+
     }
 
-    public synchronized boolean gameTermination() {
+    public void check_Game_Terminated() {
 
         int headX = snake.getHead().getX();
         int headY = snake.getHead().getY();
 
         if (out_Of_Bounces(headX, headY) || snake.check_If_collapse()) {
-            return true;
+            running = false;
         }
-        return false;
+    }
+
+    public boolean gameRunning(){
+        return running;
     }
 
     public void re_Play(){
@@ -124,28 +121,28 @@ public class Board implements Serializable {
         createFruit();
     }
 
+    public boolean isPaused() {
+        return paused;
+    }
+
     public synchronized boolean gamePause() {
         try {
             wait();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        return running;
+        return paused;
     }
 
     public synchronized boolean switch_Pause() {
-        if(running == true){
-            running = false;
-        }
-        else if (running == false) {
+        if(paused == true){
             notifyAll();
-            running = true;
+            paused = false;
         }
-        return running;
-    }
-
-    public boolean getRunning(){
-        return running;
+        else if (paused == false) {
+            paused = true;
+        }
+        return paused;
     }
 
 
@@ -153,26 +150,20 @@ public class Board implements Serializable {
         rankings.add(new Ranking("hello",score));
     }
 
-    public List<Point> getSnake(){
-        return snakePoisition;
-    }
-
-    public List<Point> getFruit(){
-        return fruitPosition;
-    }
-
     public List<Ranking> showRanking(){
         return rankings;
     }
 
 
-    private boolean check_Fruit_Overlap(int x, int y, boolean option) {
-        for (Point point : fruitPosition) {
-            if (point.getX() == x && point.getY() == y) {
-                if (option)
-                    fruitPosition.remove(point);
-                return true;
-            }
+    public boolean check_Fruit_Overlap() {
+
+        Point fruit = fruitPosition.get(0);
+        Point head = new Point(snake.getHead().getX(),snake.getHead().getY());
+        if(fruit.getX() == head.getX() && fruit.getY() == head.getY()){
+            fruitPosition.remove(0);
+            snake.grow();
+            createFruit();
+            return true;
         }
         return false;
     }
