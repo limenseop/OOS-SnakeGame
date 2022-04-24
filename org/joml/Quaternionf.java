@@ -164,6 +164,46 @@ public class Quaternionf implements Externalizable {
     }
 
     /**
+     * Add the quaternion <tt>(x, y, z, w)</tt> to this quaternion.
+     * 
+     * @param x
+     *          the x component of the vector part
+     * @param y
+     *          the y component of the vector part
+     * @param z
+     *          the z component of the vector part
+     * @param w
+     *          the real/scalar component
+     * @return this
+     */
+    public Quaternionf add(float x, float y, float z, float w) {
+        return add(x, y, z, w, this);
+    }
+
+    /**
+     * Add the quaternion <tt>(x, y, z, w)</tt> to this quaternion and store the result in <code>dest</code>.
+     * 
+     * @param x
+     *          the x component of the vector part
+     * @param y
+     *          the y component of the vector part
+     * @param z
+     *          the z component of the vector part
+     * @param w
+     *          the real/scalar component
+     * @param dest
+     *          will hold the result
+     * @return dest
+     */
+    public Quaternionf add(float x, float y, float z, float w, Quaternionf dest) {
+        dest.x = this.x + x;
+        dest.y = this.y + y;
+        dest.z = this.z + z;
+        dest.w = this.w + w;
+        return dest;
+    }
+
+    /**
      * Add <code>q2</code> to this quaternion.
      * 
      * @param q2
@@ -219,143 +259,53 @@ public class Quaternionf implements Externalizable {
     /**
      * Set the given destination matrix to the rotation represented by <code>this</code>.
      * 
+     * @see Matrix3f#set(Quaternionf)
+     * 
      * @param dest
      *          the matrix to write the rotation into
      * @return the passed in destination
      */
     public Matrix3f get(Matrix3f dest) {
-        float dx = x + x;
-        float dy = y + y;
-        float dz = z + z;
-        float q00 = dx * x;
-        float q11 = dy * y;
-        float q22 = dz * z;
-        float q01 = dx * y;
-        float q02 = dx * z;
-        float q03 = dx * w;
-        float q12 = dy * z;
-        float q13 = dy * w;
-        float q23 = dz * w;
-        dest.m00 = 1.0f - q11 - q22;
-        dest.m01 = q01 + q23;
-        dest.m02 = q02 - q13;
-        dest.m10 = q01 - q23;
-        dest.m11 = 1.0f - q22 - q00;
-        dest.m12 = q12 + q03;
-        dest.m20 = q02 + q13;
-        dest.m21 = q12 - q03;
-        dest.m22 = 1.0f - q11 - q00;
-        return dest;
+        return dest.set(this);
     }
 
     /**
      * Set the given destination matrix to the rotation represented by <code>this</code>.
+     * 
+     * @see Matrix3d#set(Quaternionf)
      * 
      * @param dest
      *          the matrix to write the rotation into
      * @return the passed in destination
      */
     public Matrix3d get(Matrix3d dest) {
-        double dx = x + x;
-        double dy = y + y;
-        double dz = z + z;
-        double q00 = dx * x;
-        double q11 = dy * y;
-        double q22 = dz * z;
-        double q01 = dx * y;
-        double q02 = dx * z;
-        double q03 = dx * w;
-        double q12 = dy * z;
-        double q13 = dy * w;
-        double q23 = dz * w;
-        dest.m00 = 1.0 - q11 - q22;
-        dest.m01 = q01 + q23;
-        dest.m02 = q02 - q13;
-        dest.m10 = q01 - q23;
-        dest.m11 = 1.0 - q22 - q00;
-        dest.m12 = q12 + q03;
-        dest.m20 = q02 + q13;
-        dest.m21 = q12 - q03;
-        dest.m22 = 1.0 - q11 - q00;
-        return dest;
+        return dest.set(this);
     }
 
     /**
      * Set the given destination matrix to the rotation represented by <code>this</code>.
+     * 
+     * @see Matrix4f#set(Quaternionf)
      * 
      * @param dest
      *          the matrix to write the rotation into
      * @return the passed in destination
      */
     public Matrix4f get(Matrix4f dest) {
-        float dx = x + x;
-        float dy = y + y;
-        float dz = z + z;
-        float q00 = dx * x;
-        float q11 = dy * y;
-        float q22 = dz * z;
-        float q01 = dx * y;
-        float q02 = dx * z;
-        float q03 = dx * w;
-        float q12 = dy * z;
-        float q13 = dy * w;
-        float q23 = dz * w;
-        dest.m00 = 1.0f - q11 - q22;
-        dest.m01 = q01 + q23;
-        dest.m02 = q02 - q13;
-        dest.m03 = 0.0f;
-        dest.m10 = q01 - q23;
-        dest.m11 = 1.0f - q22 - q00;
-        dest.m12 = q12 + q03;
-        dest.m13 = 0.0f;
-        dest.m20 = q02 + q13;
-        dest.m21 = q12 - q03;
-        dest.m22 = 1.0f - q11 - q00;
-        dest.m23 = 0.0f;
-        dest.m30 = 0.0f;
-        dest.m31 = 0.0f;
-        dest.m32 = 0.0f;
-        dest.m33 = 1.0f;
-        return dest;
+        return dest.set(this);
     }
 
     /**
      * Set the given destination matrix to the rotation represented by <code>this</code>.
+     * 
+     * @see Matrix4d#set(Quaterniond)
      * 
      * @param dest
      *          the matrix to write the rotation into
      * @return the passed in destination
      */
     public Matrix4d get(Matrix4d dest) {
-        float dx = x + x;
-        float dy = y + y;
-        float dz = z + z;
-        float q00 = dx * x;
-        float q11 = dy * y;
-        float q22 = dz * z;
-        float q01 = dx * y;
-        float q02 = dx * z;
-        float q03 = dx * w;
-        float q12 = dy * z;
-        float q13 = dy * w;
-        float q23 = dz * w;
-        dest.m00 = 1.0 - q11 - q22;
-        dest.m01 = q01 + q23;
-        dest.m02 = q02 - q13;
-        dest.m03 = 0.0;
-        dest.m10 = q01 - q23;
-        dest.m11 = 1.0 - q22 - q00;
-        dest.m12 = q12 + q03;
-        dest.m13 = 0.0;
-        dest.m20 = q02 + q13;
-        dest.m21 = q12 - q03;
-        dest.m22 = 1.0 - q11 - q00;
-        dest.m23 = 0.0;
-        dest.m30 = 0.0;
-        dest.m31 = 0.0;
-        dest.m32 = 0.0;
-        dest.m33 = 1.0;
-        return dest;
+        return dest.set(this);
     }
 
     /**
@@ -790,7 +740,35 @@ public class Quaternionf implements Externalizable {
      * @return this
      */
     public Quaternionf setFromUnnormalized(Matrix4f mat) {
-        setFromUnnormalized(mat.m00, mat.m01, mat.m02, mat.m10, mat.m11, mat.m12, mat.m20, mat.m21, mat.m22);
+        setFromUnnormalized(mat.m00(), mat.m01(), mat.m02(), mat.m10(), mat.m11(), mat.m12(), mat.m20(), mat.m21(), mat.m22());
+        return this;
+    }
+
+    /**
+     * Set this quaternion to be a representation of the rotational component of the given matrix.
+     * <p>
+     * This method assumes that the first three columns of the upper left 3x3 submatrix are no unit vectors.
+     * 
+     * @param mat
+     *          the matrix whose rotational component is used to set this quaternion
+     * @return this
+     */
+    public Quaternionf setFromUnnormalized(Matrix4x3f mat) {
+        setFromUnnormalized(mat.m00(), mat.m01(), mat.m02(), mat.m10(), mat.m11(), mat.m12(), mat.m20(), mat.m21(), mat.m22());
+        return this;
+    }
+
+    /**
+     * Set this quaternion to be a representation of the rotational component of the given matrix.
+     * <p>
+     * This method assumes that the first three columns of the upper left 3x3 submatrix are no unit vectors.
+     * 
+     * @param mat
+     *          the matrix whose rotational component is used to set this quaternion
+     * @return this
+     */
+    public Quaternionf setFromUnnormalized(Matrix4x3d mat) {
+        setFromUnnormalized(mat.m00(), mat.m01(), mat.m02(), mat.m10(), mat.m11(), mat.m12(), mat.m20(), mat.m21(), mat.m22());
         return this;
     }
 
@@ -804,7 +782,35 @@ public class Quaternionf implements Externalizable {
      * @return this
      */
     public Quaternionf setFromNormalized(Matrix4f mat) {
-        setFromNormalized(mat.m00, mat.m01, mat.m02, mat.m10, mat.m11, mat.m12, mat.m20, mat.m21, mat.m22);
+        setFromNormalized(mat.m00(), mat.m01(), mat.m02(), mat.m10(), mat.m11(), mat.m12(), mat.m20(), mat.m21(), mat.m22());
+        return this;
+    }
+
+    /**
+     * Set this quaternion to be a representation of the rotational component of the given matrix.
+     * <p>
+     * This method assumes that the first three columns of the upper left 3x3 submatrix are unit vectors.
+     * 
+     * @param mat
+     *          the matrix whose rotational component is used to set this quaternion
+     * @return this
+     */
+    public Quaternionf setFromNormalized(Matrix4x3f mat) {
+        setFromNormalized(mat.m00(), mat.m01(), mat.m02(), mat.m10(), mat.m11(), mat.m12(), mat.m20(), mat.m21(), mat.m22());
+        return this;
+    }
+
+    /**
+     * Set this quaternion to be a representation of the rotational component of the given matrix.
+     * <p>
+     * This method assumes that the first three columns of the upper left 3x3 submatrix are unit vectors.
+     * 
+     * @param mat
+     *          the matrix whose rotational component is used to set this quaternion
+     * @return this
+     */
+    public Quaternionf setFromNormalized(Matrix4x3d mat) {
+        setFromNormalized(mat.m00(), mat.m01(), mat.m02(), mat.m10(), mat.m11(), mat.m12(), mat.m20(), mat.m21(), mat.m22());
         return this;
     }
 
@@ -818,7 +824,7 @@ public class Quaternionf implements Externalizable {
      * @return this
      */
     public Quaternionf setFromUnnormalized(Matrix4d mat) {
-        setFromUnnormalized(mat.m00, mat.m01, mat.m02, mat.m10, mat.m11, mat.m12, mat.m20, mat.m21, mat.m22);
+        setFromUnnormalized(mat.m00(), mat.m01(), mat.m02(), mat.m10(), mat.m11(), mat.m12(), mat.m20(), mat.m21(), mat.m22());
         return this;
     }
 
@@ -832,7 +838,7 @@ public class Quaternionf implements Externalizable {
      * @return this
      */
     public Quaternionf setFromNormalized(Matrix4d mat) {
-        setFromNormalized(mat.m00, mat.m01, mat.m02, mat.m10, mat.m11, mat.m12, mat.m20, mat.m21, mat.m22);
+        setFromNormalized(mat.m00(), mat.m01(), mat.m02(), mat.m10(), mat.m11(), mat.m12(), mat.m20(), mat.m21(), mat.m22());
         return this;
     }
 
@@ -1095,7 +1101,7 @@ public class Quaternionf implements Externalizable {
      * @return vec
      */
     public Vector3f transform(Vector3f vec){
-        return transform(vec, vec);
+        return transform(vec.x, vec.y, vec.z, vec);
     }
 
     /**
@@ -1123,21 +1129,39 @@ public class Quaternionf implements Externalizable {
      * @return dest
      */
     public Vector3f transform(Vector3f vec, Vector3f dest) {
-        float num = x + x;
-        float num2 = y + y;
-        float num3 = z + z;
-        float num4 = x * num;
-        float num5 = y * num2;
-        float num6 = z * num3;
-        float num7 = x * num2;
-        float num8 = x * num3;
-        float num9 = y * num3;
-        float num10 = w * num;
-        float num11 = w * num2;
-        float num12 = w * num3;
-        dest.set((1.0f - (num5 + num6)) * vec.x + (num7 - num12) * vec.y + (num8 + num11) * vec.z,
-                 (num7 + num12) * vec.x + (1.0f - (num4 + num6)) * vec.y + (num9 - num10) * vec.z,
-                 (num8 - num11) * vec.x + (num9 + num10) * vec.y + (1.0f - (num4 + num5)) * vec.z);
+        return transform(vec.x, vec.y, vec.z, dest);
+    }
+
+    /**
+     * Transform the given vector <tt>(x, y, z)</tt> by this quaternion and store the result in <code>dest</code>.
+     * This will apply the rotation described by this quaternion to the given vector.
+     * 
+     * @param x
+     *          the x coordinate of the vector to transform
+     * @param y
+     *          the y coordinate of the vector to transform
+     * @param z
+     *          the z coordinate of the vector to transform
+     * @param dest
+     *          will hold the result
+     * @return dest
+     */
+    public Vector3f transform(float x, float y, float z, Vector3f dest) {
+        float num = this.x + this.x;
+        float num2 = this.y + this.y;
+        float num3 = this.z + this.z;
+        float num4 = this.x * num;
+        float num5 = this.y * num2;
+        float num6 = this.z * num3;
+        float num7 = this.x * num2;
+        float num8 = this.x * num3;
+        float num9 = this.y * num3;
+        float num10 = this.w * num;
+        float num11 = this.w * num2;
+        float num12 = this.w * num3;
+        dest.set((1.0f - (num5 + num6)) * x + (num7 - num12) * y + (num8 + num11) * z,
+                 (num7 + num12) * x + (1.0f - (num4 + num6)) * y + (num9 - num10) * z,
+                 (num8 - num11) * x + (num9 + num10) * y + (1.0f - (num4 + num5)) * z);
         return dest;
     }
 
@@ -1154,21 +1178,39 @@ public class Quaternionf implements Externalizable {
      * @return dest
      */
     public Vector4f transform(Vector4f vec, Vector4f dest) {
-        float num = x + x;
-        float num2 = y + y;
-        float num3 = z + z;
-        float num4 = x * num;
-        float num5 = y * num2;
-        float num6 = z * num3;
-        float num7 = x * num2;
-        float num8 = x * num3;
-        float num9 = y * num3;
-        float num10 = w * num;
-        float num11 = w * num2;
-        float num12 = w * num3;
-        dest.set((1.0f - (num5 + num6)) * vec.x + (num7 - num12) * vec.y + (num8 + num11) * vec.z,
-                 (num7 + num12) * vec.x + (1.0f - (num4 + num6)) * vec.y + (num9 - num10) * vec.z,
-                 (num8 - num11) * vec.x + (num9 + num10) * vec.y + (1.0f - (num4 + num5)) * vec.z,
+        return transform(vec.x, vec.y, vec.z, dest);
+    }
+
+    /**
+     * Transform the given vector <tt>(x, y, z)</tt> by this quaternion and store the result in <code>dest</code>.
+     * This will apply the rotation described by this quaternion to the given vector.
+     * 
+     * @param x
+     *          the x coordinate of the vector to transform
+     * @param y
+     *          the y coordinate of the vector to transform
+     * @param z
+     *          the z coordinate of the vector to transform
+     * @param dest
+     *          will hold the result
+     * @return dest
+     */
+    public Vector4f transform(float x, float y, float z, Vector4f dest) {
+        float num = this.x + this.x;
+        float num2 = this.y + this.y;
+        float num3 = this.z + this.z;
+        float num4 = this.x * num;
+        float num5 = this.y * num2;
+        float num6 = this.z * num3;
+        float num7 = this.x * num2;
+        float num8 = this.x * num3;
+        float num9 = this.y * num3;
+        float num10 = this.w * num;
+        float num11 = this.w * num2;
+        float num12 = this.w * num3;
+        dest.set((1.0f - (num5 + num6)) * x + (num7 - num12) * y + (num8 + num11) * z,
+                 (num7 + num12) * x + (1.0f - (num4 + num6)) * y + (num9 - num10) * z,
+                 (num8 - num11) * x + (num9 + num10) * y + (1.0f - (num4 + num5)) * z,
                  dest.w);
         return dest;
     }
@@ -1622,7 +1664,7 @@ public class Quaternionf implements Externalizable {
 
     /**
      * Interpolate between <code>this</code> quaternion and the specified
-     * <code>target</code> using sperical linear interpolation using the specified interpolation factor <code>alpha</code>.
+     * <code>target</code> using spherical linear interpolation using the specified interpolation factor <code>alpha</code>.
      * <p>
      * This method resorts to non-spherical linear interpolation when the absolute dot product of <code>this</code> and <code>target</code> is
      * below <tt>1E-6f</tt>.
@@ -1639,7 +1681,7 @@ public class Quaternionf implements Externalizable {
 
     /**
      * Interpolate between <code>this</code> quaternion and the specified
-     * <code>target</code> using sperical linear interpolation using the specified interpolation factor <code>alpha</code>,
+     * <code>target</code> using spherical linear interpolation using the specified interpolation factor <code>alpha</code>,
      * and store the result in <code>dest</code>.
      * <p>
      * This method resorts to non-spherical linear interpolation when the absolute dot product of <code>this</code> and <code>target</code> is
@@ -1678,7 +1720,38 @@ public class Quaternionf implements Externalizable {
     }
 
     /**
-     * Scale the rotation represented by this quaternion by the given <code>factor</code> using sperical linear interpolation.
+     * Interpolate between all of the quaternions given in <code>qs</code> via spherical linear interpolation using the specified interpolation factors <code>weights</code>,
+     * and store the result in <code>dest</code>.
+     * <p>
+     * This method will interpolate between each two successive quaternions via {@link #slerp(Quaternionf, float)} using their relative interpolation weights.
+     * <p>
+     * This method resorts to non-spherical linear interpolation when the absolute dot product of any two interpolated quaternions is below <tt>1E-6f</tt>.
+     * <p>
+     * Reference: <a href="http://gamedev.stackexchange.com/questions/62354/method-for-interpolation-between-3-quaternions#answer-62356">http://gamedev.stackexchange.com/</a>
+     * 
+     * @param qs
+     *          the quaternions to interpolate over
+     * @param weights
+     *          the weights of each individual quaternion in <code>qs</code>
+     * @param dest
+     *          will hold the result
+     * @return dest
+     */
+    public static Quaternionf slerp(Quaternionf[] qs, float[] weights, Quaternionf dest) {
+        dest.set(qs[0]);
+        float w = weights[0];
+        for (int i = 1; i < qs.length; i++) {
+            float w0 = w;
+            float w1 = weights[i];
+            float rw1 = w1 / (w0 + w1);
+            w += w1;
+            dest.slerp(qs[i], rw1);
+        }
+        return dest;
+    }
+
+    /**
+     * Scale the rotation represented by this quaternion by the given <code>factor</code> using spherical linear interpolation.
      * <p>
      * This method is equivalent to performing a spherical linear interpolation between the unit quaternion and <code>this</code>,
      * and thus equivalent to calling: <tt>new Quaterniond().slerp(this, factor)</tt>
@@ -1696,7 +1769,7 @@ public class Quaternionf implements Externalizable {
     }
 
     /**
-     * Scale the rotation represented by this quaternion by the given <code>factor</code> using sperical linear interpolation, and store the result in <code>dest</code>.
+     * Scale the rotation represented by this quaternion by the given <code>factor</code> using spherical linear interpolation, and store the result in <code>dest</code>.
      * <p>
      * This method is equivalent to performing a spherical linear interpolation between the unit quaternion and <code>this</code>,
      * and thus equivalent to calling: <tt>new Quaternionf().slerp(this, factor, dest)</tt>
@@ -1834,6 +1907,36 @@ public class Quaternionf implements Externalizable {
     }
 
     /**
+     * Interpolate between all of the quaternions given in <code>qs</code> via non-spherical linear interpolation using the
+     * specified interpolation factors <code>weights</code>, and store the result in <code>dest</code>.
+     * <p>
+     * This method will interpolate between each two successive quaternions via {@link #nlerp(Quaternionf, float)}
+     * using their relative interpolation weights.
+     * <p>
+     * Reference: <a href="http://gamedev.stackexchange.com/questions/62354/method-for-interpolation-between-3-quaternions#answer-62356">http://gamedev.stackexchange.com/</a>
+     * 
+     * @param qs
+     *          the quaternions to interpolate over
+     * @param weights
+     *          the weights of each individual quaternion in <code>qs</code>
+     * @param dest
+     *          will hold the result
+     * @return dest
+     */
+    public static Quaternionf nlerp(Quaternionf[] qs, float[] weights, Quaternionf dest) {
+        dest.set(qs[0]);
+        float w = weights[0];
+        for (int i = 1; i < qs.length; i++) {
+            float w0 = w;
+            float w1 = weights[i];
+            float rw1 = w1 / (w0 + w1);
+            w += w1;
+            dest.nlerp(qs[i], rw1);
+        }
+        return dest;
+    }
+
+    /**
      * Compute linear (non-spherical) interpolations of <code>this</code> and the given quaternion <code>q</code>
      * iteratively and store the result in <code>dest</code>.
      * <p>
@@ -1904,6 +2007,63 @@ public class Quaternionf implements Externalizable {
         dest.y = resY * s;
         dest.z = resZ * s;
         dest.w = resW * s;
+        return dest;
+    }
+
+    /**
+     * Compute linear (non-spherical) interpolations of <code>this</code> and the given quaternion <code>q</code>
+     * iteratively and store the result in <code>this</code>.
+     * <p>
+     * This method performs a series of small-step nlerp interpolations to avoid doing a costly spherical linear interpolation, like
+     * {@link #slerp(Quaternionf, float, Quaternionf) slerp},
+     * by subdividing the rotation arc between <code>this</code> and <code>q</code> via non-spherical linear interpolations as long as
+     * the absolute dot product of <code>this</code> and <code>q</code> is greater than the given <code>dotThreshold</code> parameter.
+     * <p>
+     * Thanks to <tt>@theagentd</tt> at <a href="http://www.java-gaming.org/">http://www.java-gaming.org/</a> for providing the code.
+     * 
+     * @param q
+     *          the other quaternion
+     * @param alpha
+     *          the interpolation factor, between 0.0 and 1.0
+     * @param dotThreshold
+     *          the threshold for the dot product of <code>this</code> and <code>q</code> above which this method performs another iteration
+     *          of a small-step linear interpolation
+     * @return this
+     */
+    public Quaternionf nlerpIterative(Quaternionf q, float alpha, float dotThreshold) {
+        return nlerpIterative(q, alpha, dotThreshold, this);
+    }
+
+    /**
+     * Interpolate between all of the quaternions given in <code>qs</code> via iterative non-spherical linear interpolation using the
+     * specified interpolation factors <code>weights</code>, and store the result in <code>dest</code>.
+     * <p>
+     * This method will interpolate between each two successive quaternions via {@link #nlerpIterative(Quaternionf, float, float)}
+     * using their relative interpolation weights.
+     * <p>
+     * Reference: <a href="http://gamedev.stackexchange.com/questions/62354/method-for-interpolation-between-3-quaternions#answer-62356">http://gamedev.stackexchange.com/</a>
+     * 
+     * @param qs
+     *          the quaternions to interpolate over
+     * @param weights
+     *          the weights of each individual quaternion in <code>qs</code>
+     * @param dotThreshold
+     *          the threshold for the dot product of each two interpolated quaternions above which {@link #nlerpIterative(Quaternionf, float, float)} performs another iteration
+     *          of a small-step linear interpolation
+     * @param dest
+     *          will hold the result
+     * @return dest
+     */
+    public static Quaternionf nlerpIterative(Quaternionf[] qs, float[] weights, float dotThreshold, Quaternionf dest) {
+        dest.set(qs[0]);
+        float w = weights[0];
+        for (int i = 1; i < qs.length; i++) {
+            float w0 = w;
+            float w1 = weights[i];
+            float rw1 = w1 / (w0 + w1);
+            w += w1;
+            dest.nlerpIterative(qs[i], rw1, dotThreshold);
+        }
         return dest;
     }
 
@@ -2109,16 +2269,27 @@ public class Quaternionf implements Externalizable {
      * @return this
      */
     public Quaternionf rotationTo(float fromDirX, float fromDirY, float fromDirZ, float toDirX, float toDirY, float toDirZ) {
-        float ax = fromDirY * toDirZ - fromDirZ * toDirY;
-        float ay = fromDirZ * toDirX - fromDirX * toDirZ;
-        float az = fromDirX * toDirY - fromDirY * toDirX;
-        x = ax;
-        y = ay;
-        z = az;
+        x = fromDirY * toDirZ - fromDirZ * toDirY;
+        y = fromDirZ * toDirX - fromDirX * toDirZ;
+        z = fromDirX * toDirY - fromDirY * toDirX;
         w = (float) Math.sqrt((fromDirX * fromDirX + fromDirY * fromDirY + fromDirZ * fromDirZ) *
                               (toDirX * toDirX + toDirY * toDirY + toDirZ * toDirZ)) +
                  (fromDirX * toDirX + fromDirY * toDirY + fromDirZ * toDirZ);
-        normalize();
+        float invNorm = (float) (1.0 / Math.sqrt(x * x + y * y + z * z + w * w));
+        if (Float.isInfinite(invNorm)) {
+            // Rotation is ambiguous: Find appropriate rotation axis (1. try toDir x +Z)
+            x = toDirY; y = -toDirX; z = 0.0f; w = 0.0f;
+            invNorm = (float) (1.0 / Math.sqrt(x * x + y * y));
+            if (Float.isInfinite(invNorm)) {
+                // 2. try toDir x +X
+                x = 0.0f; y = toDirZ; z = -toDirY; w = 0.0f;
+                invNorm = (float) (1.0 / Math.sqrt(y * y + z * z));
+            }
+        }
+        x *= invNorm;
+        y *= invNorm;
+        z *= invNorm;
+        w *= invNorm;
         return this;
     }
 
@@ -2169,16 +2340,23 @@ public class Quaternionf implements Externalizable {
      * @return dest
      */
     public Quaternionf rotateTo(float fromDirX, float fromDirY, float fromDirZ, float toDirX, float toDirY, float toDirZ, Quaternionf dest) {
-        float ax = fromDirY * toDirZ - fromDirZ * toDirY;
-        float ay = fromDirZ * toDirX - fromDirX * toDirZ;
-        float az = fromDirX * toDirY - fromDirY * toDirX;
-        float x = ax;
-        float y = ay;
-        float z = az;
+        float x = fromDirY * toDirZ - fromDirZ * toDirY;
+        float y = fromDirZ * toDirX - fromDirX * toDirZ;
+        float z = fromDirX * toDirY - fromDirY * toDirX;
         float w = (float) Math.sqrt((fromDirX * fromDirX + fromDirY * fromDirY + fromDirZ * fromDirZ) *
                                     (toDirX * toDirX + toDirY * toDirY + toDirZ * toDirZ)) +
                   (fromDirX * toDirX + fromDirY * toDirY + fromDirZ * toDirZ);
         float invNorm = (float) (1.0 / Math.sqrt(x * x + y * y + z * z + w * w));
+        if (Float.isInfinite(invNorm)) {
+            // Rotation is ambiguous: Find appropriate rotation axis (1. try toDir x +Z)
+            x = toDirY; y = -toDirX; z = 0.0f; w = 0.0f;
+            invNorm = (float) (1.0 / Math.sqrt(x * x + y * y));
+            if (Float.isInfinite(invNorm)) {
+                // 2. try toDir x +X
+                x = 0.0f; y = toDirZ; z = -toDirY; w = 0.0f;
+                invNorm = (float) (1.0 / Math.sqrt(y * y + z * z));
+            }
+        }
         x *= invNorm;
         y *= invNorm;
         z *= invNorm;
@@ -2914,10 +3092,35 @@ public class Quaternionf implements Externalizable {
         float nx = -x * invNorm;
         float ny = -y * invNorm;
         float nz = -z * invNorm;
-        float nw = w * invNorm;
-        float num2 = ny + ny;
-        float num3 = nz + nz;
-        dir.set(1.0f - (ny * num2 + nz * num3), nx * num2 + nw * num3, nx * num3 - nw * num2);
+        float nw =  w * invNorm;
+        float dy = ny + ny;
+        float dz = nz + nz;
+        dir.x = -ny * dy - nz * dz + 1.0f;
+        dir.y =  nx * dy + nw * dz;
+        dir.z =  nx * dz - nw * dy;
+        return dir;
+    }
+
+    /**
+     * Obtain the direction of <tt>+X</tt> before the rotation transformation represented by <code>this</code> <i>normalized</i> quaternion is applied.
+     * The quaternion <i>must</i> be {@link #normalize() normalized} for this method to work.
+     * <p>
+     * This method is equivalent to the following code:
+     * <pre>
+     * Quaternionf inv = new Quaternionf(this).conjugate();
+     * inv.transform(dir.set(1, 0, 0));
+     * </pre>
+     * 
+     * @param dir
+     *          will hold the direction of <tt>+X</tt>
+     * @return dir
+     */
+    public Vector3f normalizedPositiveX(Vector3f dir) {
+        float dy = y + y;
+        float dz = z + z;
+        dir.x = -y * dy - z * dz + 1.0f;
+        dir.y =  x * dy - w * dz;
+        dir.z =  x * dz + w * dy;
         return dir;
     }
 
@@ -2925,7 +3128,6 @@ public class Quaternionf implements Externalizable {
      * Obtain the direction of <tt>+Y</tt> before the rotation transformation represented by <code>this</code> quaternion is applied.
      * <p>
      * This method is equivalent to the following code:
-     * 
      * <pre>
      * Quaternionf inv = new Quaternionf(this).invert();
      * inv.transform(dir.set(0, 1, 0));
@@ -2940,11 +3142,37 @@ public class Quaternionf implements Externalizable {
         float nx = -x * invNorm;
         float ny = -y * invNorm;
         float nz = -z * invNorm;
-        float nw = w * invNorm;
-        float num = nx + nx;
-        float num2 = ny + ny;
-        float num3 = nz + nz;
-        dir.set(nx * num2 - nw * num3, 1.0f - (nx * num + nz * num3), ny * num3 + nw * num);
+        float nw =  w * invNorm;
+        float dx = nx + nx;
+        float dy = ny + ny;
+        float dz = nz + nz;
+        dir.x =  nx * dy - nw * dz;
+        dir.y = -nx * dx - nz * dz + 1.0f;
+        dir.z =  ny * dz + nw * dx;
+        return dir;
+    }
+
+    /**
+     * Obtain the direction of <tt>+Y</tt> before the rotation transformation represented by <code>this</code> <i>normalized</i> quaternion is applied.
+     * The quaternion <i>must</i> be {@link #normalize() normalized} for this method to work.
+     * <p>
+     * This method is equivalent to the following code:
+     * <pre>
+     * Quaternionf inv = new Quaternionf(this).conjugate();
+     * inv.transform(dir.set(0, 1, 0));
+     * </pre>
+     * 
+     * @param dir
+     *            will hold the direction of <tt>+Y</tt>
+     * @return dir
+     */
+    public Vector3f normalizedPositiveY(Vector3f dir) {
+        float dx = x + x;
+        float dy = y + y;
+        float dz = z + z;
+        dir.x =  x * dy + w * dz;
+        dir.y = -x * dx - z * dz + 1.0f;
+        dir.z =  y * dz - w * dx;
         return dir;
     }
 
@@ -2952,7 +3180,6 @@ public class Quaternionf implements Externalizable {
      * Obtain the direction of <tt>+Z</tt> before the rotation transformation represented by <code>this</code> quaternion is applied.
      * <p>
      * This method is equivalent to the following code:
-     * 
      * <pre>
      * Quaternionf inv = new Quaternionf(this).invert();
      * inv.transform(dir.set(0, 0, 1));
@@ -2967,11 +3194,37 @@ public class Quaternionf implements Externalizable {
         float nx = -x * invNorm;
         float ny = -y * invNorm;
         float nz = -z * invNorm;
-        float nw = w * invNorm;
-        float num = nx + nx;
-        float num2 = ny + ny;
-        float num3 = nz + nz;
-        dir.set(nx * num3 + nw * num2, ny * num3 - nw * num, 1.0f - (nx * num + ny * num2));
+        float nw =  w * invNorm;
+        float dx = nx + nx;
+        float dy = ny + ny;
+        float dz = nz + nz;
+        dir.x =  nx * dz + nw * dy;
+        dir.y =  ny * dz - nw * dx;
+        dir.z = -nx * dx - ny * dy + 1.0f;
+        return dir;
+    }
+
+    /**
+     * Obtain the direction of <tt>+Z</tt> before the rotation transformation represented by <code>this</code> <i>normalized</i> quaternion is applied.
+     * The quaternion <i>must</i> be {@link #normalize() normalized} for this method to work.
+     * <p>
+     * This method is equivalent to the following code:
+     * <pre>
+     * Quaternionf inv = new Quaternionf(this).conjugate();
+     * inv.transform(dir.set(0, 0, 1));
+     * </pre>
+     * 
+     * @param dir
+     *            will hold the direction of <tt>+Z</tt>
+     * @return dir
+     */
+    public Vector3f normalizedPositiveZ(Vector3f dir) {
+        float dx = x + x;
+        float dy = y + y;
+        float dz = z + z;
+        dir.x =  x * dz - w * dy;
+        dir.y =  y * dz + w * dx;
+        dir.z = -x * dx - y * dy + 1.0f;
         return dir;
     }
 

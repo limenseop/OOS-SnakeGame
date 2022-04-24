@@ -33,7 +33,7 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 
 /**
- * Contains the definition of a 3x3 Matrix of doubles, and associated functions to transform
+ * Contains the definition of a 3x3 matrix of doubles, and associated functions to transform
  * it. The matrix is column-major to match OpenGL's interpretation, and it looks like this:
  * <p>
  *      m00  m10  m20<br>
@@ -56,13 +56,7 @@ public class Matrix3d implements Externalizable {
      */
     public Matrix3d() {
         m00 = 1.0;
-        m01 = 0.0;
-        m02 = 0.0;
-        m10 = 0.0;
         m11 = 1.0;
-        m12 = 0.0;
-        m20 = 0.0;
-        m21 = 0.0;
         m22 = 1.0;
     }
 
@@ -109,15 +103,15 @@ public class Matrix3d implements Externalizable {
      *          the {@link Matrix4f} to copy the values from
      */
     public Matrix3d(Matrix4f mat) {
-        m00 = mat.m00;
-        m01 = mat.m01;
-        m02 = mat.m02;
-        m10 = mat.m10;
-        m11 = mat.m11;
-        m12 = mat.m12;
-        m20 = mat.m20;
-        m21 = mat.m21;
-        m22 = mat.m22;
+        m00 = mat.m00();
+        m01 = mat.m01();
+        m02 = mat.m02();
+        m10 = mat.m10();
+        m11 = mat.m11();
+        m12 = mat.m12();
+        m20 = mat.m20();
+        m21 = mat.m21();
+        m22 = mat.m22();
     }
 
     /**
@@ -127,15 +121,15 @@ public class Matrix3d implements Externalizable {
      *          the {@link Matrix4d} to copy the values from
      */
     public Matrix3d(Matrix4d mat) {
-        m00 = mat.m00;
-        m01 = mat.m01;
-        m02 = mat.m02;
-        m10 = mat.m10;
-        m11 = mat.m11;
-        m12 = mat.m12;
-        m20 = mat.m20;
-        m21 = mat.m21;
-        m22 = mat.m22;
+        m00 = mat.m00();
+        m01 = mat.m01();
+        m02 = mat.m02();
+        m10 = mat.m10();
+        m11 = mat.m11();
+        m12 = mat.m12();
+        m20 = mat.m20();
+        m21 = mat.m21();
+        m22 = mat.m22();
     }
 
     /**
@@ -172,6 +166,194 @@ public class Matrix3d implements Externalizable {
         this.m20 = m20;
         this.m21 = m21;
         this.m22 = m22;
+    }
+
+    /**
+     * Create a new {@link Matrix3d} by reading its 9 double components from the given {@link DoubleBuffer}
+     * at the buffer's current position.
+     * <p>
+     * That DoubleBuffer is expected to hold the values in column-major order.
+     * <p>
+     * The buffer's position will not be changed by this method.
+     * 
+     * @param buffer
+     *          the {@link DoubleBuffer} to read the matrix values from
+     */
+    public Matrix3d(DoubleBuffer buffer) {
+        MemUtil.INSTANCE.get(this, buffer.position(), buffer);
+    }
+
+    /**
+     * Return the value of the matrix element at column 0 and row 0.
+     * 
+     * @return the value of the matrix element
+     */
+    public double m00() {
+        return m00;
+    }
+    /**
+     * Return the value of the matrix element at column 0 and row 1.
+     * 
+     * @return the value of the matrix element
+     */
+    public double m01() {
+        return m01;
+    }
+    /**
+     * Return the value of the matrix element at column 0 and row 2.
+     * 
+     * @return the value of the matrix element
+     */
+    public double m02() {
+        return m02;
+    }
+    /**
+     * Return the value of the matrix element at column 1 and row 0.
+     * 
+     * @return the value of the matrix element
+     */
+    public double m10() {
+        return m10;
+    }
+    /**
+     * Return the value of the matrix element at column 1 and row 1.
+     * 
+     * @return the value of the matrix element
+     */
+    public double m11() {
+        return m11;
+    }
+    /**
+     * Return the value of the matrix element at column 1 and row 2.
+     * 
+     * @return the value of the matrix element
+     */
+    public double m12() {
+        return m12;
+    }
+    /**
+     * Return the value of the matrix element at column 2 and row 0.
+     * 
+     * @return the value of the matrix element
+     */
+    public double m20() {
+        return m20;
+    }
+    /**
+     * Return the value of the matrix element at column 2 and row 1.
+     * 
+     * @return the value of the matrix element
+     */
+    public double m21() {
+        return m21;
+    }
+    /**
+     * Return the value of the matrix element at column 2 and row 2.
+     * 
+     * @return the value of the matrix element
+     */
+    public double m22() {
+        return m22;
+    }
+
+    /**
+     * Set the value of the matrix element at column 0 and row 0
+     * 
+     * @param m00
+     *          the new value
+     * @return the value of the matrix element
+     */
+    public Matrix3d m00(double m00) {
+        this.m00 = m00;
+        return this;
+    }
+    /**
+     * Set the value of the matrix element at column 0 and row 1
+     * 
+     * @param m01
+     *          the new value
+     * @return the value of the matrix element
+     */
+    public Matrix3d m01(double m01) {
+        this.m01 = m01;
+        return this;
+    }
+    /**
+     * Set the value of the matrix element at column 0 and row 2
+     * 
+     * @param m02
+     *          the new value
+     * @return the value of the matrix element
+     */
+    public Matrix3d m02(double m02) {
+        this.m02 = m02;
+        return this;
+    }
+    /**
+     * Set the value of the matrix element at column 1 and row 0
+     * 
+     * @param m10
+     *          the new value
+     * @return the value of the matrix element
+     */
+    public Matrix3d m10(double m10) {
+        this.m10 = m10;
+        return this;
+    }
+    /**
+     * Set the value of the matrix element at column 1 and row 1
+     * 
+     * @param m11
+     *          the new value
+     * @return the value of the matrix element
+     */
+    public Matrix3d m11(double m11) {
+        this.m11 = m11;
+        return this;
+    }
+    /**
+     * Set the value of the matrix element at column 1 and row 2
+     * 
+     * @param m12
+     *          the new value
+     * @return the value of the matrix element
+     */
+    public Matrix3d m12(double m12) {
+        this.m12 = m12;
+        return this;
+    }
+    /**
+     * Set the value of the matrix element at column 2 and row 0
+     * 
+     * @param m20
+     *          the new value
+     * @return the value of the matrix element
+     */
+    public Matrix3d m20(double m20) {
+        this.m20 = m20;
+        return this;
+    }
+    /**
+     * Set the value of the matrix element at column 2 and row 1
+     * 
+     * @param m21
+     *          the new value
+     * @return the value of the matrix element
+     */
+    public Matrix3d m21(double m21) {
+        this.m21 = m21;
+        return this;
+    }
+    /**
+     * Set the value of the matrix element at column 2 and row 2
+     * 
+     * @param m22
+     *          the new value
+     * @return the value of the matrix element
+     */
+    public Matrix3d m22(double m22) {
+        this.m22 = m22;
+        return this;
     }
 
     /**
@@ -222,15 +404,15 @@ public class Matrix3d implements Externalizable {
      * @return this
      */
     public Matrix3d set(Matrix4f mat) {
-        m00 = mat.m00;
-        m01 = mat.m01;
-        m02 = mat.m02;
-        m10 = mat.m10;
-        m11 = mat.m11;
-        m12 = mat.m12;
-        m20 = mat.m20;
-        m21 = mat.m21;
-        m22 = mat.m22;
+        m00 = mat.m00();
+        m01 = mat.m01();
+        m02 = mat.m02();
+        m10 = mat.m10();
+        m11 = mat.m11();
+        m12 = mat.m12();
+        m20 = mat.m20();
+        m21 = mat.m21();
+        m22 = mat.m22();
         return this;
     }
 
@@ -242,18 +424,18 @@ public class Matrix3d implements Externalizable {
      * @return this
      */
     public Matrix3d set(Matrix4d mat) {
-        m00 = mat.m00;
-        m01 = mat.m01;
-        m02 = mat.m02;
-        m10 = mat.m10;
-        m11 = mat.m11;
-        m12 = mat.m12;
-        m20 = mat.m20;
-        m21 = mat.m21;
-        m22 = mat.m22;
+        m00 = mat.m00();
+        m01 = mat.m01();
+        m02 = mat.m02();
+        m10 = mat.m10();
+        m11 = mat.m11();
+        m12 = mat.m12();
+        m20 = mat.m20();
+        m21 = mat.m21();
+        m22 = mat.m22();
         return this;
     }
-    
+
     /**
      * Set this matrix to be equivalent to the rotation specified by the given {@link AxisAngle4f}.
      * 
@@ -330,29 +512,69 @@ public class Matrix3d implements Externalizable {
 
     /**
      * Set this matrix to a rotation equivalent to the given quaternion.
-     * 
-     * @see Quaternionf#get(Matrix3d)
+     * <p>
+     * Reference: <a href="http://www.euclideanspace.com/maths/geometry/rotations/conversions/quaternionToMatrix/">http://www.euclideanspace.com/</a>
      * 
      * @param q
      *          the quaternion
      * @return this
      */
     public Matrix3d set(Quaternionf q) {
-        q.get(this);
+        float dx = q.x + q.x;
+        float dy = q.y + q.y;
+        float dz = q.z + q.z;
+        float q00 = dx * q.x;
+        float q11 = dy * q.y;
+        float q22 = dz * q.z;
+        float q01 = dx * q.y;
+        float q02 = dx * q.z;
+        float q03 = dx * q.w;
+        float q12 = dy * q.z;
+        float q13 = dy * q.w;
+        float q23 = dz * q.w;
+        m00 = 1.0 - q11 - q22;
+        m01 = q01 + q23;
+        m02 = q02 - q13;
+        m10 = q01 - q23;
+        m11 = 1.0 - q22 - q00;
+        m12 = q12 + q03;
+        m20 = q02 + q13;
+        m21 = q12 - q03;
+        m22 = 1.0 - q11 - q00;
         return this;
     }
 
     /**
      * Set this matrix to a rotation equivalent to the given quaternion.
-     * 
-     * @see Quaterniond#get(Matrix3d)
+     * <p>
+     * Reference: <a href="http://www.euclideanspace.com/maths/geometry/rotations/conversions/quaternionToMatrix/">http://www.euclideanspace.com/</a>
      * 
      * @param q
      *          the quaternion
      * @return this
      */
     public Matrix3d set(Quaterniond q) {
-        q.get(this);
+        double dx = q.x + q.x;
+        double dy = q.y + q.y;
+        double dz = q.z + q.z;
+        double q00 = dx * q.x;
+        double q11 = dy * q.y;
+        double q22 = dz * q.z;
+        double q01 = dx * q.y;
+        double q02 = dx * q.z;
+        double q03 = dx * q.w;
+        double q12 = dy * q.z;
+        double q13 = dy * q.w;
+        double q23 = dz * q.w;
+        m00 = 1.0 - q11 - q22;
+        m01 = q01 + q23;
+        m02 = q02 - q13;
+        m10 = q01 - q23;
+        m11 = 1.0 - q22 - q00;
+        m12 = q12 + q03;
+        m20 = q02 + q13;
+        m21 = q12 - q03;
+        m22 = 1.0 - q11 - q00;
         return this;
     }
 
@@ -389,15 +611,24 @@ public class Matrix3d implements Externalizable {
      * @return dest
      */
     public Matrix3d mul(Matrix3d right, Matrix3d dest) {
-        dest.set(m00 * right.m00 + m10 * right.m01 + m20 * right.m02,
-                 m01 * right.m00 + m11 * right.m01 + m21 * right.m02,
-                 m02 * right.m00 + m12 * right.m01 + m22 * right.m02,
-                 m00 * right.m10 + m10 * right.m11 + m20 * right.m12,
-                 m01 * right.m10 + m11 * right.m11 + m21 * right.m12,
-                 m02 * right.m10 + m12 * right.m11 + m22 * right.m12,
-                 m00 * right.m20 + m10 * right.m21 + m20 * right.m22,
-                 m01 * right.m20 + m11 * right.m21 + m21 * right.m22,
-                 m02 * right.m20 + m12 * right.m21 + m22 * right.m22 );
+        double nm00 = m00 * right.m00 + m10 * right.m01 + m20 * right.m02;
+        double nm01 = m01 * right.m00 + m11 * right.m01 + m21 * right.m02;
+        double nm02 = m02 * right.m00 + m12 * right.m01 + m22 * right.m02;
+        double nm10 = m00 * right.m10 + m10 * right.m11 + m20 * right.m12;
+        double nm11 = m01 * right.m10 + m11 * right.m11 + m21 * right.m12;
+        double nm12 = m02 * right.m10 + m12 * right.m11 + m22 * right.m12;
+        double nm20 = m00 * right.m20 + m10 * right.m21 + m20 * right.m22;
+        double nm21 = m01 * right.m20 + m11 * right.m21 + m21 * right.m22;
+        double nm22 = m02 * right.m20 + m12 * right.m21 + m22 * right.m22;
+        dest.m00 = nm00;
+        dest.m01 = nm01;
+        dest.m02 = nm02;
+        dest.m10 = nm10;
+        dest.m11 = nm11;
+        dest.m12 = nm12;
+        dest.m20 = nm20;
+        dest.m21 = nm21;
+        dest.m22 = nm22;
         return dest;
     }
 
@@ -434,43 +665,25 @@ public class Matrix3d implements Externalizable {
      * @return dest
      */
     public Matrix3d mul(Matrix3f right, Matrix3d dest) {
-        dest.set(m00 * right.m00 + m10 * right.m01 + m20 * right.m02,
-                 m01 * right.m00 + m11 * right.m01 + m21 * right.m02,
-                 m02 * right.m00 + m12 * right.m01 + m22 * right.m02,
-                 m00 * right.m10 + m10 * right.m11 + m20 * right.m12,
-                 m01 * right.m10 + m11 * right.m11 + m21 * right.m12,
-                 m02 * right.m10 + m12 * right.m11 + m22 * right.m12,
-                 m00 * right.m20 + m10 * right.m21 + m20 * right.m22,
-                 m01 * right.m20 + m11 * right.m21 + m21 * right.m22,
-                 m02 * right.m20 + m12 * right.m21 + m22 * right.m22);
+        double nm00 = m00 * right.m00 + m10 * right.m01 + m20 * right.m02;
+        double nm01 = m01 * right.m00 + m11 * right.m01 + m21 * right.m02;
+        double nm02 = m02 * right.m00 + m12 * right.m01 + m22 * right.m02;
+        double nm10 = m00 * right.m10 + m10 * right.m11 + m20 * right.m12;
+        double nm11 = m01 * right.m10 + m11 * right.m11 + m21 * right.m12;
+        double nm12 = m02 * right.m10 + m12 * right.m11 + m22 * right.m12;
+        double nm20 = m00 * right.m20 + m10 * right.m21 + m20 * right.m22;
+        double nm21 = m01 * right.m20 + m11 * right.m21 + m21 * right.m22;
+        double nm22 = m02 * right.m20 + m12 * right.m21 + m22 * right.m22;
+        dest.m00 = nm00;
+        dest.m01 = nm01;
+        dest.m02 = nm02;
+        dest.m10 = nm10;
+        dest.m11 = nm11;
+        dest.m12 = nm12;
+        dest.m20 = nm20;
+        dest.m21 = nm21;
+        dest.m22 = nm22;
         return dest;
-    }
-
-    /**
-     * Multiply the <code>left</code> matrix by the <code>right</code> and store the result in <code>dest</code>.
-     * <p>
-     * If <code>M</code> is <code>this</code> matrix and <code>R</code> the <code>right</code> matrix,
-     * then the new matrix will be <code>M * R</code>. So when transforming a
-     * vector <code>v</code> with the new matrix by using <code>M * R * v</code>, the
-     * transformation of the right matrix will be applied first!
-     * 
-     * @param left
-     *          the left matrix
-     * @param right
-     *          the right matrix
-     * @param dest
-     *          will hold the result
-     */
-    public static void mul(Matrix3f left, Matrix3d right, Matrix3d dest) {
-        dest.set(left.m00 * right.m00 + left.m10 * right.m01 + left.m20 * right.m02,
-                 left.m01 * right.m00 + left.m11 * right.m01 + left.m21 * right.m02,
-                 left.m02 * right.m00 + left.m12 * right.m01 + left.m22 * right.m02,
-                 left.m00 * right.m10 + left.m10 * right.m11 + left.m20 * right.m12,
-                 left.m01 * right.m10 + left.m11 * right.m11 + left.m21 * right.m12,
-                 left.m02 * right.m10 + left.m12 * right.m11 + left.m22 * right.m12,
-                 left.m00 * right.m20 + left.m10 * right.m21 + left.m20 * right.m22,
-                 left.m01 * right.m20 + left.m11 * right.m21 + left.m21 * right.m22,
-                 left.m02 * right.m20 + left.m12 * right.m21 + left.m22 * right.m22 );
     }
 
     /**
@@ -598,15 +811,24 @@ public class Matrix3d implements Externalizable {
         double s = determinant();
         // client must make sure that matrix is invertible
         s = 1.0 / s;
-        dest.set((m11 * m22 - m21 * m12) * s,
-                 (m21 * m02 - m01 * m22) * s,
-                 (m01 * m12 - m11 * m02) * s,
-                 (m20 * m12 - m10 * m22) * s,
-                 (m00 * m22 - m20 * m02) * s,
-                 (m10 * m02 - m00 * m12) * s,
-                 (m10 * m21 - m20 * m11) * s,
-                 (m20 * m01 - m00 * m21) * s,
-                 (m00 * m11 - m10 * m01) * s);
+        double nm00 = (m11 * m22 - m21 * m12) * s;
+        double nm01 = (m21 * m02 - m01 * m22) * s;
+        double nm02 = (m01 * m12 - m11 * m02) * s;
+        double nm10 = (m20 * m12 - m10 * m22) * s;
+        double nm11 = (m00 * m22 - m20 * m02) * s;
+        double nm12 = (m10 * m02 - m00 * m12) * s;
+        double nm20 = (m10 * m21 - m20 * m11) * s;
+        double nm21 = (m20 * m01 - m00 * m21) * s;
+        double nm22 = (m00 * m11 - m10 * m01) * s;
+        dest.m00 = nm00;
+        dest.m01 = nm01;
+        dest.m02 = nm02;
+        dest.m10 = nm10;
+        dest.m11 = nm11;
+        dest.m12 = nm12;
+        dest.m20 = nm20;
+        dest.m21 = nm21;
+        dest.m22 = nm22;
         return dest;
     }
 
@@ -788,15 +1010,7 @@ public class Matrix3d implements Externalizable {
      * @return the passed in buffer
      */
     public DoubleBuffer get(int index, DoubleBuffer buffer) {
-        buffer.put(index, m00);
-        buffer.put(index+1, m01);
-        buffer.put(index+2, m02);
-        buffer.put(index+3, m10);
-        buffer.put(index+4, m11);
-        buffer.put(index+5, m12);
-        buffer.put(index+6, m20);
-        buffer.put(index+7, m21);
-        buffer.put(index+8, m22);
+        MemUtil.INSTANCE.put(this, index, buffer);
         return buffer;
     }
 
@@ -839,15 +1053,7 @@ public class Matrix3d implements Externalizable {
      * @return the passed in buffer
      */
     public FloatBuffer get(int index, FloatBuffer buffer) {
-        buffer.put(index, (float) m00);
-        buffer.put(index+1, (float) m01);
-        buffer.put(index+2, (float) m02);
-        buffer.put(index+3, (float) m10);
-        buffer.put(index+4, (float) m11);
-        buffer.put(index+5, (float) m12);
-        buffer.put(index+6, (float) m20);
-        buffer.put(index+7, (float) m21);
-        buffer.put(index+8, (float) m22);
+        MemUtil.INSTANCE.putf(this, index, buffer);
         return buffer;
     }
 
@@ -884,15 +1090,7 @@ public class Matrix3d implements Externalizable {
      * @return the passed in buffer
      */
     public ByteBuffer get(int index, ByteBuffer buffer) {
-        buffer.putDouble(index+8*0, m00);
-        buffer.putDouble(index+8*1, m01);
-        buffer.putDouble(index+8*2, m02);
-        buffer.putDouble(index+8*3, m10);
-        buffer.putDouble(index+8*4, m11);
-        buffer.putDouble(index+8*5, m12);
-        buffer.putDouble(index+8*6, m20);
-        buffer.putDouble(index+8*7, m21);
-        buffer.putDouble(index+8*8, m22);
+        MemUtil.INSTANCE.put(this, index, buffer);
         return buffer;
     }
 
@@ -935,16 +1133,88 @@ public class Matrix3d implements Externalizable {
      * @return the passed in buffer
      */
     public ByteBuffer getFloats(int index, ByteBuffer buffer) {
-        buffer.putFloat(index+4*0,  (float)m00);
-        buffer.putFloat(index+4*1,  (float)m01);
-        buffer.putFloat(index+4*2,  (float)m02);
-        buffer.putFloat(index+4*3,  (float)m10);
-        buffer.putFloat(index+4*4,  (float)m11);
-        buffer.putFloat(index+4*5,  (float)m12);
-        buffer.putFloat(index+4*6,  (float)m20);
-        buffer.putFloat(index+4*7,  (float)m21);
-        buffer.putFloat(index+4*8, (float)m22);
+        MemUtil.INSTANCE.putf(this, index, buffer);
         return buffer;
+    }
+
+    /**
+     * Store this matrix into the supplied double array in column-major order at the given offset.
+     * 
+     * @param arr
+     *          the array to write the matrix values into
+     * @param offset
+     *          the offset into the array
+     * @return the passed in array
+     */
+    public double[] get(double[] arr, int offset) {
+        arr[offset+0] = m00;
+        arr[offset+1] = m01;
+        arr[offset+2] = m02;
+        arr[offset+3] = m10;
+        arr[offset+4] = m11;
+        arr[offset+5] = m12;
+        arr[offset+6] = m20;
+        arr[offset+7] = m21;
+        arr[offset+8] = m22;
+        return arr;
+    }
+
+    /**
+     * Store this matrix into the supplied double array in column-major order.
+     * <p>
+     * In order to specify an explicit offset into the array, use the method {@link #get(double[], int)}.
+     * 
+     * @see #get(double[], int)
+     * 
+     * @param arr
+     *          the array to write the matrix values into
+     * @return the passed in array
+     */
+    public double[] get(double[] arr) {
+        return get(arr, 0);
+    }
+
+    /**
+     * Store the elements of this matrix as float values in column-major order into the supplied float array at the given offset.
+     * <p>
+     * Please note that due to this matrix storing double values those values will potentially
+     * lose precision when they are converted to float values before being put into the given float array.
+     * 
+     * @param arr
+     *          the array to write the matrix values into
+     * @param offset
+     *          the offset into the array
+     * @return the passed in array
+     */
+    public float[] get(float[] arr, int offset) {
+        arr[offset+0] = (float)m00;
+        arr[offset+1] = (float)m01;
+        arr[offset+2] = (float)m02;
+        arr[offset+3] = (float)m10;
+        arr[offset+4] = (float)m11;
+        arr[offset+5] = (float)m12;
+        arr[offset+6] = (float)m20;
+        arr[offset+7] = (float)m21;
+        arr[offset+8] = (float)m22;
+        return arr;
+    }
+
+    /**
+     * Store the elements of this matrix as float values in column-major order into the supplied float array.
+     * <p>
+     * Please note that due to this matrix storing double values those values will potentially
+     * lose precision when they are converted to float values before being put into the given float array.
+     * <p>
+     * In order to specify an explicit offset into the array, use the method {@link #get(float[], int)}.
+     * 
+     * @see #get(float[], int)
+     * 
+     * @param arr
+     *          the array to write the matrix values into
+     * @return the passed in array
+     */
+    public float[] get(float[] arr) {
+        return get(arr, 0);
     }
 
     /**
@@ -960,16 +1230,7 @@ public class Matrix3d implements Externalizable {
      * @return this
      */
     public Matrix3d set(DoubleBuffer buffer) {
-        int pos = buffer.position();
-        m00 = buffer.get(pos);
-        m01 = buffer.get(pos+1);
-        m02 = buffer.get(pos+2);
-        m10 = buffer.get(pos+3);
-        m11 = buffer.get(pos+4);
-        m12 = buffer.get(pos+5);
-        m20 = buffer.get(pos+6);
-        m21 = buffer.get(pos+7);
-        m22 = buffer.get(pos+8);
+        MemUtil.INSTANCE.get(this, buffer.position(), buffer);
         return this;
     }
 
@@ -986,16 +1247,7 @@ public class Matrix3d implements Externalizable {
      * @return this
      */
     public Matrix3d set(FloatBuffer buffer) {
-        int pos = buffer.position();
-        m00 = buffer.get(pos);
-        m01 = buffer.get(pos+1);
-        m02 = buffer.get(pos+2);
-        m10 = buffer.get(pos+3);
-        m11 = buffer.get(pos+4);
-        m12 = buffer.get(pos+5);
-        m20 = buffer.get(pos+6);
-        m21 = buffer.get(pos+7);
-        m22 = buffer.get(pos+8);
+        MemUtil.INSTANCE.getf(this, buffer.position(), buffer);
         return this;
     }
 
@@ -1012,16 +1264,7 @@ public class Matrix3d implements Externalizable {
      * @return this
      */
     public Matrix3d set(ByteBuffer buffer) {
-        int pos = buffer.position();
-        m00 = buffer.getDouble(pos);
-        m01 = buffer.getDouble(pos+8*1);
-        m02 = buffer.getDouble(pos+8*2);
-        m10 = buffer.getDouble(pos+8*3);
-        m11 = buffer.getDouble(pos+8*4);
-        m12 = buffer.getDouble(pos+8*5);
-        m20 = buffer.getDouble(pos+8*6);
-        m21 = buffer.getDouble(pos+8*7);
-        m22 = buffer.getDouble(pos+8*8);
+        MemUtil.INSTANCE.get(this, buffer.position(), buffer);
         return this;
     }
 
@@ -1038,16 +1281,7 @@ public class Matrix3d implements Externalizable {
      * @return this
      */
     public Matrix3d setFloats(ByteBuffer buffer) {
-        int pos = buffer.position();
-        m00 = buffer.getFloat(pos);
-        m01 = buffer.getFloat(pos+4*1);
-        m02 = buffer.getFloat(pos+4*2);
-        m10 = buffer.getFloat(pos+4*3);
-        m11 = buffer.getFloat(pos+4*4);
-        m12 = buffer.getFloat(pos+4*5);
-        m20 = buffer.getFloat(pos+4*6);
-        m21 = buffer.getFloat(pos+4*7);
-        m22 = buffer.getFloat(pos+4*8);
+        MemUtil.INSTANCE.getf(this, buffer.position(), buffer);
         return this;
     }
 
@@ -1168,7 +1402,7 @@ public class Matrix3d implements Externalizable {
     }
 
     /**
-     * Apply scaling to the this matrix by scaling the base axes by the given <tt>xyz.x</tt>,
+     * Apply scaling to <code>this</code> matrix by scaling the base axes by the given <tt>xyz.x</tt>,
      * <tt>xyz.y</tt> and <tt>xyz.z</tt> factors, respectively and store the result in <code>dest</code>.
      * <p>
      * If <code>M</code> is <code>this</code> matrix and <code>S</code> the scaling matrix,
@@ -1299,7 +1533,73 @@ public class Matrix3d implements Externalizable {
     }
 
     /**
+     * Pre-multiply scaling to <code>this</code> matrix by scaling the base axes by the given x,
+     * y and z factors and store the result in <code>dest</code>.
+     * <p>
+     * If <code>M</code> is <code>this</code> matrix and <code>S</code> the scaling matrix,
+     * then the new matrix will be <code>S * M</code>. So when transforming a
+     * vector <code>v</code> with the new matrix by using <code>S * M * v</code>
+     * , the scaling will be applied last!
+     * 
+     * @param x
+     *            the factor of the x component
+     * @param y
+     *            the factor of the y component
+     * @param z
+     *            the factor of the z component
+     * @param dest
+     *            will hold the result
+     * @return dest
+     */
+    public Matrix3d scaleLocal(double x, double y, double z, Matrix3d dest) {
+        double nm00 = x * m00;
+        double nm01 = y * m01;
+        double nm02 = z * m02;
+        double nm10 = x * m10;
+        double nm11 = y * m11;
+        double nm12 = z * m12;
+        double nm20 = x * m20;
+        double nm21 = y * m21;
+        double nm22 = z * m22;
+        dest.m00 = nm00;
+        dest.m01 = nm01;
+        dest.m02 = nm02;
+        dest.m10 = nm10;
+        dest.m11 = nm11;
+        dest.m12 = nm12;
+        dest.m20 = nm20;
+        dest.m21 = nm21;
+        dest.m22 = nm22;
+        return dest;
+    }
+
+    /**
+     * Pre-multiply scaling to this matrix by scaling the base axes by the given x,
+     * y and z factors.
+     * <p>
+     * If <code>M</code> is <code>this</code> matrix and <code>S</code> the scaling matrix,
+     * then the new matrix will be <code>S * M</code>. So when transforming a
+     * vector <code>v</code> with the new matrix by using <code>S * M * v</code>, the
+     * scaling will be applied last!
+     * 
+     * @param x
+     *            the factor of the x component
+     * @param y
+     *            the factor of the y component
+     * @param z
+     *            the factor of the z component
+     * @return this
+     */
+    public Matrix3d scaleLocal(double x, double y, double z) {
+        return scaleLocal(x, y, z, this);
+    }
+
+    /**
      * Set this matrix to a rotation matrix which rotates the given radians about a given axis.
+     * <p>
+     * When used with a right-handed coordinate system, the produced rotation will rotate a vector 
+     * counter-clockwise around the rotation axis, when viewing along the negative axis direction towards the origin.
+     * When used with a left-handed coordinate system, the rotation is clockwise.
      * <p>
      * The resulting matrix can be multiplied against another transformation
      * matrix to obtain an additional rotation.
@@ -1322,6 +1622,10 @@ public class Matrix3d implements Externalizable {
     /**
      * Set this matrix to a rotation matrix which rotates the given radians about a given axis.
      * <p>
+     * When used with a right-handed coordinate system, the produced rotation will rotate a vector 
+     * counter-clockwise around the rotation axis, when viewing along the negative axis direction towards the origin.
+     * When used with a left-handed coordinate system, the rotation is clockwise.
+     * <p>
      * The resulting matrix can be multiplied against another transformation
      * matrix to obtain an additional rotation.
      * <p>
@@ -1343,6 +1647,10 @@ public class Matrix3d implements Externalizable {
     /**
      * Set this matrix to a rotation transformation using the given {@link AxisAngle4f}.
      * <p>
+     * When used with a right-handed coordinate system, the produced rotation will rotate a vector 
+     * counter-clockwise around the rotation axis, when viewing along the negative axis direction towards the origin.
+     * When used with a left-handed coordinate system, the rotation is clockwise.
+     * <p>
      * The resulting matrix can be multiplied against another transformation
      * matrix to obtain an additional rotation.
      * <p>
@@ -1363,6 +1671,10 @@ public class Matrix3d implements Externalizable {
 
     /**
      * Set this matrix to a rotation transformation using the given {@link AxisAngle4d}.
+     * <p>
+     * When used with a right-handed coordinate system, the produced rotation will rotate a vector 
+     * counter-clockwise around the rotation axis, when viewing along the negative axis direction towards the origin.
+     * When used with a left-handed coordinate system, the rotation is clockwise.
      * <p>
      * The resulting matrix can be multiplied against another transformation
      * matrix to obtain an additional rotation.
@@ -1386,6 +1698,10 @@ public class Matrix3d implements Externalizable {
      * Set this matrix to a rotation matrix which rotates the given radians about a given axis.
      * <p>
      * The axis described by the three components needs to be a unit vector.
+     * <p>
+     * When used with a right-handed coordinate system, the produced rotation will rotate a vector 
+     * counter-clockwise around the rotation axis, when viewing along the negative axis direction towards the origin.
+     * When used with a left-handed coordinate system, the rotation is clockwise.
      * <p>
      * The resulting matrix can be multiplied against another transformation
      * matrix to obtain an additional rotation.
@@ -1427,6 +1743,10 @@ public class Matrix3d implements Externalizable {
     /**
      * Set this matrix to a rotation transformation about the X axis.
      * <p>
+     * When used with a right-handed coordinate system, the produced rotation will rotate a vector 
+     * counter-clockwise around the rotation axis, when viewing along the negative axis direction towards the origin.
+     * When used with a left-handed coordinate system, the rotation is clockwise.
+     * <p>
      * Reference: <a href="http://en.wikipedia.org/wiki/Rotation_matrix#Basic_rotations">http://en.wikipedia.org</a>
      * 
      * @param ang
@@ -1434,8 +1754,20 @@ public class Matrix3d implements Externalizable {
      * @return this
      */
     public Matrix3d rotationX(double ang) {
-        double cos = Math.cos(ang);
-        double sin = Math.sin(ang);
+        double sin, cos;
+        if (ang == Math.PI || ang == -Math.PI) {
+            cos = -1.0;
+            sin = 0.0;
+        } else if (ang == Math.PI * 0.5 || ang == -Math.PI * 1.5) {
+            cos = 0.0;
+            sin = 1.0;
+        } else if (ang == -Math.PI * 0.5 || ang == Math.PI * 1.5) {
+            cos = 0.0;
+            sin = -1.0;
+        } else {
+            cos = Math.cos(ang);
+            sin = Math.sin(ang);
+        }
         m00 = 1.0;
         m01 = 0.0;
         m02 = 0.0;
@@ -1451,6 +1783,10 @@ public class Matrix3d implements Externalizable {
     /**
      * Set this matrix to a rotation transformation about the Y axis.
      * <p>
+     * When used with a right-handed coordinate system, the produced rotation will rotate a vector 
+     * counter-clockwise around the rotation axis, when viewing along the negative axis direction towards the origin.
+     * When used with a left-handed coordinate system, the rotation is clockwise.
+     * <p>
      * Reference: <a href="http://en.wikipedia.org/wiki/Rotation_matrix#Basic_rotations">http://en.wikipedia.org</a>
      * 
      * @param ang
@@ -1458,8 +1794,20 @@ public class Matrix3d implements Externalizable {
      * @return this
      */
     public Matrix3d rotationY(double ang) {
-        double cos = Math.cos(ang);
-        double sin = Math.sin(ang);
+        double sin, cos;
+        if (ang == Math.PI || ang == -Math.PI) {
+            cos = -1.0;
+            sin = 0.0;
+        } else if (ang == Math.PI * 0.5 || ang == -Math.PI * 1.5) {
+            cos = 0.0;
+            sin = 1.0;
+        } else if (ang == -Math.PI * 0.5 || ang == Math.PI * 1.5) {
+            cos = 0.0;
+            sin = -1.0;
+        } else {
+            cos = Math.cos(ang);
+            sin = Math.sin(ang);
+        }
         m00 = cos;
         m01 = 0.0;
         m02 = -sin;
@@ -1475,6 +1823,10 @@ public class Matrix3d implements Externalizable {
     /**
      * Set this matrix to a rotation transformation about the Z axis.
      * <p>
+     * When used with a right-handed coordinate system, the produced rotation will rotate a vector 
+     * counter-clockwise around the rotation axis, when viewing along the negative axis direction towards the origin.
+     * When used with a left-handed coordinate system, the rotation is clockwise.
+     * <p>
      * Reference: <a href="http://en.wikipedia.org/wiki/Rotation_matrix#Basic_rotations">http://en.wikipedia.org</a>
      * 
      * @param ang
@@ -1482,8 +1834,20 @@ public class Matrix3d implements Externalizable {
      * @return this
      */
     public Matrix3d rotationZ(double ang) {
-        double cos = Math.cos(ang);
-        double sin = Math.sin(ang);
+        double sin, cos;
+        if (ang == Math.PI || ang == -Math.PI) {
+            cos = -1.0;
+            sin = 0.0;
+        } else if (ang == Math.PI * 0.5 || ang == -Math.PI * 1.5) {
+            cos = 0.0;
+            sin = 1.0;
+        } else if (ang == -Math.PI * 0.5 || ang == Math.PI * 1.5) {
+            cos = 0.0;
+            sin = -1.0;
+        } else {
+            cos = Math.cos(ang);
+            sin = Math.sin(ang);
+        }
         m00 = cos;
         m01 = sin;
         m02 = 0.0;
@@ -1499,6 +1863,10 @@ public class Matrix3d implements Externalizable {
     /**
      * Set this matrix to a rotation of <code>angleX</code> radians about the X axis, followed by a rotation
      * of <code>angleY</code> radians about the Y axis and followed by a rotation of <code>angleZ</code> radians about the Z axis.
+     * <p>
+     * When used with a right-handed coordinate system, the produced rotation will rotate a vector 
+     * counter-clockwise around the rotation axis, when viewing along the negative axis direction towards the origin.
+     * When used with a left-handed coordinate system, the rotation is clockwise.
      * <p>
      * This method is equivalent to calling: <tt>rotationX(angleX).rotateY(angleY).rotateZ(angleZ)</tt>
      * 
@@ -1547,6 +1915,10 @@ public class Matrix3d implements Externalizable {
      * Set this matrix to a rotation of <code>angleZ</code> radians about the Z axis, followed by a rotation
      * of <code>angleY</code> radians about the Y axis and followed by a rotation of <code>angleX</code> radians about the X axis.
      * <p>
+     * When used with a right-handed coordinate system, the produced rotation will rotate a vector 
+     * counter-clockwise around the rotation axis, when viewing along the negative axis direction towards the origin.
+     * When used with a left-handed coordinate system, the rotation is clockwise.
+     * <p>
      * This method is equivalent to calling: <tt>rotationZ(angleZ).rotateY(angleY).rotateX(angleX)</tt>
      * 
      * @param angleZ
@@ -1594,6 +1966,10 @@ public class Matrix3d implements Externalizable {
      * Set this matrix to a rotation of <code>angleY</code> radians about the Y axis, followed by a rotation
      * of <code>angleX</code> radians about the X axis and followed by a rotation of <code>angleZ</code> radians about the Z axis.
      * <p>
+     * When used with a right-handed coordinate system, the produced rotation will rotate a vector 
+     * counter-clockwise around the rotation axis, when viewing along the negative axis direction towards the origin.
+     * When used with a left-handed coordinate system, the rotation is clockwise.
+     * <p>
      * This method is equivalent to calling: <tt>rotationY(angleY).rotateX(angleX).rotateZ(angleZ)</tt>
      * 
      * @param angleY
@@ -1640,6 +2016,10 @@ public class Matrix3d implements Externalizable {
     /**
      * Set this matrix to the rotation transformation of the given {@link Quaterniond}.
      * <p>
+     * When used with a right-handed coordinate system, the produced rotation will rotate a vector 
+     * counter-clockwise around the rotation axis, when viewing along the negative axis direction towards the origin.
+     * When used with a left-handed coordinate system, the rotation is clockwise.
+     * <p>
      * The resulting matrix can be multiplied against another transformation
      * matrix to obtain an additional rotation.
      * <p>
@@ -1683,6 +2063,10 @@ public class Matrix3d implements Externalizable {
 
     /**
      * Set this matrix to the rotation transformation of the given {@link Quaternionf}.
+     * <p>
+     * When used with a right-handed coordinate system, the produced rotation will rotate a vector 
+     * counter-clockwise around the rotation axis, when viewing along the negative axis direction towards the origin.
+     * When used with a left-handed coordinate system, the rotation is clockwise.
      * <p>
      * The resulting matrix can be multiplied against another transformation
      * matrix to obtain an additional rotation.
@@ -1750,6 +2134,26 @@ public class Matrix3d implements Externalizable {
         return dest;
     }
 
+    /**
+     * Transform the vector <tt>(x, y, z)</tt> by this matrix and store the result in <code>dest</code>.
+     * 
+     * @param x
+     *          the x coordinate of the vector to transform
+     * @param y
+     *          the y coordinate of the vector to transform
+     * @param z
+     *          the z coordinate of the vector to transform
+     * @param dest
+     *          will hold the result
+     * @return dest
+     */
+    public Vector3d transform(double x, double y, double z, Vector3d dest) {
+        dest.set(m00 * x + m10 * y + m20 * z,
+                 m01 * x + m11 * y + m21 * z,
+                 m02 * x + m12 * y + m22 * z);
+        return dest;
+    }
+
     public void writeExternal(ObjectOutput out) throws IOException {
         out.writeDouble(m00);
         out.writeDouble(m01);
@@ -1779,6 +2183,10 @@ public class Matrix3d implements Externalizable {
      * Apply rotation about the X axis to this matrix by rotating the given amount of radians
      * and store the result in <code>dest</code>.
      * <p>
+     * When used with a right-handed coordinate system, the produced rotation will rotate a vector 
+     * counter-clockwise around the rotation axis, when viewing along the negative axis direction towards the origin.
+     * When used with a left-handed coordinate system, the rotation is clockwise.
+     * <p>
      * If <code>M</code> is <code>this</code> matrix and <code>R</code> the rotation matrix,
      * then the new matrix will be <code>M * R</code>. So when transforming a
      * vector <code>v</code> with the new matrix by using <code>M * R * v</code>
@@ -1793,8 +2201,20 @@ public class Matrix3d implements Externalizable {
      * @return dest
      */
     public Matrix3d rotateX(double ang, Matrix3d dest) {
-        double cos = Math.cos(ang);
-        double sin = Math.sin(ang);
+        double sin, cos;
+        if (ang == Math.PI || ang == -Math.PI) {
+            cos = -1.0;
+            sin = 0.0;
+        } else if (ang == Math.PI * 0.5 || ang == -Math.PI * 1.5) {
+            cos = 0.0;
+            sin = 1.0;
+        } else if (ang == -Math.PI * 0.5 || ang == Math.PI * 1.5) {
+            cos = 0.0;
+            sin = -1.0;
+        } else {
+            cos = Math.cos(ang);
+            sin = Math.sin(ang);
+        }
         double rm11 = cos;
         double rm21 = -sin;
         double rm12 = sin;
@@ -1822,6 +2242,10 @@ public class Matrix3d implements Externalizable {
     /**
      * Apply rotation about the X axis to this matrix by rotating the given amount of radians.
      * <p>
+     * When used with a right-handed coordinate system, the produced rotation will rotate a vector 
+     * counter-clockwise around the rotation axis, when viewing along the negative axis direction towards the origin.
+     * When used with a left-handed coordinate system, the rotation is clockwise.
+     * <p>
      * If <code>M</code> is <code>this</code> matrix and <code>R</code> the rotation matrix,
      * then the new matrix will be <code>M * R</code>. So when transforming a
      * vector <code>v</code> with the new matrix by using <code>M * R * v</code>
@@ -1841,6 +2265,10 @@ public class Matrix3d implements Externalizable {
      * Apply rotation about the Y axis to this matrix by rotating the given amount of radians
      * and store the result in <code>dest</code>.
      * <p>
+     * When used with a right-handed coordinate system, the produced rotation will rotate a vector 
+     * counter-clockwise around the rotation axis, when viewing along the negative axis direction towards the origin.
+     * When used with a left-handed coordinate system, the rotation is clockwise.
+     * <p>
      * If <code>M</code> is <code>this</code> matrix and <code>R</code> the rotation matrix,
      * then the new matrix will be <code>M * R</code>. So when transforming a
      * vector <code>v</code> with the new matrix by using <code>M * R * v</code>
@@ -1855,8 +2283,20 @@ public class Matrix3d implements Externalizable {
      * @return dest
      */
     public Matrix3d rotateY(double ang, Matrix3d dest) {
-        double cos = Math.cos(ang);
-        double sin = Math.sin(ang);
+        double sin, cos;
+        if (ang == Math.PI || ang == -Math.PI) {
+            cos = -1.0;
+            sin = 0.0;
+        } else if (ang == Math.PI * 0.5 || ang == -Math.PI * 1.5) {
+            cos = 0.0;
+            sin = 1.0;
+        } else if (ang == -Math.PI * 0.5 || ang == Math.PI * 1.5) {
+            cos = 0.0;
+            sin = -1.0;
+        } else {
+            cos = Math.cos(ang);
+            sin = Math.sin(ang);
+        }
         double rm00 = cos;
         double rm20 = sin;
         double rm02 = -sin;
@@ -1884,6 +2324,10 @@ public class Matrix3d implements Externalizable {
     /**
      * Apply rotation about the Y axis to this matrix by rotating the given amount of radians.
      * <p>
+     * When used with a right-handed coordinate system, the produced rotation will rotate a vector 
+     * counter-clockwise around the rotation axis, when viewing along the negative axis direction towards the origin.
+     * When used with a left-handed coordinate system, the rotation is clockwise.
+     * <p>
      * If <code>M</code> is <code>this</code> matrix and <code>R</code> the rotation matrix,
      * then the new matrix will be <code>M * R</code>. So when transforming a
      * vector <code>v</code> with the new matrix by using <code>M * R * v</code>
@@ -1903,6 +2347,10 @@ public class Matrix3d implements Externalizable {
      * Apply rotation about the Z axis to this matrix by rotating the given amount of radians
      * and store the result in <code>dest</code>.
      * <p>
+     * When used with a right-handed coordinate system, the produced rotation will rotate a vector 
+     * counter-clockwise around the rotation axis, when viewing along the negative axis direction towards the origin.
+     * When used with a left-handed coordinate system, the rotation is clockwise.
+     * <p>
      * If <code>M</code> is <code>this</code> matrix and <code>R</code> the rotation matrix,
      * then the new matrix will be <code>M * R</code>. So when transforming a
      * vector <code>v</code> with the new matrix by using <code>M * R * v</code>
@@ -1917,8 +2365,20 @@ public class Matrix3d implements Externalizable {
      * @return dest
      */
     public Matrix3d rotateZ(double ang, Matrix3d dest) {
-        double cos = Math.cos(ang);
-        double sin = Math.sin(ang);
+        double sin, cos;
+        if (ang == Math.PI || ang == -Math.PI) {
+            cos = -1.0;
+            sin = 0.0;
+        } else if (ang == Math.PI * 0.5 || ang == -Math.PI * 1.5) {
+            cos = 0.0;
+            sin = 1.0;
+        } else if (ang == -Math.PI * 0.5 || ang == Math.PI * 1.5) {
+            cos = 0.0;
+            sin = -1.0;
+        } else {
+            cos = Math.cos(ang);
+            sin = Math.sin(ang);
+        }
         double rm00 = cos;
         double rm10 = -sin;
         double rm01 = sin;
@@ -1946,6 +2406,10 @@ public class Matrix3d implements Externalizable {
     /**
      * Apply rotation about the Z axis to this matrix by rotating the given amount of radians.
      * <p>
+     * When used with a right-handed coordinate system, the produced rotation will rotate a vector 
+     * counter-clockwise around the rotation axis, when viewing along the negative axis direction towards the origin.
+     * When used with a left-handed coordinate system, the rotation is clockwise.
+     * <p>
      * If <code>M</code> is <code>this</code> matrix and <code>R</code> the rotation matrix,
      * then the new matrix will be <code>M * R</code>. So when transforming a
      * vector <code>v</code> with the new matrix by using <code>M * R * v</code>
@@ -1964,6 +2428,10 @@ public class Matrix3d implements Externalizable {
     /**
      * Apply rotation of <code>angleX</code> radians about the X axis, followed by a rotation of <code>angleY</code> radians about the Y axis and
      * followed by a rotation of <code>angleZ</code> radians about the Z axis.
+     * <p>
+     * When used with a right-handed coordinate system, the produced rotation will rotate a vector 
+     * counter-clockwise around the rotation axis, when viewing along the negative axis direction towards the origin.
+     * When used with a left-handed coordinate system, the rotation is clockwise.
      * <p>
      * If <code>M</code> is <code>this</code> matrix and <code>R</code> the rotation matrix,
      * then the new matrix will be <code>M * R</code>. So when transforming a
@@ -1987,6 +2455,10 @@ public class Matrix3d implements Externalizable {
     /**
      * Apply rotation of <code>angleX</code> radians about the X axis, followed by a rotation of <code>angleY</code> radians about the Y axis and
      * followed by a rotation of <code>angleZ</code> radians about the Z axis and store the result in <code>dest</code>.
+     * <p>
+     * When used with a right-handed coordinate system, the produced rotation will rotate a vector 
+     * counter-clockwise around the rotation axis, when viewing along the negative axis direction towards the origin.
+     * When used with a left-handed coordinate system, the rotation is clockwise.
      * <p>
      * If <code>M</code> is <code>this</code> matrix and <code>R</code> the rotation matrix,
      * then the new matrix will be <code>M * R</code>. So when transforming a
@@ -2044,6 +2516,10 @@ public class Matrix3d implements Externalizable {
      * Apply rotation of <code>angleZ</code> radians about the Z axis, followed by a rotation of <code>angleY</code> radians about the Y axis and
      * followed by a rotation of <code>angleX</code> radians about the X axis.
      * <p>
+     * When used with a right-handed coordinate system, the produced rotation will rotate a vector 
+     * counter-clockwise around the rotation axis, when viewing along the negative axis direction towards the origin.
+     * When used with a left-handed coordinate system, the rotation is clockwise.
+     * <p>
      * If <code>M</code> is <code>this</code> matrix and <code>R</code> the rotation matrix,
      * then the new matrix will be <code>M * R</code>. So when transforming a
      * vector <code>v</code> with the new matrix by using <code>M * R * v</code>, the
@@ -2066,6 +2542,10 @@ public class Matrix3d implements Externalizable {
     /**
      * Apply rotation of <code>angleZ</code> radians about the Z axis, followed by a rotation of <code>angleY</code> radians about the Y axis and
      * followed by a rotation of <code>angleX</code> radians about the X axis and store the result in <code>dest</code>.
+     * <p>
+     * When used with a right-handed coordinate system, the produced rotation will rotate a vector 
+     * counter-clockwise around the rotation axis, when viewing along the negative axis direction towards the origin.
+     * When used with a left-handed coordinate system, the rotation is clockwise.
      * <p>
      * If <code>M</code> is <code>this</code> matrix and <code>R</code> the rotation matrix,
      * then the new matrix will be <code>M * R</code>. So when transforming a
@@ -2123,6 +2603,12 @@ public class Matrix3d implements Externalizable {
      * Apply rotation to this matrix by rotating the given amount of radians
      * about the given axis specified as x, y and z components.
      * <p>
+     * The axis described by the three components needs to be a unit vector.
+     * <p>
+     * When used with a right-handed coordinate system, the produced rotation will rotate a vector 
+     * counter-clockwise around the rotation axis, when viewing along the negative axis direction towards the origin.
+     * When used with a left-handed coordinate system, the rotation is clockwise.
+     * <p>
      * If <code>M</code> is <code>this</code> matrix and <code>R</code> the rotation matrix,
      * then the new matrix will be <code>M * R</code>. So when transforming a
      * vector <code>v</code> with the new matrix by using <code>M * R * v</code>
@@ -2147,6 +2633,12 @@ public class Matrix3d implements Externalizable {
     /**
      * Apply rotation to this matrix by rotating the given amount of radians
      * about the given axis specified as x, y and z components, and store the result in <code>dest</code>.
+     * <p>
+     * The axis described by the three components needs to be a unit vector.
+     * <p>
+     * When used with a right-handed coordinate system, the produced rotation will rotate a vector 
+     * counter-clockwise around the rotation axis, when viewing along the negative axis direction towards the origin.
+     * When used with a left-handed coordinate system, the rotation is clockwise.
      * <p>
      * If <code>M</code> is <code>this</code> matrix and <code>R</code> the rotation matrix,
      * then the new matrix will be <code>M * R</code>. So when transforming a
@@ -2210,7 +2702,310 @@ public class Matrix3d implements Externalizable {
     }
 
     /**
+     * Pre-multiply a rotation to this matrix by rotating the given amount of radians
+     * about the specified <tt>(x, y, z)</tt> axis and store the result in <code>dest</code>.
+     * <p>
+     * The axis described by the three components needs to be a unit vector.
+     * <p>
+     * When used with a right-handed coordinate system, the produced rotation will rotate a vector 
+     * counter-clockwise around the rotation axis, when viewing along the negative axis direction towards the origin.
+     * When used with a left-handed coordinate system, the rotation is clockwise.
+     * <p>
+     * If <code>M</code> is <code>this</code> matrix and <code>R</code> the rotation matrix,
+     * then the new matrix will be <code>R * M</code>. So when transforming a
+     * vector <code>v</code> with the new matrix by using <code>R * M * v</code>, the
+     * rotation will be applied last!
+     * <p>
+     * In order to set the matrix to a rotation matrix without pre-multiplying the rotation
+     * transformation, use {@link #rotation(double, double, double, double) rotation()}.
+     * <p>
+     * Reference: <a href="http://en.wikipedia.org/wiki/Rotation_matrix#Rotation_matrix_from_axis_and_angle">http://en.wikipedia.org</a>
+     * 
+     * @see #rotation(double, double, double, double)
+     * 
+     * @param ang
+     *            the angle in radians
+     * @param x
+     *            the x component of the axis
+     * @param y
+     *            the y component of the axis
+     * @param z
+     *            the z component of the axis
+     * @param dest
+     *            will hold the result
+     * @return dest
+     */
+    public Matrix3d rotateLocal(double ang, double x, double y, double z, Matrix3d dest) {
+        double s = Math.sin(ang);
+        double c = Math.cos(ang);
+        double C = 1.0 - c;
+        double xx = x * x, xy = x * y, xz = x * z;
+        double yy = y * y, yz = y * z;
+        double zz = z * z;
+        double lm00 = xx * C + c;
+        double lm01 = xy * C + z * s;
+        double lm02 = xz * C - y * s;
+        double lm10 = xy * C - z * s;
+        double lm11 = yy * C + c;
+        double lm12 = yz * C + x * s;
+        double lm20 = xz * C + y * s;
+        double lm21 = yz * C - x * s;
+        double lm22 = zz * C + c;
+        double nm00 = lm00 * m00 + lm10 * m01 + lm20 * m02;
+        double nm01 = lm01 * m00 + lm11 * m01 + lm21 * m02;
+        double nm02 = lm02 * m00 + lm12 * m01 + lm22 * m02;
+        double nm10 = lm00 * m10 + lm10 * m11 + lm20 * m12;
+        double nm11 = lm01 * m10 + lm11 * m11 + lm21 * m12;
+        double nm12 = lm02 * m10 + lm12 * m11 + lm22 * m12;
+        double nm20 = lm00 * m20 + lm10 * m21 + lm20 * m22;
+        double nm21 = lm01 * m20 + lm11 * m21 + lm21 * m22;
+        double nm22 = lm02 * m20 + lm12 * m21 + lm22 * m22;
+        dest.m00 = nm00;
+        dest.m01 = nm01;
+        dest.m02 = nm02;
+        dest.m10 = nm10;
+        dest.m11 = nm11;
+        dest.m12 = nm12;
+        dest.m20 = nm20;
+        dest.m21 = nm21;
+        dest.m22 = nm22;
+        return dest;
+    }
+
+    /**
+     * Pre-multiply a rotation to this matrix by rotating the given amount of radians
+     * about the specified <tt>(x, y, z)</tt> axis.
+     * <p>
+     * The axis described by the three components needs to be a unit vector.
+     * <p>
+     * When used with a right-handed coordinate system, the produced rotation will rotate a vector 
+     * counter-clockwise around the rotation axis, when viewing along the negative axis direction towards the origin.
+     * When used with a left-handed coordinate system, the rotation is clockwise.
+     * <p>
+     * If <code>M</code> is <code>this</code> matrix and <code>R</code> the rotation matrix,
+     * then the new matrix will be <code>R * M</code>. So when transforming a
+     * vector <code>v</code> with the new matrix by using <code>R * M * v</code>, the
+     * rotation will be applied last!
+     * <p>
+     * In order to set the matrix to a rotation matrix without pre-multiplying the rotation
+     * transformation, use {@link #rotation(double, double, double, double) rotation()}.
+     * <p>
+     * Reference: <a href="http://en.wikipedia.org/wiki/Rotation_matrix#Rotation_matrix_from_axis_and_angle">http://en.wikipedia.org</a>
+     * 
+     * @see #rotation(double, double, double, double)
+     * 
+     * @param ang
+     *            the angle in radians
+     * @param x
+     *            the x component of the axis
+     * @param y
+     *            the y component of the axis
+     * @param z
+     *            the z component of the axis
+     * @return this
+     */
+    public Matrix3d rotateLocal(double ang, double x, double y, double z) {
+        return rotateLocal(ang, x, y, z, this);
+    }
+
+    /**
+     * Pre-multiply the rotation transformation of the given {@link Quaterniond} to this matrix and store
+     * the result in <code>dest</code>.
+     * <p>
+     * When used with a right-handed coordinate system, the produced rotation will rotate a vector 
+     * counter-clockwise around the rotation axis, when viewing along the negative axis direction towards the origin.
+     * When used with a left-handed coordinate system, the rotation is clockwise.
+     * <p>
+     * If <code>M</code> is <code>this</code> matrix and <code>Q</code> the rotation matrix obtained from the given quaternion,
+     * then the new matrix will be <code>Q * M</code>. So when transforming a
+     * vector <code>v</code> with the new matrix by using <code>Q * M * v</code>,
+     * the quaternion rotation will be applied last!
+     * <p>
+     * In order to set the matrix to a rotation transformation without pre-multiplying,
+     * use {@link #rotation(Quaterniond)}.
+     * <p>
+     * Reference: <a href="http://en.wikipedia.org/wiki/Rotation_matrix#Quaternion">http://en.wikipedia.org</a>
+     * 
+     * @see #rotation(Quaterniond)
+     * 
+     * @param quat
+     *          the {@link Quaterniond}
+     * @param dest
+     *          will hold the result
+     * @return dest
+     */
+    public Matrix3d rotateLocal(Quaterniond quat, Matrix3d dest) {
+        double dqx = quat.x + quat.x;
+        double dqy = quat.y + quat.y;
+        double dqz = quat.z + quat.z;
+        double q00 = dqx * quat.x;
+        double q11 = dqy * quat.y;
+        double q22 = dqz * quat.z;
+        double q01 = dqx * quat.y;
+        double q02 = dqx * quat.z;
+        double q03 = dqx * quat.w;
+        double q12 = dqy * quat.z;
+        double q13 = dqy * quat.w;
+        double q23 = dqz * quat.w;
+        double lm00 = 1.0 - q11 - q22;
+        double lm01 = q01 + q23;
+        double lm02 = q02 - q13;
+        double lm10 = q01 - q23;
+        double lm11 = 1.0 - q22 - q00;
+        double lm12 = q12 + q03;
+        double lm20 = q02 + q13;
+        double lm21 = q12 - q03;
+        double lm22 = 1.0 - q11 - q00;
+        double nm00 = lm00 * m00 + lm10 * m01 + lm20 * m02;
+        double nm01 = lm01 * m00 + lm11 * m01 + lm21 * m02;
+        double nm02 = lm02 * m00 + lm12 * m01 + lm22 * m02;
+        double nm10 = lm00 * m10 + lm10 * m11 + lm20 * m12;
+        double nm11 = lm01 * m10 + lm11 * m11 + lm21 * m12;
+        double nm12 = lm02 * m10 + lm12 * m11 + lm22 * m12;
+        double nm20 = lm00 * m20 + lm10 * m21 + lm20 * m22;
+        double nm21 = lm01 * m20 + lm11 * m21 + lm21 * m22;
+        double nm22 = lm02 * m20 + lm12 * m21 + lm22 * m22;
+        dest.m00 = nm00;
+        dest.m01 = nm01;
+        dest.m02 = nm02;
+        dest.m10 = nm10;
+        dest.m11 = nm11;
+        dest.m12 = nm12;
+        dest.m20 = nm20;
+        dest.m21 = nm21;
+        dest.m22 = nm22;
+        return dest;
+    }
+
+    /**
+     * Pre-multiply the rotation transformation of the given {@link Quaterniond} to this matrix.
+     * <p>
+     * When used with a right-handed coordinate system, the produced rotation will rotate a vector 
+     * counter-clockwise around the rotation axis, when viewing along the negative axis direction towards the origin.
+     * When used with a left-handed coordinate system, the rotation is clockwise.
+     * <p>
+     * If <code>M</code> is <code>this</code> matrix and <code>Q</code> the rotation matrix obtained from the given quaternion,
+     * then the new matrix will be <code>Q * M</code>. So when transforming a
+     * vector <code>v</code> with the new matrix by using <code>Q * M * v</code>,
+     * the quaternion rotation will be applied last!
+     * <p>
+     * In order to set the matrix to a rotation transformation without pre-multiplying,
+     * use {@link #rotation(Quaterniond)}.
+     * <p>
+     * Reference: <a href="http://en.wikipedia.org/wiki/Rotation_matrix#Quaternion">http://en.wikipedia.org</a>
+     * 
+     * @see #rotation(Quaterniond)
+     * 
+     * @param quat
+     *          the {@link Quaterniond}
+     * @return this
+     */
+    public Matrix3d rotateLocal(Quaterniond quat) {
+        return rotateLocal(quat, this);
+    }
+
+    /**
+     * Pre-multiply the rotation transformation of the given {@link Quaternionf} to this matrix and store
+     * the result in <code>dest</code>.
+     * <p>
+     * When used with a right-handed coordinate system, the produced rotation will rotate a vector 
+     * counter-clockwise around the rotation axis, when viewing along the negative axis direction towards the origin.
+     * When used with a left-handed coordinate system, the rotation is clockwise.
+     * <p>
+     * If <code>M</code> is <code>this</code> matrix and <code>Q</code> the rotation matrix obtained from the given quaternion,
+     * then the new matrix will be <code>Q * M</code>. So when transforming a
+     * vector <code>v</code> with the new matrix by using <code>Q * M * v</code>,
+     * the quaternion rotation will be applied last!
+     * <p>
+     * In order to set the matrix to a rotation transformation without pre-multiplying,
+     * use {@link #rotation(Quaternionf)}.
+     * <p>
+     * Reference: <a href="http://en.wikipedia.org/wiki/Rotation_matrix#Quaternion">http://en.wikipedia.org</a>
+     * 
+     * @see #rotation(Quaternionf)
+     * 
+     * @param quat
+     *          the {@link Quaternionf}
+     * @param dest
+     *          will hold the result
+     * @return dest
+     */
+    public Matrix3d rotateLocal(Quaternionf quat, Matrix3d dest) {
+        double dqx = quat.x + quat.x;
+        double dqy = quat.y + quat.y;
+        double dqz = quat.z + quat.z;
+        double q00 = dqx * quat.x;
+        double q11 = dqy * quat.y;
+        double q22 = dqz * quat.z;
+        double q01 = dqx * quat.y;
+        double q02 = dqx * quat.z;
+        double q03 = dqx * quat.w;
+        double q12 = dqy * quat.z;
+        double q13 = dqy * quat.w;
+        double q23 = dqz * quat.w;
+        double lm00 = 1.0 - q11 - q22;
+        double lm01 = q01 + q23;
+        double lm02 = q02 - q13;
+        double lm10 = q01 - q23;
+        double lm11 = 1.0 - q22 - q00;
+        double lm12 = q12 + q03;
+        double lm20 = q02 + q13;
+        double lm21 = q12 - q03;
+        double lm22 = 1.0 - q11 - q00;
+        double nm00 = lm00 * m00 + lm10 * m01 + lm20 * m02;
+        double nm01 = lm01 * m00 + lm11 * m01 + lm21 * m02;
+        double nm02 = lm02 * m00 + lm12 * m01 + lm22 * m02;
+        double nm10 = lm00 * m10 + lm10 * m11 + lm20 * m12;
+        double nm11 = lm01 * m10 + lm11 * m11 + lm21 * m12;
+        double nm12 = lm02 * m10 + lm12 * m11 + lm22 * m12;
+        double nm20 = lm00 * m20 + lm10 * m21 + lm20 * m22;
+        double nm21 = lm01 * m20 + lm11 * m21 + lm21 * m22;
+        double nm22 = lm02 * m20 + lm12 * m21 + lm22 * m22;
+        dest.m00 = nm00;
+        dest.m01 = nm01;
+        dest.m02 = nm02;
+        dest.m10 = nm10;
+        dest.m11 = nm11;
+        dest.m12 = nm12;
+        dest.m20 = nm20;
+        dest.m21 = nm21;
+        dest.m22 = nm22;
+        return dest;
+    }
+
+    /**
+     * Pre-multiply the rotation transformation of the given {@link Quaternionf} to this matrix.
+     * <p>
+     * When used with a right-handed coordinate system, the produced rotation will rotate a vector 
+     * counter-clockwise around the rotation axis, when viewing along the negative axis direction towards the origin.
+     * When used with a left-handed coordinate system, the rotation is clockwise.
+     * <p>
+     * If <code>M</code> is <code>this</code> matrix and <code>Q</code> the rotation matrix obtained from the given quaternion,
+     * then the new matrix will be <code>Q * M</code>. So when transforming a
+     * vector <code>v</code> with the new matrix by using <code>Q * M * v</code>,
+     * the quaternion rotation will be applied last!
+     * <p>
+     * In order to set the matrix to a rotation transformation without pre-multiplying,
+     * use {@link #rotation(Quaternionf)}.
+     * <p>
+     * Reference: <a href="http://en.wikipedia.org/wiki/Rotation_matrix#Quaternion">http://en.wikipedia.org</a>
+     * 
+     * @see #rotation(Quaternionf)
+     * 
+     * @param quat
+     *          the {@link Quaternionf}
+     * @return this
+     */
+    public Matrix3d rotateLocal(Quaternionf quat) {
+        return rotateLocal(quat, this);
+    }
+
+    /**
      * Apply the rotation transformation of the given {@link Quaterniond} to this matrix.
+     * <p>
+     * When used with a right-handed coordinate system, the produced rotation will rotate a vector 
+     * counter-clockwise around the rotation axis, when viewing along the negative axis direction towards the origin.
+     * When used with a left-handed coordinate system, the rotation is clockwise.
      * <p>
      * If <code>M</code> is <code>this</code> matrix and <code>Q</code> the rotation matrix obtained from the given quaternion,
      * then the new matrix will be <code>M * Q</code>. So when transforming a
@@ -2235,6 +3030,10 @@ public class Matrix3d implements Externalizable {
     /**
      * Apply the rotation transformation of the given {@link Quaterniond} to this matrix and store
      * the result in <code>dest</code>.
+     * <p>
+     * When used with a right-handed coordinate system, the produced rotation will rotate a vector 
+     * counter-clockwise around the rotation axis, when viewing along the negative axis direction towards the origin.
+     * When used with a left-handed coordinate system, the rotation is clockwise.
      * <p>
      * If <code>M</code> is <code>this</code> matrix and <code>Q</code> the rotation matrix obtained from the given quaternion,
      * then the new matrix will be <code>M * Q</code>. So when transforming a
@@ -2300,6 +3099,10 @@ public class Matrix3d implements Externalizable {
     /**
      * Apply the rotation transformation of the given {@link Quaternionf} to this matrix.
      * <p>
+     * When used with a right-handed coordinate system, the produced rotation will rotate a vector 
+     * counter-clockwise around the rotation axis, when viewing along the negative axis direction towards the origin.
+     * When used with a left-handed coordinate system, the rotation is clockwise.
+     * <p>
      * If <code>M</code> is <code>this</code> matrix and <code>Q</code> the rotation matrix obtained from the given quaternion,
      * then the new matrix will be <code>M * Q</code>. So when transforming a
      * vector <code>v</code> with the new matrix by using <code>M * Q * v</code>,
@@ -2323,6 +3126,10 @@ public class Matrix3d implements Externalizable {
     /**
      * Apply the rotation transformation of the given {@link Quaternionf} to this matrix and store
      * the result in <code>dest</code>.
+     * <p>
+     * When used with a right-handed coordinate system, the produced rotation will rotate a vector 
+     * counter-clockwise around the rotation axis, when viewing along the negative axis direction towards the origin.
+     * When used with a left-handed coordinate system, the rotation is clockwise.
      * <p>
      * If <code>M</code> is <code>this</code> matrix and <code>Q</code> the rotation matrix obtained from the given quaternion,
      * then the new matrix will be <code>M * Q</code>. So when transforming a
@@ -2388,6 +3195,10 @@ public class Matrix3d implements Externalizable {
     /**
      * Apply a rotation transformation, rotating about the given {@link AxisAngle4f}, to this matrix.
      * <p>
+     * When used with a right-handed coordinate system, the produced rotation will rotate a vector 
+     * counter-clockwise around the rotation axis, when viewing along the negative axis direction towards the origin.
+     * When used with a left-handed coordinate system, the rotation is clockwise.
+     * <p>
      * If <code>M</code> is <code>this</code> matrix and <code>A</code> the rotation matrix obtained from the given {@link AxisAngle4f},
      * then the new matrix will be <code>M * A</code>. So when transforming a
      * vector <code>v</code> with the new matrix by using <code>M * A * v</code>,
@@ -2411,6 +3222,10 @@ public class Matrix3d implements Externalizable {
 
     /**
      * Apply a rotation transformation, rotating about the given {@link AxisAngle4f} and store the result in <code>dest</code>.
+     * <p>
+     * When used with a right-handed coordinate system, the produced rotation will rotate a vector 
+     * counter-clockwise around the rotation axis, when viewing along the negative axis direction towards the origin.
+     * When used with a left-handed coordinate system, the rotation is clockwise.
      * <p>
      * If <code>M</code> is <code>this</code> matrix and <code>A</code> the rotation matrix obtained from the given {@link AxisAngle4f},
      * then the new matrix will be <code>M * A</code>. So when transforming a
@@ -2438,6 +3253,10 @@ public class Matrix3d implements Externalizable {
     /**
      * Apply a rotation transformation, rotating about the given {@link AxisAngle4d}, to this matrix.
      * <p>
+     * When used with a right-handed coordinate system, the produced rotation will rotate a vector 
+     * counter-clockwise around the rotation axis, when viewing along the negative axis direction towards the origin.
+     * When used with a left-handed coordinate system, the rotation is clockwise.
+     * <p>
      * If <code>M</code> is <code>this</code> matrix and <code>A</code> the rotation matrix obtained from the given {@link AxisAngle4d},
      * then the new matrix will be <code>M * A</code>. So when transforming a
      * vector <code>v</code> with the new matrix by using <code>M * A * v</code>,
@@ -2461,6 +3280,10 @@ public class Matrix3d implements Externalizable {
 
     /**
      * Apply a rotation transformation, rotating about the given {@link AxisAngle4d} and store the result in <code>dest</code>.
+     * <p>
+     * When used with a right-handed coordinate system, the produced rotation will rotate a vector 
+     * counter-clockwise around the rotation axis, when viewing along the negative axis direction towards the origin.
+     * When used with a left-handed coordinate system, the rotation is clockwise.
      * <p>
      * If <code>M</code> is <code>this</code> matrix and <code>A</code> the rotation matrix obtained from the given {@link AxisAngle4d},
      * then the new matrix will be <code>M * A</code>. So when transforming a
@@ -2488,6 +3311,12 @@ public class Matrix3d implements Externalizable {
     /**
      * Apply a rotation transformation, rotating the given radians about the specified axis, to this matrix.
      * <p>
+     * The axis described by the <code>axis</code> vector needs to be a unit vector.
+     * <p>
+     * When used with a right-handed coordinate system, the produced rotation will rotate a vector 
+     * counter-clockwise around the rotation axis, when viewing along the negative axis direction towards the origin.
+     * When used with a left-handed coordinate system, the rotation is clockwise.
+     * <p>
      * If <code>M</code> is <code>this</code> matrix and <code>A</code> the rotation matrix obtained from the given angle and axis,
      * then the new matrix will be <code>M * A</code>. So when transforming a
      * vector <code>v</code> with the new matrix by using <code>M * A * v</code>,
@@ -2513,6 +3342,12 @@ public class Matrix3d implements Externalizable {
 
     /**
      * Apply a rotation transformation, rotating the given radians about the specified axis and store the result in <code>dest</code>.
+     * <p>
+     * The axis described by the <code>axis</code> vector needs to be a unit vector.
+     * <p>
+     * When used with a right-handed coordinate system, the produced rotation will rotate a vector 
+     * counter-clockwise around the rotation axis, when viewing along the negative axis direction towards the origin.
+     * When used with a left-handed coordinate system, the rotation is clockwise.
      * <p>
      * If <code>M</code> is <code>this</code> matrix and <code>A</code> the rotation matrix obtained from the given axis and angle,
      * then the new matrix will be <code>M * A</code>. So when transforming a
@@ -2542,6 +3377,12 @@ public class Matrix3d implements Externalizable {
     /**
      * Apply a rotation transformation, rotating the given radians about the specified axis, to this matrix.
      * <p>
+     * The axis described by the <code>axis</code> vector needs to be a unit vector.
+     * <p>
+     * When used with a right-handed coordinate system, the produced rotation will rotate a vector 
+     * counter-clockwise around the rotation axis, when viewing along the negative axis direction towards the origin.
+     * When used with a left-handed coordinate system, the rotation is clockwise.
+     * <p>
      * If <code>M</code> is <code>this</code> matrix and <code>A</code> the rotation matrix obtained from the given angle and axis,
      * then the new matrix will be <code>M * A</code>. So when transforming a
      * vector <code>v</code> with the new matrix by using <code>M * A * v</code>,
@@ -2567,6 +3408,12 @@ public class Matrix3d implements Externalizable {
 
     /**
      * Apply a rotation transformation, rotating the given radians about the specified axis and store the result in <code>dest</code>.
+     * <p>
+     * The axis described by the <code>axis</code> vector needs to be a unit vector.
+     * <p>
+     * When used with a right-handed coordinate system, the produced rotation will rotate a vector 
+     * counter-clockwise around the rotation axis, when viewing along the negative axis direction towards the origin.
+     * When used with a left-handed coordinate system, the rotation is clockwise.
      * <p>
      * If <code>M</code> is <code>this</code> matrix and <code>A</code> the rotation matrix obtained from the given axis and angle,
      * then the new matrix will be <code>M * A</code>. So when transforming a
@@ -2964,7 +3811,6 @@ public class Matrix3d implements Externalizable {
         dest.z = Math.sqrt(m20 * m20 + m21 * m21 + m22 * m22);
         return dest;
     }
-    
 
     /**
      * Obtain the direction of <tt>+Z</tt> before the transformation represented by <code>this</code> matrix is applied.
@@ -2974,6 +3820,7 @@ public class Matrix3d implements Externalizable {
      * Matrix3d inv = new Matrix3d(this).invert();
      * inv.transform(dir.set(0, 0, 1)).normalize();
      * </pre>
+     * If <code>this</code> is already an orthogonal matrix, then consider using {@link #normalizedPositiveZ(Vector3d)} instead.
      * <p>
      * Reference: <a href="http://www.euclideanspace.com/maths/algebra/matrix/functions/inverse/threeD/">http://www.euclideanspace.com</a>
      * 
@@ -2990,6 +3837,29 @@ public class Matrix3d implements Externalizable {
     }
 
     /**
+     * Obtain the direction of <tt>+Z</tt> before the transformation represented by <code>this</code> <i>orthogonal</i> matrix is applied.
+     * This method only produces correct results if <code>this</code> is an <i>orthogonal</i> matrix.
+     * <p>
+     * This method is equivalent to the following code:
+     * <pre>
+     * Matrix3d inv = new Matrix3d(this).transpose();
+     * inv.transform(dir.set(0, 0, 1)).normalize();
+     * </pre>
+     * <p>
+     * Reference: <a href="http://www.euclideanspace.com/maths/algebra/matrix/functions/inverse/threeD/">http://www.euclideanspace.com</a>
+     * 
+     * @param dir
+     *          will hold the direction of <tt>+Z</tt>
+     * @return dir
+     */
+    public Vector3d normalizedPositiveZ(Vector3d dir) {
+        dir.x = m02;
+        dir.y = m12;
+        dir.z = m22;
+        return dir;
+    }
+
+    /**
      * Obtain the direction of <tt>+X</tt> before the transformation represented by <code>this</code> matrix is applied.
      * <p>
      * This method is equivalent to the following code:
@@ -2997,6 +3867,7 @@ public class Matrix3d implements Externalizable {
      * Matrix3d inv = new Matrix3d(this).invert();
      * inv.transform(dir.set(1, 0, 0)).normalize();
      * </pre>
+     * If <code>this</code> is already an orthogonal matrix, then consider using {@link #normalizedPositiveX(Vector3d)} instead.
      * <p>
      * Reference: <a href="http://www.euclideanspace.com/maths/algebra/matrix/functions/inverse/threeD/">http://www.euclideanspace.com</a>
      * 
@@ -3013,6 +3884,29 @@ public class Matrix3d implements Externalizable {
     }
 
     /**
+     * Obtain the direction of <tt>+X</tt> before the transformation represented by <code>this</code> <i>orthogonal</i> matrix is applied.
+     * This method only produces correct results if <code>this</code> is an <i>orthogonal</i> matrix.
+     * <p>
+     * This method is equivalent to the following code:
+     * <pre>
+     * Matrix3d inv = new Matrix3d(this).transpose();
+     * inv.transform(dir.set(1, 0, 0)).normalize();
+     * </pre>
+     * <p>
+     * Reference: <a href="http://www.euclideanspace.com/maths/algebra/matrix/functions/inverse/threeD/">http://www.euclideanspace.com</a>
+     * 
+     * @param dir
+     *          will hold the direction of <tt>+X</tt>
+     * @return dir
+     */
+    public Vector3d normalizedPositiveX(Vector3d dir) {
+        dir.x = m00;
+        dir.y = m10;
+        dir.z = m20;
+        return dir;
+    }
+
+    /**
      * Obtain the direction of <tt>+Y</tt> before the transformation represented by <code>this</code> matrix is applied.
      * <p>
      * This method is equivalent to the following code:
@@ -3020,6 +3914,7 @@ public class Matrix3d implements Externalizable {
      * Matrix3d inv = new Matrix3d(this).invert();
      * inv.transform(dir.set(0, 1, 0)).normalize();
      * </pre>
+     * If <code>this</code> is already an orthogonal matrix, then consider using {@link #normalizedPositiveY(Vector3d)} instead.
      * <p>
      * Reference: <a href="http://www.euclideanspace.com/maths/algebra/matrix/functions/inverse/threeD/">http://www.euclideanspace.com</a>
      * 
@@ -3032,6 +3927,29 @@ public class Matrix3d implements Externalizable {
         dir.y = m00 * m22 - m02 * m20;
         dir.z = m02 * m10 - m00 * m12;
         dir.normalize();
+        return dir;
+    }
+
+    /**
+     * Obtain the direction of <tt>+Y</tt> before the transformation represented by <code>this</code> <i>orthogonal</i> matrix is applied.
+     * This method only produces correct results if <code>this</code> is an <i>orthogonal</i> matrix.
+     * <p>
+     * This method is equivalent to the following code:
+     * <pre>
+     * Matrix3d inv = new Matrix3d(this).transpose();
+     * inv.transform(dir.set(0, 1, 0)).normalize();
+     * </pre>
+     * <p>
+     * Reference: <a href="http://www.euclideanspace.com/maths/algebra/matrix/functions/inverse/threeD/">http://www.euclideanspace.com</a>
+     * 
+     * @param dir
+     *          will hold the direction of <tt>+Y</tt>
+     * @return dir
+     */
+    public Vector3d normalizedPositiveY(Vector3d dir) {
+        dir.x = m01;
+        dir.y = m11;
+        dir.z = m21;
         return dir;
     }
 

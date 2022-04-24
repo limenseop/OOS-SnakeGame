@@ -61,6 +61,62 @@ public class Intersectiond {
     public static final int POINT_ON_TRIANGLE_FACE = 2;
 
     /**
+     * Return value of {@link #intersectRayAar(double, double, double, double, double, double, double, double, Vector2d)} and
+     * {@link #intersectRayAar(Vector2d, Vector2d, Vector2d, Vector2d, Vector2d)}
+     * to indicate that the ray intersects the side of the axis-aligned rectangle with the minimum x coordinate.
+     */
+    public static final int AAR_SIDE_MINX = 0;
+    /**
+     * Return value of {@link #intersectRayAar(double, double, double, double, double, double, double, double, Vector2d)} and
+     * {@link #intersectRayAar(Vector2d, Vector2d, Vector2d, Vector2d, Vector2d)}
+     * to indicate that the ray intersects the side of the axis-aligned rectangle with the minimum y coordinate.
+     */
+    public static final int AAR_SIDE_MINY = 1;
+    /**
+     * Return value of {@link #intersectRayAar(double, double, double, double, double, double, double, double, Vector2d)} and
+     * {@link #intersectRayAar(Vector2d, Vector2d, Vector2d, Vector2d, Vector2d)}
+     * to indicate that the ray intersects the side of the axis-aligned rectangle with the maximum x coordinate.
+     */
+    public static final int AAR_SIDE_MAXX = 2;
+    /**
+     * Return value of {@link #intersectRayAar(double, double, double, double, double, double, double, double, Vector2d)} and
+     * {@link #intersectRayAar(Vector2d, Vector2d, Vector2d, Vector2d, Vector2d)}
+     * to indicate that the ray intersects the side of the axis-aligned rectangle with the maximum y coordinate.
+     */
+    public static final int AAR_SIDE_MAXY = 3;
+
+    /**
+     * Return value of {@link #intersectLineSegmentAab(double, double, double, double, double, double, double, double, double, double, double, double, Vector2d)} and
+     * {@link #intersectLineSegmentAab(Vector3d, Vector3d, Vector3d, Vector3d, Vector2d)} to indicate that the line segment does not intersect the axis-aligned box;
+     * or return value of {@link #intersectLineSegmentAar(double, double, double, double, double, double, double, double, Vector2d)} and
+     * {@link #intersectLineSegmentAar(Vector2d, Vector2d, Vector2d, Vector2d, Vector2d)} to indicate that the line segment does not intersect the axis-aligned rectangle.
+     */
+    public static final int OUTSIDE = -1;
+    /**
+     * Return value of {@link #intersectLineSegmentAab(double, double, double, double, double, double, double, double, double, double, double, double, Vector2d)} and
+     * {@link #intersectLineSegmentAab(Vector3d, Vector3d, Vector3d, Vector3d, Vector2d)} to indicate that one end point of the line segment lies inside of the axis-aligned box;
+     * or return value of {@link #intersectLineSegmentAar(double, double, double, double, double, double, double, double, Vector2d)} and
+     * {@link #intersectLineSegmentAar(Vector2d, Vector2d, Vector2d, Vector2d, Vector2d)} to indicate that one end point of the line segment lies inside of the axis-aligned rectangle.
+     */
+    public static final int ONE_INTERSECTION = 1;
+    /**
+     * Return value of {@link #intersectLineSegmentAab(double, double, double, double, double, double, double, double, double, double, double, double, Vector2d)} and
+     * {@link #intersectLineSegmentAab(Vector3d, Vector3d, Vector3d, Vector3d, Vector2d)} to indicate that the line segment intersects two sides of the axis-aligned box
+     * or lies on an edge or a side of the box;
+     * or return value of {@link #intersectLineSegmentAar(double, double, double, double, double, double, double, double, Vector2d)} and
+     * {@link #intersectLineSegmentAar(Vector2d, Vector2d, Vector2d, Vector2d, Vector2d)} to indicate that the line segment intersects two edges of the axis-aligned rectangle
+     * or lies on an edge of the rectangle.
+     */
+    public static final int TWO_INTERSECTION = 2;
+    /**
+     * Return value of {@link #intersectLineSegmentAab(double, double, double, double, double, double, double, double, double, double, double, double, Vector2d)} and
+     * {@link #intersectLineSegmentAab(Vector3d, Vector3d, Vector3d, Vector3d, Vector2d)} to indicate that the line segment lies completely inside of the axis-aligned box;
+     * or return value of {@link #intersectLineSegmentAar(double, double, double, double, double, double, double, double, Vector2d)} and
+     * {@link #intersectLineSegmentAar(Vector2d, Vector2d, Vector2d, Vector2d, Vector2d)} to indicate that the line segment lies completely inside of the axis-aligned rectangle.
+     */
+    public static final int INSIDE = 3;
+
+    /**
      * Test whether the plane with the general plane equation <i>a*x + b*y + c*z + d = 0</i> intersects the sphere with center
      * <tt>(centerX, centerY, centerZ)</tt> and <code>radius</code>.
      * <p>
@@ -344,7 +400,7 @@ public class Intersectiond {
      * @return <code>true</code> iff both spheres intersect; <code>false</code> otherwise
      */
     public static boolean intersectSphereSphere(Vector3d centerA, double radiusSquaredA, Vector3d centerB, double radiusSquaredB, Vector4d centerAndRadiusOfIntersectionCircle) {
-        return intersectSphereSphere(centerA.x, centerA.y, centerA.z, radiusSquaredB, centerB.x, centerB.y, centerB.z, radiusSquaredB, centerAndRadiusOfIntersectionCircle);
+        return intersectSphereSphere(centerA.x, centerA.y, centerA.z, radiusSquaredA, centerB.x, centerB.y, centerB.z, radiusSquaredB, centerAndRadiusOfIntersectionCircle);
     }
 
     /**
@@ -1021,10 +1077,10 @@ public class Intersectiond {
             r2 = r1;
             r1 = temp;
         }
-        if (r1 > 0.0f && r1 < maxR) {
+        if (r1 > 0.0 && r1 < maxR) {
             return r1;
         }
-        if (r2 > 0.0f && r2 < maxR) {
+        if (r2 > 0.0 && r2 < maxR) {
             return r2;
         }
         return Double.MAX_VALUE;
@@ -1234,7 +1290,7 @@ public class Intersectiond {
     }
 
     /**
-     * Test whether the given line segment with the end points <tt>(p0X, p0Y, p0Z)</tt> and <tt>(p1X, p1Y, p1Z)</tt>
+     * Test whether the line segment with the end points <tt>(p0X, p0Y, p0Z)</tt> and <tt>(p1X, p1Y, p1Z)</tt>
      * intersects the given sphere with center <tt>(centerX, centerY, centerZ)</tt> and square radius <code>radiusSquared</code>.
      * <p>
      * Reference: <a href="http://paulbourke.net/geometry/circlesphere/index.html#linesphere">http://paulbourke.net/</a>
@@ -1290,7 +1346,7 @@ public class Intersectiond {
     }
 
     /**
-     * Test whether the given line segment with the end points <code>p0</code> and <code>p1</code>
+     * Test whether the line segment with the end points <code>p0</code> and <code>p1</code>
      * intersects the given sphere with center <code>center</code> and square radius <code>radiusSquared</code>.
      * <p>
      * Reference: <a href="http://paulbourke.net/geometry/circlesphere/index.html#linesphere">http://paulbourke.net/</a>
@@ -1311,15 +1367,14 @@ public class Intersectiond {
 
     /**
      * Test whether the given ray with the origin <tt>(originX, originY, originZ)</tt> and direction <tt>(dirX, dirY, dirZ)</tt>
-     * intersects the given axis-aligned box given as any two opposite corners <tt>(aX, aY, aZ)</tt> and <tt>(bX, bY, bZ)</tt>,
+     * intersects the axis-aligned box given as its minimum corner <tt>(minX, minY, minZ)</tt> and maximum corner <tt>(maxX, maxY, maxZ)</tt>,
      * and return the values of the parameter <i>t</i> in the ray equation <i>p(t) = origin + t * dir</i> of the near and far point of intersection.
-     * <p>
-     * This is an implementation of the <a href="http://www.siggraph.org/education/materials/HyperGraph/raytrace/rtinter3.htm">
-     * Ray - Box Intersection</a> method, also known as "slab method."
      * <p>
      * This method returns <code>true</code> for a ray whose origin lies inside the axis-aligned box.
      * <p>
      * If many boxes need to be tested against the same ray, then the {@link RayAabIntersection} class is likely more efficient.
+     * <p>
+     * Reference: <a href="http://people.csail.mit.edu/amy/papers/box-jgt.pdf">http://people.csail.mit.edu/</a>
      * 
      * @see #intersectRayAab(Vector3d, Vector3d, Vector3d, Vector3d, Vector2d)
      * @see RayAabIntersection
@@ -1336,18 +1391,18 @@ public class Intersectiond {
      *              the y coordinate of the ray's direction
      * @param dirZ
      *              the z coordinate of the ray's direction
-     * @param aX
-     *              the x coordinate of one corner of the axis-aligned box
-     * @param aY
-     *              the y coordinate of one corner of the axis-aligned box
-     * @param aZ
-     *              the z coordinate of one corner of the axis-aligned box
-     * @param bX
-     *              the x coordinate of the opposite corner of the axis-aligned box
-     * @param bY
-     *              the y coordinate of the opposite corner of the axis-aligned box
-     * @param bZ
-     *              the y coordinate of the opposite corner of the axis-aligned box
+     * @param minX
+     *              the x coordinate of the minimum corner of the axis-aligned box
+     * @param minY
+     *              the y coordinate of the minimum corner of the axis-aligned box
+     * @param minZ
+     *              the z coordinate of the minimum corner of the axis-aligned box
+     * @param maxX
+     *              the x coordinate of the maximum corner of the axis-aligned box
+     * @param maxY
+     *              the y coordinate of the maximum corner of the axis-aligned box
+     * @param maxZ
+     *              the y coordinate of the maximum corner of the axis-aligned box
      * @param result
      *              a vector which will hold the resulting values of the parameter
      *              <i>t</i> in the ray equation <i>p(t) = origin + t * dir</i> of the near and far point of intersection
@@ -1355,24 +1410,38 @@ public class Intersectiond {
      * @return <code>true</code> if the given ray intersects the axis-aligned box; <code>false</code> otherwise
      */
     public static boolean intersectRayAab(double originX, double originY, double originZ, double dirX, double dirY, double dirZ,
-            double aX, double aY, double aZ, double bX, double bY, double bZ, Vector2d result) {
+            double minX, double minY, double minZ, double maxX, double maxY, double maxZ, Vector2d result) {
         double invDirX = 1.0 / dirX, invDirY = 1.0 / dirY, invDirZ = 1.0 / dirZ;
-        double tMinX = (aX - originX) * invDirX;
-        double tMinY = (aY - originY) * invDirY;
-        double tMinZ = (aZ - originZ) * invDirZ;
-        double tMaxX = (bX - originX) * invDirX;
-        double tMaxY = (bY - originY) * invDirY;
-        double tMaxZ = (bZ - originZ) * invDirZ;
-        double t1X = tMinX < tMaxX ? tMinX : tMaxX;
-        double t1Y = tMinY < tMaxY ? tMinY : tMaxY;
-        double t1Z = tMinZ < tMaxZ ? tMinZ : tMaxZ;
-        double t2X = tMinX > tMaxX ? tMinX : tMaxX;
-        double t2Y = tMinY > tMaxY ? tMinY : tMaxY;
-        double t2Z = tMinZ > tMaxZ ? tMinZ : tMaxZ;
-        double t1XY = t1X > t1Y ? t1X : t1Y;
-        double tNear = t1XY > t1Z ? t1XY : t1Z;
-        double t2XY = t2X < t2Y ? t2X : t2Y;
-        double tFar = t2XY < t2Z ? t2XY : t2Z;
+        double tNear, tFar, tymin, tymax, tzmin, tzmax;
+        if (invDirX >= 0.0) {
+            tNear = (minX - originX) * invDirX;
+            tFar = (maxX - originX) * invDirX;
+        } else {
+            tNear = (maxX - originX) * invDirX;
+            tFar = (minX - originX) * invDirX;
+        }
+        if (invDirY >= 0.0) {
+            tymin = (minY - originY) * invDirY;
+            tymax = (maxY - originY) * invDirY;
+        } else {
+            tymin = (maxY - originY) * invDirY;
+            tymax = (minY - originY) * invDirY;
+        }
+        if (tNear > tymax || tymin > tFar)
+            return false;
+        if (invDirZ >= 0.0) {
+            tzmin = (minZ - originZ) * invDirZ;
+            tzmax = (maxZ - originZ) * invDirZ;
+        } else {
+            tzmin = (maxZ - originZ) * invDirZ;
+            tzmax = (minZ - originZ) * invDirZ;
+        }
+        if (tNear > tzmax || tzmin > tFar)
+            return false;
+        tNear = tymin > tNear || Double.isNaN(tNear) ? tymin : tNear;
+        tFar = tymax < tFar || Double.isNaN(tFar) ? tymax : tFar;
+        tNear = tzmin > tNear ? tzmin : tNear;
+        tFar = tzmax < tFar ? tzmax : tFar;
         if (tNear < tFar && tFar >= 0.0) {
             result.x = tNear;
             result.y = tFar;
@@ -1383,15 +1452,14 @@ public class Intersectiond {
 
     /**
      * Test whether the ray with the given <code>origin</code> and direction <code>dir</code>
-     * intersects the given axis-aligned box specified as any two opposite corners <code>a</code> and <code>b</code>,
+     * intersects the axis-aligned box specified as its minimum corner <code>min</code> and maximum corner <code>max</code>,
      * and return the values of the parameter <i>t</i> in the ray equation <i>p(t) = origin + t * dir</i> of the near and far point of intersection..
-     * <p>
-     * This is an implementation of the <a href="http://www.siggraph.org/education/materials/HyperGraph/raytrace/rtinter3.htm">
-     * Ray - Box Intersection</a> method, also known as "slab method."
      * <p>
      * This method returns <code>true</code> for a ray whose origin lies inside the axis-aligned box.
      * <p>
      * If many boxes need to be tested against the same ray, then the {@link RayAabIntersection} class is likely more efficient.
+     * <p>
+     * Reference: <a href="http://people.csail.mit.edu/amy/papers/box-jgt.pdf">http://people.csail.mit.edu/</a>
      * 
      * @see #intersectRayAab(double, double, double, double, double, double, double, double, double, double, double, double, Vector2d)
      * @see RayAabIntersection
@@ -1400,30 +1468,160 @@ public class Intersectiond {
      *              the ray's origin
      * @param dir
      *              the ray's direction
-     * @param a
-     *              one corner of the axis-aligned box
-     * @param b
-     *              the opposite corner of the axis-aligned box
+     * @param min
+     *              the minimum corner of the axis-aligned box
+     * @param max
+     *              the maximum corner of the axis-aligned box
      * @param result
      *              a vector which will hold the resulting values of the parameter
      *              <i>t</i> in the ray equation <i>p(t) = origin + t * dir</i> of the near and far point of intersection
      *              iff the ray intersects the axis-aligned box
      * @return <code>true</code> if the given ray intersects the axis-aligned box; <code>false</code> otherwise
      */
-    public static boolean intersectRayAab(Vector3d origin, Vector3d dir, Vector3d a, Vector3d b, Vector2d result) {
-        return intersectRayAab(origin.x, origin.y, origin.z, dir.x, dir.y, dir.z, a.x, a.y, a.z, b.x, b.y, b.z, result);
+    public static boolean intersectRayAab(Vector3d origin, Vector3d dir, Vector3d min, Vector3d max, Vector2d result) {
+        return intersectRayAab(origin.x, origin.y, origin.z, dir.x, dir.y, dir.z, min.x, min.y, min.z, max.x, max.y, max.z, result);
+    }
+
+    /**
+     * Determine whether the undirected line segment with the end points <tt>(p0X, p0Y, p0Z)</tt> and <tt>(p1X, p1Y, p1Z)</tt>
+     * intersects the axis-aligned box given as its minimum corner <tt>(minX, minY, minZ)</tt> and maximum corner <tt>(maxX, maxY, maxZ)</tt>,
+     * and return the values of the parameter <i>t</i> in the ray equation <i>p(t) = origin + p0 * (p1 - p0)</i> of the near and far point of intersection.
+     * <p>
+     * This method returns <code>true</code> for a line segment whose either end point lies inside the axis-aligned box.
+     * <p>
+     * Reference: <a href="http://people.csail.mit.edu/amy/papers/box-jgt.pdf">http://people.csail.mit.edu/</a>
+     * 
+     * @see #intersectLineSegmentAab(Vector3d, Vector3d, Vector3d, Vector3d, Vector2d)
+     * 
+     * @param p0X
+     *              the x coordinate of the line segment's first end point
+     * @param p0Y
+     *              the y coordinate of the line segment's first end point
+     * @param p0Z
+     *              the z coordinate of the line segment's first end point
+     * @param p1X
+     *              the x coordinate of the line segment's second end point
+     * @param p1Y
+     *              the y coordinate of the line segment's second end point
+     * @param p1Z
+     *              the z coordinate of the line segment's second end point
+     * @param minX
+     *              the x coordinate of one corner of the axis-aligned box
+     * @param minY
+     *              the y coordinate of one corner of the axis-aligned box
+     * @param minZ
+     *              the z coordinate of one corner of the axis-aligned box
+     * @param maxX
+     *              the x coordinate of the opposite corner of the axis-aligned box
+     * @param maxY
+     *              the y coordinate of the opposite corner of the axis-aligned box
+     * @param maxZ
+     *              the y coordinate of the opposite corner of the axis-aligned box
+     * @param result
+     *              a vector which will hold the resulting values of the parameter
+     *              <i>t</i> in the ray equation <i>p(t) = p0 + t * (p1 - p0)</i> of the near and far point of intersection
+     *              iff the line segment intersects the axis-aligned box
+     * @return {@link #INSIDE} if the line segment lies completely inside of the axis-aligned box; or
+     *         {@link #OUTSIDE} if the line segment lies completely outside of the axis-aligned box; or
+     *         {@link #ONE_INTERSECTION} if one of the end points of the line segment lies inside of the axis-aligned box; or
+     *         {@link #TWO_INTERSECTION} if the line segment intersects two sides of the axis-aligned box
+     *         or lies on an edge or a side of the box
+     */
+    public static int intersectLineSegmentAab(double p0X, double p0Y, double p0Z, double p1X, double p1Y, double p1Z,
+            double minX, double minY, double minZ, double maxX, double maxY, double maxZ, Vector2d result) {
+        double dirX = p1X - p0X, dirY = p1Y - p0Y, dirZ = p1Z - p0Z;
+        double invDirX = 1.0 / dirX, invDirY = 1.0 / dirY, invDirZ = 1.0 / dirZ;
+        double tNear, tFar, tymin, tymax, tzmin, tzmax;
+        if (invDirX >= 0.0) {
+            tNear = (minX - p0X) * invDirX;
+            tFar = (maxX - p0X) * invDirX;
+        } else {
+            tNear = (maxX - p0X) * invDirX;
+            tFar = (minX - p0X) * invDirX;
+        }
+        if (invDirY >= 0.0) {
+            tymin = (minY - p0Y) * invDirY;
+            tymax = (maxY - p0Y) * invDirY;
+        } else {
+            tymin = (maxY - p0Y) * invDirY;
+            tymax = (minY - p0Y) * invDirY;
+        }
+        if (tNear > tymax || tymin > tFar)
+            return OUTSIDE;
+        if (invDirZ >= 0.0) {
+            tzmin = (minZ - p0Z) * invDirZ;
+            tzmax = (maxZ - p0Z) * invDirZ;
+        } else {
+            tzmin = (maxZ - p0Z) * invDirZ;
+            tzmax = (minZ - p0Z) * invDirZ;
+        }
+        if (tNear > tzmax || tzmin > tFar)
+            return OUTSIDE;
+        tNear = tymin > tNear || Double.isNaN(tNear) ? tymin : tNear;
+        tFar = tymax < tFar || Double.isNaN(tFar) ? tymax : tFar;
+        tNear = tzmin > tNear ? tzmin : tNear;
+        tFar = tzmax < tFar ? tzmax : tFar;
+        int type = OUTSIDE;
+        if (tNear < tFar && tNear <= 1.0 && tFar >= 0.0) {
+            if (tNear > 0.0 && tFar > 1.0) {
+                tFar = tNear;
+                type = ONE_INTERSECTION;
+            } else if (tNear < 0.0 && tFar < 1.0) {
+                tNear = tFar;
+                type = ONE_INTERSECTION;
+            } else if (tNear < 0.0 && tFar > 1.0) {
+                type = INSIDE;
+            } else {
+                type = TWO_INTERSECTION;
+            }
+            result.x = tNear;
+            result.y = tFar;
+        }
+        return type;
+    }
+
+    /**
+     * Determine whether the undirected line segment with the end points <code>p0</code> and <code>p1</code>
+     * intersects the axis-aligned box given as its minimum corner <code>min</code> and maximum corner <code>max</code>,
+     * and return the values of the parameter <i>t</i> in the ray equation <i>p(t) = origin + p0 * (p1 - p0)</i> of the near and far point of intersection.
+     * <p>
+     * This method returns <code>true</code> for a line segment whose either end point lies inside the axis-aligned box.
+     * <p>
+     * Reference: <a href="http://people.csail.mit.edu/amy/papers/box-jgt.pdf">http://people.csail.mit.edu/</a>
+     * 
+     * @see #intersectLineSegmentAab(Vector3d, Vector3d, Vector3d, Vector3d, Vector2d)
+     * 
+     * @param p0
+     *              the line segment's first end point
+     * @param p1
+     *              the line segment's second end point
+     * @param min
+     *              the minimum corner of the axis-aligned box
+     * @param max
+     *              the maximum corner of the axis-aligned box
+     * @param result
+     *              a vector which will hold the resulting values of the parameter
+     *              <i>t</i> in the ray equation <i>p(t) = p0 + t * (p1 - p0)</i> of the near and far point of intersection
+     *              iff the line segment intersects the axis-aligned box
+     * @return {@link #INSIDE} if the line segment lies completely inside of the axis-aligned box; or
+     *         {@link #OUTSIDE} if the line segment lies completely outside of the axis-aligned box; or
+     *         {@link #ONE_INTERSECTION} if one of the end points of the line segment lies inside of the axis-aligned box; or
+     *         {@link #TWO_INTERSECTION} if the line segment intersects two sides of the axis-aligned box
+     *         or lies on an edge or a side of the box
+     */
+    public static int intersectLineSegmentAab(Vector3d p0, Vector3d p1, Vector3d min, Vector3d max, Vector2d result) {
+        return intersectLineSegmentAab(p0.x, p0.y, p0.z, p1.x, p1.y, p1.z, min.x, min.y, min.z, max.x, max.y, max.z, result);
     }
 
     /**
      * Test whether the given ray with the origin <tt>(originX, originY, originZ)</tt> and direction <tt>(dirX, dirY, dirZ)</tt>
-     * intersects the given axis-aligned box given as any two opposite corners <tt>(aX, aY, aZ)</tt> and <tt>(bX, bY, bZ)</tt>.
-     * <p>
-     * This is an implementation of the <a href="http://www.siggraph.org/education/materials/HyperGraph/raytrace/rtinter3.htm">
-     * Ray - Box Intersection</a> method, also known as "slab method."
+     * intersects the axis-aligned box given as its minimum corner <tt>(minX, minY, minZ)</tt> and maximum corner <tt>(maxX, maxY, maxZ)</tt>.
      * <p>
      * This method returns <code>true</code> for a ray whose origin lies inside the axis-aligned box.
      * <p>
      * If many boxes need to be tested against the same ray, then the {@link RayAabIntersection} class is likely more efficient.
+     * <p>
+     * Reference: <a href="http://people.csail.mit.edu/amy/papers/box-jgt.pdf">http://people.csail.mit.edu/</a>
      * 
      * @see #testRayAab(Vector3d, Vector3d, Vector3d, Vector3d)
      * @see RayAabIntersection
@@ -1440,53 +1638,66 @@ public class Intersectiond {
      *              the y coordinate of the ray's direction
      * @param dirZ
      *              the z coordinate of the ray's direction
-     * @param aX
-     *              the x coordinate of one corner of the axis-aligned box
-     * @param aY
-     *              the y coordinate of one corner of the axis-aligned box
-     * @param aZ
-     *              the z coordinate of one corner of the axis-aligned box
-     * @param bX
-     *              the x coordinate of the opposite corner of the axis-aligned box
-     * @param bY
-     *              the y coordinate of the opposite corner of the axis-aligned box
-     * @param bZ
-     *              the y coordinate of the opposite corner of the axis-aligned box
+     * @param minX
+     *              the x coordinate of the minimum corner of the axis-aligned box
+     * @param minY
+     *              the y coordinate of the minimum corner of the axis-aligned box
+     * @param minZ
+     *              the z coordinate of the minimum corner of the axis-aligned box
+     * @param maxX
+     *              the x coordinate of the maximum corner of the axis-aligned box
+     * @param maxY
+     *              the y coordinate of the maximum corner of the axis-aligned box
+     * @param maxZ
+     *              the y coordinate of the maximum corner of the axis-aligned box
      * @return <code>true</code> if the given ray intersects the axis-aligned box; <code>false</code> otherwise
      */
     public static boolean testRayAab(double originX, double originY, double originZ, double dirX, double dirY, double dirZ,
-            double aX, double aY, double aZ, double bX, double bY, double bZ) {
+            double minX, double minY, double minZ, double maxX, double maxY, double maxZ) {
         double invDirX = 1.0 / dirX, invDirY = 1.0 / dirY, invDirZ = 1.0 / dirZ;
-        double tMinX = (aX - originX) * invDirX;
-        double tMinY = (aY - originY) * invDirY;
-        double tMinZ = (aZ - originZ) * invDirZ;
-        double tMaxX = (bX - originX) * invDirX;
-        double tMaxY = (bY - originY) * invDirY;
-        double tMaxZ = (bZ - originZ) * invDirZ;
-        double t1X = tMinX < tMaxX ? tMinX : tMaxX;
-        double t1Y = tMinY < tMaxY ? tMinY : tMaxY;
-        double t1Z = tMinZ < tMaxZ ? tMinZ : tMaxZ;
-        double t2X = tMinX > tMaxX ? tMinX : tMaxX;
-        double t2Y = tMinY > tMaxY ? tMinY : tMaxY;
-        double t2Z = tMinZ > tMaxZ ? tMinZ : tMaxZ;
-        double t1XY = t1X > t1Y ? t1X : t1Y;
-        double tNear = t1XY > t1Z ? t1XY : t1Z;
-        double t2XY = t2X < t2Y ? t2X : t2Y;
-        double tFar = t2XY < t2Z ? t2XY : t2Z;
+        double tNear, tFar, tymin, tymax, tzmin, tzmax;
+        if (invDirX >= 0.0) {
+            tNear = (minX - originX) * invDirX;
+            tFar = (maxX - originX) * invDirX;
+        } else {
+            tNear = (maxX - originX) * invDirX;
+            tFar = (minX - originX) * invDirX;
+        }
+        if (invDirY >= 0.0) {
+            tymin = (minY - originY) * invDirY;
+            tymax = (maxY - originY) * invDirY;
+        } else {
+            tymin = (maxY - originY) * invDirY;
+            tymax = (minY - originY) * invDirY;
+        }
+        if (tNear > tymax || tymin > tFar)
+            return false;
+        if (invDirZ >= 0.0) {
+            tzmin = (minZ - originZ) * invDirZ;
+            tzmax = (maxZ - originZ) * invDirZ;
+        } else {
+            tzmin = (maxZ - originZ) * invDirZ;
+            tzmax = (minZ - originZ) * invDirZ;
+        }
+        if (tNear > tzmax || tzmin > tFar)
+            return false;
+        tNear = tymin > tNear || Double.isNaN(tNear) ? tymin : tNear;
+        tFar = tymax < tFar || Double.isNaN(tFar) ? tymax : tFar;
+        tNear = tzmin > tNear ? tzmin : tNear;
+        tFar = tzmax < tFar ? tzmax : tFar;
         return tNear < tFar && tFar >= 0.0;
     }
 
     /**
      * Test whether the ray with the given <code>origin</code> and direction <code>dir</code>
-     * intersects the given axis-aligned box specified as any two opposite corners <code>a</code> and <code>b</code>.
-     * <p>
-     * This is an implementation of the <a href="http://www.siggraph.org/education/materials/HyperGraph/raytrace/rtinter3.htm">
-     * Ray - Box Intersection</a> method, also known as "slab method."
+     * intersects the axis-aligned box specified as its minimum corner <code>min</code> and maximum corner <code>max</code>.
      * <p>
      * This method returns <code>true</code> for a ray whose origin lies inside the axis-aligned box.
      * <p>
      * If many boxes need to be tested against the same ray, then the {@link RayAabIntersection} class is likely more efficient.
-     * 
+     * <p>
+     * Reference: <a href="http://people.csail.mit.edu/amy/papers/box-jgt.pdf">http://people.csail.mit.edu/</a>
+     *  
      * @see #testRayAab(double, double, double, double, double, double, double, double, double, double, double, double)
      * @see RayAabIntersection
      * 
@@ -1494,14 +1705,14 @@ public class Intersectiond {
      *              the ray's origin
      * @param dir
      *              the ray's direction
-     * @param a
-     *              one corner of the axis-aligned box
-     * @param b
-     *              the opposite corner of the axis-aligned box
+     * @param min
+     *              the minimum corner of the axis-aligned box
+     * @param max
+     *              the maximum corner of the axis-aligned box
      * @return <code>true</code> if the given ray intersects the axis-aligned box; <code>false</code> otherwise
      */
-    public static boolean testRayAab(Vector3d origin, Vector3d dir, Vector3d a, Vector3d b) {
-        return testRayAab(origin.x, origin.y, origin.z, dir.x, dir.y, dir.z, a.x, a.y, a.z, b.x, b.y, b.z);
+    public static boolean testRayAab(Vector3d origin, Vector3d dir, Vector3d min, Vector3d max) {
+        return testRayAab(origin.x, origin.y, origin.z, dir.x, dir.y, dir.z, min.x, min.y, min.z, max.x, max.y, max.z);
     }
 
     /**
@@ -2078,7 +2289,7 @@ public class Intersectiond {
         double dirY = p1Y - p0Y;
         double dirZ = p1Z - p0Z;
         double t = intersectRayTriangle(p0X, p0Y, p0Z, dirX, dirY, dirZ, v0X, v0Y, v0Z, v1X, v1Y, v1Z, v2X, v2Y, v2Z, epsilon);
-        if (t >= 0.0f && t <= 1.0f) {
+        if (t >= 0.0 && t <= 1.0) {
             intersectionPoint.x = p0X + dirX * t;
             intersectionPoint.y = p0Y + dirY * t;
             intersectionPoint.z = p0Z + dirZ * t;
@@ -2116,6 +2327,51 @@ public class Intersectiond {
      */
     public static boolean intersectLineSegmentTriangle(Vector3d p0, Vector3d p1, Vector3d v0, Vector3d v1, Vector3d v2, double epsilon, Vector3d intersectionPoint) {
         return intersectLineSegmentTriangle(p0.x, p0.y, p0.z, p1.x, p1.y, p1.z, v0.x, v0.y, v0.z, v1.x, v1.y, v1.z, v2.x, v2.y, v2.z, epsilon, intersectionPoint);
+    }
+
+    /**
+     * Determine whether the line segment with the end points <tt>(p0X, p0Y, p0Z)</tt> and <tt>(p1X, p1Y, p1Z)</tt>
+     * intersects the plane given as the general plane equation <i>a*x + b*y + c*z + d = 0</i>,
+     * and return the point of intersection.
+     * 
+     * @param p0X
+     *              the x coordinate of the line segment's first end point
+     * @param p0Y
+     *              the y coordinate of the line segment's first end point
+     * @param p0Z
+     *              the z coordinate of the line segment's first end point
+     * @param p1X
+     *              the x coordinate of the line segment's second end point
+     * @param p1Y
+     *              the y coordinate of the line segment's second end point
+     * @param p1Z
+     *              the z coordinate of the line segment's second end point
+     * @param a
+     *              the x factor in the plane equation
+     * @param b
+     *              the y factor in the plane equation
+     * @param c
+     *              the z factor in the plane equation
+     * @param d
+     *              the constant in the plane equation
+     * @param intersectionPoint
+     *              the point of intersection
+     * @return <code>true</code> if the given line segment intersects the plane; <code>false</code> otherwise
+     */
+    public static boolean intersectLineSegmentPlane(double p0X, double p0Y, double p0Z, double p1X, double p1Y, double p1Z,
+            double a, double b, double c, double d, Vector3d intersectionPoint) {
+        double dirX = p1X - p0X;
+        double dirY = p1Y - p0Y;
+        double dirZ = p1Z - p0Z;
+        double denom = a * dirX + b * dirY + c * dirZ;
+        double t = -(a * p0X + b * p0Y + c * p0Z + d) / denom;
+        if (t >= 0.0 && t <= 1.0) {
+            intersectionPoint.x = p0X + t * dirX;
+            intersectionPoint.y = p0Y + t * dirY;
+            intersectionPoint.z = p0Z + t * dirZ;
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -2406,7 +2662,7 @@ public class Intersectiond {
      * @return <code>true</code> iff both circles intersect; <code>false</code> otherwise
      */
     public static boolean intersectCircleCircle(Vector2d centerA, double radiusSquaredA, Vector2d centerB, double radiusSquaredB, Vector3d intersectionCenterAndHL) {
-        return intersectCircleCircle(centerA.x, centerA.y, radiusSquaredB, centerB.x, centerB.y, radiusSquaredB, intersectionCenterAndHL);
+        return intersectCircleCircle(centerA.x, centerA.y, radiusSquaredA, centerB.x, centerB.y, radiusSquaredB, intersectionCenterAndHL);
     }
 
     /**
@@ -2568,6 +2824,71 @@ public class Intersectiond {
      */
     public static double intersectRayLine(Vector2d origin, Vector2d dir, Vector2d point, Vector2d normal, double epsilon) {
         return intersectRayLine(origin.x, origin.y, dir.x, dir.y, point.x, point.y, normal.x, normal.y, epsilon);
+    }
+
+    /**
+     * Determine whether the ray with given origin <tt>(originX, originY)</tt> and direction <tt>(dirX, dirY)</tt> intersects the undirected line segment
+     * given by the two end points <tt>(aX, bY)</tt> and <tt>(bX, bY)</tt>, and return the value of the parameter <i>t</i> in the ray equation
+     * <i>p(t) = origin + t * dir</i> of the intersection point, if any.
+     * <p>
+     * This method returns <tt>-1.0</tt> if the ray does not intersect the line segment.
+     * 
+     * @see #intersectRayLineSegment(Vector2d, Vector2d, Vector2d, Vector2d)
+     * 
+     * @param originX
+     *              the x coordinate of the ray's origin
+     * @param originY
+     *              the y coordinate of the ray's origin
+     * @param dirX
+     *              the x coordinate of the ray's direction
+     * @param dirY
+     *              the y coordinate of the ray's direction
+     * @param aX
+     *              the x coordinate of the line segment's first end point
+     * @param aY
+     *              the y coordinate of the line segment's first end point
+     * @param bX
+     *              the x coordinate of the line segment's second end point
+     * @param bY
+     *              the y coordinate of the line segment's second end point
+     * @return the value of the parameter <i>t</i> in the ray equation <i>p(t) = origin + t * dir</i> of the intersection point, if the ray
+     *         intersects the line segment; <tt>-1.0</tt> otherwise
+     */
+    public static double intersectRayLineSegment(double originX, double originY, double dirX, double dirY, double aX, double aY, double bX, double bY) {
+        double v1X = originX - aX;
+        double v1Y = originY - aY;
+        double v2X = bX - aX;
+        double v2Y = bY - aY;
+        double invV23 = 1.0 / (v2Y * dirX - v2X * dirY);
+        double t1 = (v2X * v1Y - v2Y * v1X) * invV23;
+        double t2 = (v1Y * dirX - v1X * dirY) * invV23;
+        if (t1 >= 0.0 && t2 >= 0.0 && t2 <= 1.0)
+            return t1;
+        return -1.0;
+    }
+
+    /**
+     * Determine whether the ray with given <code>origin</code> and direction <code>dir</code> intersects the undirected line segment
+     * given by the two end points <code>a</code> and <code>b</code>, and return the value of the parameter <i>t</i> in the ray equation
+     * <i>p(t) = origin + t * dir</i> of the intersection point, if any.
+     * <p>
+     * This method returns <tt>-1.0</tt> if the ray does not intersect the line segment.
+     * 
+     * @see #intersectRayLineSegment(double, double, double, double, double, double, double, double)
+     * 
+     * @param origin
+     *              the ray's origin
+     * @param dir
+     *              the ray's direction
+     * @param a
+     *              the line segment's first end point
+     * @param b
+     *              the line segment's second end point
+     * @return the value of the parameter <i>t</i> in the ray equation <i>p(t) = origin + t * dir</i> of the intersection point, if the ray
+     *         intersects the line segment; <tt>-1.0</tt> otherwise
+     */
+    public static double intersectRayLineSegment(Vector2d origin, Vector2d dir, Vector2d a, Vector2d b) {
+        return intersectRayLineSegment(origin.x, origin.y, dir.x, dir.y, a.x, a.y, b.x, b.y);
     }
 
     /**
@@ -2870,14 +3191,14 @@ public class Intersectiond {
     }
 
     /**
-     * Test whether the given ray with the origin <tt>(originX, originY)</tt> and direction <tt>(dirX, dirY)</tt>
-     * intersects the given axis-aligned rectangle given as any two opposite corners <tt>(aX, aY)</tt> and <tt>(bX, bY)</tt>,
-     * and return the values of the parameter <i>t</i> in the ray equation <i>p(t) = origin + t * dir</i> of the near and far point of intersection.
+     * Determine whether the given ray with the origin <tt>(originX, originY)</tt> and direction <tt>(dirX, dirY)</tt>
+     * intersects the axis-aligned rectangle given as its minimum corner <tt>(minX, minY)</tt> and maximum corner <tt>(maxX, maxY)</tt>,
+     * and return the values of the parameter <i>t</i> in the ray equation <i>p(t) = origin + t * dir</i> of the near and far point of intersection
+     * as well as the side of the axis-aligned rectangle the ray intersects.
      * <p>
-     * This is an implementation of the <a href="http://www.siggraph.org/education/materials/HyperGraph/raytrace/rtinter3.htm">
-     * Ray - Box Intersection</a> method, also known as "slab method."
+     * This method also detects an intersection for a ray whose origin lies inside the axis-aligned rectangle.
      * <p>
-     * This method returns <code>true</code> for a ray whose origin lies inside the axis-aligned rectangle.
+     * Reference: <a href="http://people.csail.mit.edu/amy/papers/box-jgt.pdf">http://people.csail.mit.edu/</a>
      * 
      * @see #intersectRayAar(Vector2d, Vector2d, Vector2d, Vector2d, Vector2d)
      * 
@@ -2889,50 +3210,78 @@ public class Intersectiond {
      *              the x coordinate of the ray's direction
      * @param dirY
      *              the y coordinate of the ray's direction
-     * @param aX
-     *              the x coordinate of one corner of the axis-aligned rectangle
-     * @param aY
-     *              the y coordinate of one corner of the axis-aligned rectangle
-     * @param bX
-     *              the x coordinate of the opposite corner of the axis-aligned rectangle
-     * @param bY
-     *              the y coordinate of the opposite corner of the axis-aligned rectangle
+     * @param minX
+     *              the x coordinate of the minimum corner of the axis-aligned rectangle
+     * @param minY
+     *              the y coordinate of the minimum corner of the axis-aligned rectangle
+     * @param maxX
+     *              the x coordinate of the maximum corner of the axis-aligned rectangle
+     * @param maxY
+     *              the y coordinate of the maximum corner of the axis-aligned rectangle
      * @param result
-     *              a vector which will hold the resulting values of the parameter
-     *              <i>t</i> in the ray equation <i>p(t) = origin + t * dir</i> of the near and far point of intersection
-     *              iff the ray intersects the axis-aligned rectangle
-     * @return <code>true</code> if the given ray intersects the axis-aligned rectangle; <code>false</code> otherwise
+     *              a vector which will hold the values of the parameter <i>t</i> in the ray equation
+     *              <i>p(t) = origin + t * dir</i> of the near and far point of intersection
+     * @return the side on which the near intersection occurred as one of
+     *         {@link #AAR_SIDE_MINX}, {@link #AAR_SIDE_MINY}, {@link #AAR_SIDE_MAXX} or {@link #AAR_SIDE_MAXY};
+     *         or <tt>-1</tt> if the ray does not intersect the axis-aligned rectangle;
      */
-    public static boolean intersectRayAar(double originX, double originY, double dirX, double dirY, 
-            double aX, double aY, double bX, double bY, Vector2d result) {
+    public static int intersectRayAar(double originX, double originY, double dirX, double dirY, 
+            double minX, double minY, double maxX, double maxY, Vector2d result) {
         double invDirX = 1.0 / dirX, invDirY = 1.0 / dirY;
-        double tMinX = (aX - originX) * invDirX;
-        double tMinY = (aY - originY) * invDirY;
-        double tMaxX = (bX - originX) * invDirX;
-        double tMaxY = (bY - originY) * invDirY;
-        double t1X = tMinX < tMaxX ? tMinX : tMaxX;
-        double t1Y = tMinY < tMaxY ? tMinY : tMaxY;
-        double t2X = tMinX > tMaxX ? tMinX : tMaxX;
-        double t2Y = tMinY > tMaxY ? tMinY : tMaxY;
-        double tNear = t1X > t1Y ? t1X : t1Y;
-        double tFar = t2X < t2Y ? t2X : t2Y;
+        double tNear, tFar, tymin, tymax;
+        if (invDirX >= 0.0) {
+            tNear = (minX - originX) * invDirX;
+            tFar = (maxX - originX) * invDirX;
+        } else {
+            tNear = (maxX - originX) * invDirX;
+            tFar = (minX - originX) * invDirX;
+        }
+        if (invDirY >= 0.0) {
+            tymin = (minY - originY) * invDirY;
+            tymax = (maxY - originY) * invDirY;
+        } else {
+            tymin = (maxY - originY) * invDirY;
+            tymax = (minY - originY) * invDirY;
+        }
+        if (tNear > tymax || tymin > tFar)
+            return OUTSIDE;
+        tNear = tymin > tNear || Double.isNaN(tNear) ? tymin : tNear;
+        tFar = tymax < tFar || Double.isNaN(tFar) ? tymax : tFar;
+        int side = -1; // no intersection side
         if (tNear < tFar && tFar >= 0.0) {
+            double px = originX + tNear * dirX;
+            double py = originY + tNear * dirY;
             result.x = tNear;
             result.y = tFar;
-            return true;
+            double daX = Math.abs(px - minX);
+            double daY = Math.abs(py - minY);
+            double dbX = Math.abs(px - maxX);
+            double dbY = Math.abs(py - maxY);
+            side = 0; // min x coordinate
+            double min = daX;
+            if (daY < min) {
+                min = daY;
+                side = 1; // min y coordinate
+            }
+            if (dbX < min) {
+                min = dbX;
+                side = 2; // max xcoordinate
+            }
+            if (dbY < min)
+                side = 3; // max y coordinate
         }
-        return false;
+        return side;
     }
 
     /**
-     * Test whether the ray with the given <code>origin</code> and direction <code>dir</code>
-     * intersects the given axis-aligned rectangle specified as any two opposite corners <code>a</code> and <code>b</code>,
-     * and return the values of the parameter <i>t</i> in the ray equation <i>p(t) = origin + t * dir</i> of the near and far point of intersection..
+     * Determine whether the given ray with the given <code>origin</code> and direction <code>dir</code>
+     * intersects the axis-aligned rectangle given as its minimum corner <code>min</code> and maximum corner <code>max</code>,
+     * and return the values of the parameter <i>t</i> in the ray equation <i>p(t) = origin + t * dir</i> of the near and far point of intersection
+     * as well as the side of the axis-aligned rectangle the ray intersects.
      * <p>
-     * This is an implementation of the <a href="http://www.siggraph.org/education/materials/HyperGraph/raytrace/rtinter3.htm">
-     * Ray - Box Intersection</a> method, also known as "slab method."
+     * This method also detects an intersection for a ray whose origin lies inside the axis-aligned rectangle.
      * <p>
-     * This method returns <code>true</code> for a ray whose origin lies inside the axis-aligned rectangle.
+     * Reference: <a href="http://people.csail.mit.edu/amy/papers/box-jgt.pdf">http://people.csail.mit.edu/</a>
      * 
      * @see #intersectRayAar(double, double, double, double, double, double, double, double, Vector2d)
      * 
@@ -2940,28 +3289,138 @@ public class Intersectiond {
      *              the ray's origin
      * @param dir
      *              the ray's direction
-     * @param a
-     *              one corner of the axis-aligned rectangle
-     * @param b
-     *              the opposite corner of the axis-aligned rectangle
+     * @param min
+     *              the minimum corner of the axis-aligned rectangle
+     * @param max
+     *              the maximum corner of the axis-aligned rectangle
      * @param result
-     *              a vector which will hold the resulting values of the parameter
-     *              <i>t</i> in the ray equation <i>p(t) = origin + t * dir</i> of the near and far point of intersection
-     *              iff the ray intersects the axis-aligned rectangle
-     * @return <code>true</code> if the given ray intersects the axis-aligned rectangle; <code>false</code> otherwise
+     *              a vector which will hold the values of the parameter <i>t</i> in the ray equation
+     *              <i>p(t) = origin + t * dir</i> of the near and far point of intersection
+     * @return the side on which the near intersection occurred as one of
+     *         {@link #AAR_SIDE_MINX}, {@link #AAR_SIDE_MINY}, {@link #AAR_SIDE_MAXX} or {@link #AAR_SIDE_MAXY};
+     *         or <tt>-1</tt> if the ray does not intersect the axis-aligned rectangle;
      */
-    public static boolean intersectRayAar(Vector2d origin, Vector2d dir, Vector2d a, Vector2d b, Vector2d result) {
-        return intersectRayAar(origin.x, origin.y, dir.x, dir.y, a.x, a.y, b.x, b.y, result);
+    public static int intersectRayAar(Vector2d origin, Vector2d dir, Vector2d min, Vector2d max, Vector2d result) {
+        return intersectRayAar(origin.x, origin.y, dir.x, dir.y, min.x, min.y, max.x, max.y, result);
+    }
+
+    /**
+     * Determine whether the undirected line segment with the end points <tt>(p0X, p0Y)</tt> and <tt>(p1X, p1Y)</tt>
+     * intersects the axis-aligned rectangle given as its minimum corner <tt>(minX, minY)</tt> and maximum corner <tt>(maxX, maxY)</tt>,
+     * and store the values of the parameter <i>t</i> in the ray equation <i>p(t) = p0 + t * (p1 - p0)</i> of the near and far point of intersection
+     * into <code>result</code>.
+     * <p>
+     * This method also detects an intersection of a line segment whose either end point lies inside the axis-aligned rectangle.
+     * <p>
+     * Reference: <a href="http://people.csail.mit.edu/amy/papers/box-jgt.pdf">http://people.csail.mit.edu/</a>
+     *
+     * @see #intersectLineSegmentAar(Vector2d, Vector2d, Vector2d, Vector2d, Vector2d)
+     * 
+     * @param p0X
+     *              the x coordinate of the line segment's first end point
+     * @param p0Y
+     *              the y coordinate of the line segment's first end point
+     * @param p1X
+     *              the x coordinate of the line segment's second end point
+     * @param p1Y
+     *              the y coordinate of the line segment's second end point
+     * @param minX
+     *              the x coordinate of the minimum corner of the axis-aligned rectangle
+     * @param minY
+     *              the y coordinate of the minimum corner of the axis-aligned rectangle
+     * @param maxX
+     *              the x coordinate of the maximum corner of the axis-aligned rectangle
+     * @param maxY
+     *              the y coordinate of the maximum corner of the axis-aligned rectangle
+     * @param result
+     *              a vector which will hold the values of the parameter <i>t</i> in the ray equation
+     *              <i>p(t) = p0 + t * (p1 - p0)</i> of the near and far point of intersection
+     * @return {@link #INSIDE} if the line segment lies completely inside of the axis-aligned rectangle; or
+     *         {@link #OUTSIDE} if the line segment lies completely outside of the axis-aligned rectangle; or
+     *         {@link #ONE_INTERSECTION} if one of the end points of the line segment lies inside of the axis-aligned rectangle; or
+     *         {@link #TWO_INTERSECTION} if the line segment intersects two edges of the axis-aligned rectangle or lies on one edge of the rectangle
+     */
+    public static int intersectLineSegmentAar(double p0X, double p0Y, double p1X, double p1Y, 
+            double minX, double minY, double maxX, double maxY, Vector2d result) {
+        double dirX = p1X - p0X, dirY = p1Y - p0Y;
+        double invDirX = 1.0 / dirX, invDirY = 1.0 / dirY;
+        double tNear, tFar, tymin, tymax;
+        if (invDirX >= 0.0) {
+            tNear = (minX - p0X) * invDirX;
+            tFar = (maxX - p0X) * invDirX;
+        } else {
+            tNear = (maxX - p0X) * invDirX;
+            tFar = (minX - p0X) * invDirX;
+        }
+        if (invDirY >= 0.0) {
+            tymin = (minY - p0Y) * invDirY;
+            tymax = (maxY - p0Y) * invDirY;
+        } else {
+            tymin = (maxY - p0Y) * invDirY;
+            tymax = (minY - p0Y) * invDirY;
+        }
+        if (tNear > tymax || tymin > tFar)
+            return OUTSIDE;
+        tNear = tymin > tNear || Double.isNaN(tNear) ? tymin : tNear;
+        tFar = tymax < tFar || Double.isNaN(tFar) ? tymax : tFar;
+        int type = OUTSIDE;
+        if (tNear < tFar && tNear <= 1.0 && tFar >= 0.0) {
+            if (tNear > 0.0 && tFar > 1.0) {
+                tFar = tNear;
+                type = ONE_INTERSECTION;
+            } else if (tNear < 0.0 && tFar < 1.0) {
+                tNear = tFar;
+                type = ONE_INTERSECTION;
+            } else if (tNear < 0.0 && tFar > 1.0) {
+                type = INSIDE;
+            } else {
+                type = TWO_INTERSECTION;
+            }
+            result.x = tNear;
+            result.y = tFar;
+        }
+        return type;
+    }
+
+    /**
+     * Determine whether the undirected line segment with the end points <code>p0</code> and <code>p1</code>
+     * intersects the axis-aligned rectangle given as its minimum corner <code>min</code> and maximum corner <code>max</code>,
+     * and store the values of the parameter <i>t</i> in the ray equation <i>p(t) = p0 + t * (p1 - p0)</i> of the near and far point of intersection
+     * into <code>result</code>.
+     * <p>
+     * This method also detects an intersection of a line segment whose either end point lies inside the axis-aligned rectangle.
+     * <p>
+     * Reference: <a href="http://people.csail.mit.edu/amy/papers/box-jgt.pdf">http://people.csail.mit.edu/</a>
+     *
+     * #see {@link #intersectLineSegmentAar(double, double, double, double, double, double, double, double, Vector2d)}
+     * 
+     * @param p0
+     *              the line segment's first end point
+     * @param p1
+     *              the line segment's second end point
+     * @param min
+     *              the minimum corner of the axis-aligned rectangle
+     * @param max
+     *              the maximum corner of the axis-aligned rectangle
+     * @param result
+     *              a vector which will hold the values of the parameter <i>t</i> in the ray equation
+     *              <i>p(t) = p0 + t * (p1 - p0)</i> of the near and far point of intersection
+     * @return {@link #INSIDE} if the line segment lies completely inside of the axis-aligned rectangle; or
+     *         {@link #OUTSIDE} if the line segment lies completely outside of the axis-aligned rectangle; or
+     *         {@link #ONE_INTERSECTION} if one of the end points of the line segment lies inside of the axis-aligned rectangle; or
+     *         {@link #TWO_INTERSECTION} if the line segment intersects two edges of the axis-aligned rectangle
+     */
+    public static int intersectLineSegmentAar(Vector2d p0, Vector2d p1, Vector2d min, Vector2d max, Vector2d result) {
+        return intersectLineSegmentAar(p0.x, p0.y, p1.x, p1.y, min.x, min.y, max.x, max.y, result);
     }
 
     /**
      * Test whether the given ray with the origin <tt>(originX, originY)</tt> and direction <tt>(dirX, dirY)</tt>
-     * intersects the given axis-aligned rectangle given as any two opposite corners <tt>(aX, aY)</tt> and <tt>(bX, bY)</tt>.
-     * <p>
-     * This is an implementation of the <a href="http://www.siggraph.org/education/materials/HyperGraph/raytrace/rtinter3.htm">
-     * Ray - Box Intersection</a> method, also known as "slab method."
+     * intersects the given axis-aligned rectangle given as its minimum corner <tt>(minX, minY)</tt> and maximum corner <tt>(maxX, maxY)</tt>.
      * <p>
      * This method returns <code>true</code> for a ray whose origin lies inside the axis-aligned rectangle.
+     * <p>
+     * Reference: <a href="http://people.csail.mit.edu/amy/papers/box-jgt.pdf">http://people.csail.mit.edu/</a>
      * 
      * @see #testRayAar(Vector2d, Vector2d, Vector2d, Vector2d)
      * 
@@ -2973,39 +3432,47 @@ public class Intersectiond {
      *              the x coordinate of the ray's direction
      * @param dirY
      *              the y coordinate of the ray's direction
-     * @param aX
-     *              the x coordinate of one corner of the axis-aligned rectangle
-     * @param aY
-     *              the y coordinate of one corner of the axis-aligned rectangle
-     * @param bX
-     *              the x coordinate of the opposite corner of the axis-aligned rectangle
-     * @param bY
-     *              the y coordinate of the opposite corner of the axis-aligned rectangle
+     * @param minX
+     *          the x coordinate of the minimum corner of the axis-aligned rectangle
+     * @param minY
+     *          the y coordinate of the minimum corner of the axis-aligned rectangle
+     * @param maxX
+     *          the x coordinate of the maximum corner of the axis-aligned rectangle
+     * @param maxY
+     *          the y coordinate of the maximum corner of the axis-aligned rectangle
      * @return <code>true</code> if the given ray intersects the axis-aligned rectangle; <code>false</code> otherwise
      */
-    public static boolean testRayAar(double originX, double originY, double dirX, double dirY, double aX, double aY, double bX, double bY) {
+    public static boolean testRayAar(double originX, double originY, double dirX, double dirY, double minX, double minY, double maxX, double maxY) {
         double invDirX = 1.0 / dirX, invDirY = 1.0 / dirY;
-        double tMinX = (aX - originX) * invDirX;
-        double tMinY = (aY - originY) * invDirY;
-        double tMaxX = (bX - originX) * invDirX;
-        double tMaxY = (bY - originY) * invDirY;
-        double t1X = tMinX < tMaxX ? tMinX : tMaxX;
-        double t1Y = tMinY < tMaxY ? tMinY : tMaxY;
-        double t2X = tMinX > tMaxX ? tMinX : tMaxX;
-        double t2Y = tMinY > tMaxY ? tMinY : tMaxY;
-        double tNear = t1X > t1Y ? t1X : t1Y;
-        double tFar = t2X < t2Y ? t2X : t2Y;
+        double tNear, tFar, tymin, tymax;
+        if (invDirX >= 0.0) {
+            tNear = (minX - originX) * invDirX;
+            tFar = (maxX - originX) * invDirX;
+        } else {
+            tNear = (maxX - originX) * invDirX;
+            tFar = (minX - originX) * invDirX;
+        }
+        if (invDirY >= 0.0) {
+            tymin = (minY - originY) * invDirY;
+            tymax = (maxY - originY) * invDirY;
+        } else {
+            tymin = (maxY - originY) * invDirY;
+            tymax = (minY - originY) * invDirY;
+        }
+        if (tNear > tymax || tymin > tFar)
+            return false;
+        tNear = tymin > tNear || Double.isNaN(tNear) ? tymin : tNear;
+        tFar = tymax < tFar || Double.isNaN(tFar) ? tymax : tFar;
         return tNear < tFar && tFar >= 0.0;
     }
 
     /**
      * Test whether the ray with the given <code>origin</code> and direction <code>dir</code>
-     * intersects the given axis-aligned rectangle specified as any two opposite corners <code>a</code> and <code>b</code>.
-     * <p>
-     * This is an implementation of the <a href="http://www.siggraph.org/education/materials/HyperGraph/raytrace/rtinter3.htm">
-     * Ray - Box Intersection</a> method, also known as "slab method."
+     * intersects the given axis-aligned rectangle specified as its minimum corner <code>min</code> and maximum corner <code>max</code>.
      * <p>
      * This method returns <code>true</code> for a ray whose origin lies inside the axis-aligned rectangle.
+     * <p>
+     * Reference: <a href="http://people.csail.mit.edu/amy/papers/box-jgt.pdf">http://people.csail.mit.edu/</a>
      * 
      * @see #testRayAar(double, double, double, double, double, double, double, double)
      * 
@@ -3013,14 +3480,14 @@ public class Intersectiond {
      *              the ray's origin
      * @param dir
      *              the ray's direction
-     * @param a
-     *              one corner of the axis-aligned rectangle
-     * @param b
-     *              the opposite corner of the axis-aligned rectangle
+     * @param min
+     *              the minimum corner of the axis-aligned rectangle
+     * @param max
+     *              the maximum corner of the axis-aligned rectangle
      * @return <code>true</code> if the given ray intersects the axis-aligned rectangle; <code>false</code> otherwise
      */
-    public static boolean testRayAar(Vector2d origin, Vector2d dir, Vector2d a, Vector2d b) {
-        return testRayAar(origin.x, origin.y, dir.x, dir.y, a.x, a.y, b.x, b.y);
+    public static boolean testRayAar(Vector2d origin, Vector2d dir, Vector2d min, Vector2d max) {
+        return testRayAar(origin.x, origin.y, dir.x, dir.y, min.x, min.y, max.x, max.y);
     }
 
     /**
@@ -3210,6 +3677,142 @@ public class Intersectiond {
      */
     public static boolean testCircleTriangle(Vector2d center, double radiusSquared, Vector2d v0, Vector2d v1, Vector2d v2) {
         return testCircleTriangle(center.x, center.y, radiusSquared, v0.x, v0.y, v1.x, v1.y, v2.x, v2.y);
+    }
+
+    /**
+     * Determine whether the polygon specified by the given sequence of <tt>(x, y)</tt> coordinate pairs intersects with the ray
+     * with given origin <tt>(originX, originY, originZ)</tt> and direction <tt>(dirX, dirY, dirZ)</tt>, and store the point of intersection
+     * into the given vector <code>p</code>.
+     * <p>
+     * If the polygon intersects the ray, this method returns the index of the polygon edge intersecting the ray, that is, the index of the 
+     * first vertex of the directed line segment. The second vertex is always that index + 1, modulus the number of polygon vertices.
+     * 
+     * @param verticesXY
+     *          the sequence of <tt>(x, y)</tt> coordinate pairs of all vertices of the polygon
+     * @param originX
+     *          the x coordinate of the ray's origin
+     * @param originY
+     *          the y coordinate of the ray's origin
+     * @param dirX
+     *          the x coordinate of the ray's direction
+     * @param dirY
+     *          the y coordinate of the ray's direction
+     * @param p
+     *          will hold the point of intersection
+     * @return the index of the first vertex of the polygon edge that intersects the ray; or <tt>-1</tt> if the ray does not intersect the polygon
+     */
+    public static int intersectPolygonRay(double[] verticesXY, double originX, double originY, double dirX, double dirY, Vector2d p) {
+        double nearestT = Double.MAX_VALUE;
+        int count = verticesXY.length >> 1;
+        int edgeIndex = -1;
+        double aX = verticesXY[(count-1)<<1], aY = verticesXY[((count-1)<<1) + 1];
+        for (int i = 0; i < count; i++) {
+            double bX = verticesXY[i << 1], bY = verticesXY[(i << 1) + 1];
+            double doaX = originX - aX, doaY = originY - aY;
+            double dbaX = bX - aX, dbaY = bY - aY;
+            double invDbaDir = 1.0 / (dbaY * dirX - dbaX * dirY);
+            double t = (dbaX * doaY - dbaY * doaX) * invDbaDir;
+            if (t >= 0.0 && t < nearestT) {
+                double t2 = (doaY * dirX - doaX * dirY) * invDbaDir;
+                if (t2 >= 0.0 && t2 <= 1.0) {
+                    edgeIndex = (i - 1 + count) % count;
+                    nearestT = t;
+                    p.x = originX + t * dirX;
+                    p.y = originY + t * dirY;
+                }
+            }
+            aX = bX;
+            aY = bY;
+        }
+        return edgeIndex;
+    }
+
+    /**
+     * Determine whether the polygon specified by the given sequence of <code>vertices</code> intersects with the ray
+     * with given origin <tt>(originX, originY, originZ)</tt> and direction <tt>(dirX, dirY, dirZ)</tt>, and store the point of intersection
+     * into the given vector <code>p</code>.
+     * <p>
+     * If the polygon intersects the ray, this method returns the index of the polygon edge intersecting the ray, that is, the index of the 
+     * first vertex of the directed line segment. The second vertex is always that index + 1, modulus the number of polygon vertices.
+     * 
+     * @param vertices
+     *          the sequence of <tt>(x, y)</tt> coordinate pairs of all vertices of the polygon
+     * @param originX
+     *          the x coordinate of the ray's origin
+     * @param originY
+     *          the y coordinate of the ray's origin
+     * @param dirX
+     *          the x coordinate of the ray's direction
+     * @param dirY
+     *          the y coordinate of the ray's direction
+     * @param p
+     *          will hold the point of intersection
+     * @return the index of the first vertex of the polygon edge that intersects the ray; or <tt>-1</tt> if the ray does not intersect the polygon
+     */
+    public static int intersectPolygonRay(Vector2d[] vertices, double originX, double originY, double dirX, double dirY, Vector2d p) {
+        double nearestT = Double.MAX_VALUE;
+        int count = vertices.length;
+        int edgeIndex = -1;
+        double aX = vertices[count-1].x, aY = vertices[count-1].y;
+        for (int i = 0; i < count; i++) {
+            Vector2d b = vertices[i];
+            double bX = b.x, bY = b.y;
+            double doaX = originX - aX, doaY = originY - aY;
+            double dbaX = bX - aX, dbaY = bY - aY;
+            double invDbaDir = 1.0 / (dbaY * dirX - dbaX * dirY);
+            double t = (dbaX * doaY - dbaY * doaX) * invDbaDir;
+            if (t >= 0.0 && t < nearestT) {
+                double t2 = (doaY * dirX - doaX * dirY) * invDbaDir;
+                if (t2 >= 0.0 && t2 <= 1.0) {
+                    edgeIndex = (i - 1 + count) % count;
+                    nearestT = t;
+                    p.x = originX + t * dirX;
+                    p.y = originY + t * dirY;
+                }
+            }
+            aX = bX;
+            aY = bY;
+        }
+        return edgeIndex;
+    }
+
+    /**
+     * Determine whether the two lines, specified via two points lying on each line, intersect each other, and store the point of intersection
+     * into the given vector <code>p</code>.
+     * 
+     * @param ps1x
+     *          the x coordinate of the first point on the first line
+     * @param ps1y
+     *          the y coordinate of the first point on the first line
+     * @param pe1x
+     *          the x coordinate of the second point on the first line
+     * @param pe1y
+     *          the y coordinate of the second point on the first line
+     * @param ps2x
+     *          the x coordinate of the first point on the second line
+     * @param ps2y
+     *          the y coordinate of the first point on the second line
+     * @param pe2x
+     *          the x coordinate of the second point on the second line
+     * @param pe2y
+     *          the y coordinate of the second point on the second line
+     * @param p
+     *          will hold the point of intersection
+     * @return <code>true</code> iff the two lines intersect; <code>false</code> otherwise
+     */
+    public static boolean intersectLineLine(double ps1x, double ps1y, double pe1x, double pe1y, double ps2x, double ps2y, double pe2x, double pe2y, Vector2d p) {
+        double d1x = ps1x - pe1x;
+        double d1y = pe1y - ps1y;
+        double d1ps1 = d1y * ps1x + d1x * ps1y;
+        double d2x = ps2x - pe2x;
+        double d2y = pe2y - ps2y;
+        double d2ps2 = d2y * ps2x + d2x * ps2y;
+        double det = d1y * d2x - d2y * d1x;
+        if (det == 0.0)
+            return false;
+        p.x = (d2x * d1ps1 - d1x * d2ps2) / det;
+        p.y = (d1y * d2ps2 - d2y * d1ps1) / det;
+        return true;
     }
 
 }

@@ -113,6 +113,16 @@ public class Vector4d implements Externalizable {
     }
 
     /**
+     * Create a new {@link Vector4d} and initialize all four components with the given value.
+     *
+     * @param d
+     *          the value of all four components
+     */
+    public Vector4d(double d) {
+        this(d, d, d, d); 
+    }
+
+    /**
      * Create a new {@link Vector4d} with the same values as <code>v</code>.
      * 
      * @param v
@@ -157,16 +167,6 @@ public class Vector4d implements Externalizable {
         this.y = v.y;
         this.z = z;
         this.w = w;
-    }
-
-    /**
-     * Create a new {@link Vector4d} and initialize all four components with the given value.
-     *
-     * @param d
-     *          the value of all four components
-     */
-    public Vector4d(double d) {
-        this(d, d, d, d);
     }
 
     /**
@@ -340,7 +340,18 @@ public class Vector4d implements Externalizable {
         this.w = w;
         return this;
     }
-    
+
+    /**
+     * Set the x, y, z, and w components to the supplied value.
+     *
+     * @param d
+     *          the value of all four components
+     * @return this
+     */
+    public Vector4d set(double d) {
+        return set(d, d, d, d);
+    }
+
     /**
      * Set the x and y components from the given <code>v</code>
      * and the z and w components to the given <code>z</code> and <code>w</code>.
@@ -359,17 +370,6 @@ public class Vector4d implements Externalizable {
         this.z = z;
         this.w = w;
         return this;
-    }
-
-    /**
-     * Set the x, y, z, and w components to the supplied value.
-     *
-     * @param d
-     *          the value of all four components
-     * @return this
-     */
-    public Vector4d set(double d) {
-        return set(d, d, d, d);
     }
 
     /**
@@ -892,9 +892,9 @@ public class Vector4d implements Externalizable {
      * Multiply this {@link Vector4d} component-wise by the given {@link Vector4d} and store the result in <code>dest</code>.
      * 
      * @param v
-     * 			the vector to multiply this by
+     *             the vector to multiply this by
      * @param dest
-     * 			will hold the result
+     *             will hold the result
      * @return dest
      */
     public Vector4d mul(Vector4d v, Vector4d dest) {
@@ -924,9 +924,9 @@ public class Vector4d implements Externalizable {
      * Divide this {@link Vector4d} component-wise by the given {@link Vector4d} and store the result in <code>dest</code>.
      * 
      * @param v
-     * 			the vector to divide this by
+     *          the vector to divide this by
      * @param dest
-     * 			will hold the result
+     *          will hold the result
      * @return dest
      */
     public Vector4d div(Vector4d v, Vector4d dest) {
@@ -973,10 +973,40 @@ public class Vector4d implements Externalizable {
      * @return dest
      */
     public Vector4d mul(Matrix4d mat, Vector4d dest) {
-        dest.set(mat.m00 * x + mat.m10 * y + mat.m20 * z + mat.m30 * w,
-                 mat.m01 * x + mat.m11 * y + mat.m21 * z + mat.m31 * w,
-                 mat.m02 * x + mat.m12 * y + mat.m22 * z + mat.m32 * w, 
-                 mat.m03 * x + mat.m13 * y + mat.m23 * z + mat.m33 * w);
+        dest.set(mat.m00() * x + mat.m10() * y + mat.m20() * z + mat.m30() * w,
+                 mat.m01() * x + mat.m11() * y + mat.m21() * z + mat.m31() * w,
+                 mat.m02() * x + mat.m12() * y + mat.m22() * z + mat.m32() * w, 
+                 mat.m03() * x + mat.m13() * y + mat.m23() * z + mat.m33() * w);
+        return dest;
+    }
+
+    /**
+     * Multiply this Vector4d by the given matrix mat and store the result in
+     * <code>this</code>.
+     * 
+     * @param mat
+     *          the matrix to multiply the vector with
+     * @return this
+     */
+    public Vector4d mul(Matrix4x3d mat) {
+        return mul(mat, this);
+    }
+
+    /**
+     * Multiply this Vector4d by the given matrix mat and store the result in
+     * <code>dest</code>.
+     * 
+     * @param mat
+     *          the matrix to multiply the vector with
+     * @param dest
+     *          the destination vector to hold the result
+     * @return dest
+     */
+    public Vector4d mul(Matrix4x3d mat, Vector4d dest) {
+        dest.set(mat.m00() * x + mat.m10() * y + mat.m20() * z + mat.m30() * w,
+                 mat.m01() * x + mat.m11() * y + mat.m21() * z + mat.m31() * w,
+                 mat.m02() * x + mat.m12() * y + mat.m22() * z + mat.m32() * w,
+                 w);
         return dest;
     }
 
@@ -1001,10 +1031,10 @@ public class Vector4d implements Externalizable {
      * @return dest
      */
     public Vector4d mul(Matrix4f mat, Vector4d dest) {
-        dest.set(mat.m00 * x + mat.m10 * y + mat.m20 * z + mat.m30 * w,
-                 mat.m01 * x + mat.m11 * y + mat.m21 * z + mat.m31 * w,
-                 mat.m02 * x + mat.m12 * y + mat.m22 * z + mat.m32 * w, 
-                 mat.m03 * x + mat.m13 * y + mat.m23 * z + mat.m33 * w);
+        dest.set(mat.m00() * x + mat.m10() * y + mat.m20() * z + mat.m30() * w,
+                 mat.m01() * x + mat.m11() * y + mat.m21() * z + mat.m31() * w,
+                 mat.m02() * x + mat.m12() * y + mat.m22() * z + mat.m32() * w, 
+                 mat.m03() * x + mat.m13() * y + mat.m23() * z + mat.m33() * w);
         return dest;
     }
 
@@ -1019,10 +1049,10 @@ public class Vector4d implements Externalizable {
      * @return dest
      */
     public Vector4d mulProject(Matrix4d mat, Vector4d dest) {
-        double invW = 1.0 / (mat.m03 * x + mat.m13 * y + mat.m23 * z + mat.m33 * w);
-        dest.set((mat.m00 * x + mat.m10 * y + mat.m20 * z + mat.m30 * w) * invW,
-                 (mat.m01 * x + mat.m11 * y + mat.m21 * z + mat.m31 * w) * invW,
-                 (mat.m02 * x + mat.m12 * y + mat.m22 * z + mat.m32 * w) * invW,
+        double invW = 1.0 / (mat.m03() * x + mat.m13() * y + mat.m23() * z + mat.m33() * w);
+        dest.set((mat.m00() * x + mat.m10() * y + mat.m20() * z + mat.m30() * w) * invW,
+                 (mat.m01() * x + mat.m11() * y + mat.m21() * z + mat.m31() * w) * invW,
+                 (mat.m02() * x + mat.m12() * y + mat.m22() * z + mat.m32() * w) * invW,
                  1.0);
         return dest;
     }

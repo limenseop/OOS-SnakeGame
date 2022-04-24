@@ -2,10 +2,8 @@ package src.board;
 
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
-import src.models.Basicmodel;
-import src.models.Camera;
-import src.models.Shader;
-import src.models.Texture;
+import src.models.*;
+
 import java.util.HashMap;
 
 public class TileRenderer {
@@ -14,7 +12,7 @@ public class TileRenderer {
 
     public TileRenderer() {
         tile_textures = new HashMap<String, Texture>();
-        model = new Basicmodel(1.0f);
+        model = new Basicmodel();
 
         for (int i = 0; i < Tile.tiles.length; i++) {
             if (Tile.tiles[i] != null) {

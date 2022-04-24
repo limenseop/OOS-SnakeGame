@@ -548,22 +548,6 @@ public class Vector3d implements Externalizable {
     }
 
     /**
-     * Subtract <code>v2</code> from <code>v1</code> and store the result in <code>dest</code>.
-     * 
-     * @param v1
-     *          the vector to subtract from
-     * @param v2
-     *          the vector to subtract
-     * @param dest
-     *          will hold the result
-     */
-    public static void sub(Vector3f v1, Vector3d v2, Vector3d dest) {
-        dest.x = v1.x - v2.x;
-        dest.y = v1.y - v2.y;
-        dest.z = v1.z - v2.z;
-    }
-
-    /**
      * Add the supplied vector to this one.
      * 
      * @param v
@@ -835,7 +819,7 @@ public class Vector3d implements Externalizable {
      * @param v
      *          the vector to multiply by
      * @param dest
-     * 			will hold the result
+     *             will hold the result
      * @return dest
      */
     public Vector3d mul(Vector3f v, Vector3d dest) {
@@ -895,7 +879,7 @@ public class Vector3d implements Externalizable {
      * @param v
      *          the vector to divide by
      * @param dest
-     * 			will hold the result
+     *          will hold the result
      * @return dest
      */
     public Vector3d div(Vector3f v, Vector3d dest) {
@@ -934,10 +918,10 @@ public class Vector3d implements Externalizable {
      * @return dest
      */
     public Vector3d mulProject(Matrix4d mat, Vector3d dest) {
-        double invW = 1.0 / (mat.m03 * x + mat.m13 * y + mat.m23 * z + mat.m33);
-        dest.set((mat.m00 * x + mat.m10 * y + mat.m20 * z + mat.m30) * invW,
-                 (mat.m01 * x + mat.m11 * y + mat.m21 * z + mat.m31) * invW,
-                 (mat.m02 * x + mat.m12 * y + mat.m22 * z + mat.m32) * invW);
+        double invW = 1.0 / (mat.m03() * x + mat.m13() * y + mat.m23() * z + mat.m33());
+        dest.set((mat.m00() * x + mat.m10() * y + mat.m20() * z + mat.m30()) * invW,
+                 (mat.m01() * x + mat.m11() * y + mat.m21() * z + mat.m31()) * invW,
+                 (mat.m02() * x + mat.m12() * y + mat.m22() * z + mat.m32()) * invW);
         return dest;
     }
 
@@ -967,10 +951,10 @@ public class Vector3d implements Externalizable {
      * @return dest
      */
     public Vector3d mulProject(Matrix4f mat, Vector3d dest) {
-        double invW = 1.0 / (mat.m03 * x + mat.m13 * y + mat.m23 * z + mat.m33);
-        dest.set((mat.m00 * x + mat.m10 * y + mat.m20 * z + mat.m30) * invW,
-                 (mat.m01 * x + mat.m11 * y + mat.m21 * z + mat.m31) * invW,
-                 (mat.m02 * x + mat.m12 * y + mat.m22 * z + mat.m32) * invW);
+        double invW = 1.0 / (mat.m03() * x + mat.m13() * y + mat.m23() * z + mat.m33());
+        dest.set((mat.m00() * x + mat.m10() * y + mat.m20() * z + mat.m30()) * invW,
+                 (mat.m01() * x + mat.m11() * y + mat.m21() * z + mat.m31()) * invW,
+                 (mat.m02() * x + mat.m12() * y + mat.m22() * z + mat.m32()) * invW);
         return dest;
     }
 
@@ -1052,8 +1036,8 @@ public class Vector3d implements Externalizable {
      *          the matrix to multiply this vector by
      * @return this
      */
-    public Vector3d mulPoint(Matrix4f mat) {
-        return mulPoint(mat, this);
+    public Vector3d mulPosition(Matrix4f mat) {
+        return mulPosition(mat, this);
     }
 
     /**
@@ -1065,8 +1049,8 @@ public class Vector3d implements Externalizable {
      *          the matrix to multiply this vector by
      * @return this
      */
-    public Vector3d mulPoint(Matrix4d mat) {
-        return mulPoint(mat, this);
+    public Vector3d mulPosition(Matrix4d mat) {
+        return mulPosition(mat, this);
     }
 
     /**
@@ -1081,10 +1065,10 @@ public class Vector3d implements Externalizable {
      *          will hold the result
      * @return dest
      */
-    public Vector3d mulPoint(Matrix4d mat, Vector3d dest) {
-        dest.set(mat.m00 * x + mat.m10 * y + mat.m20 * z + mat.m30,
-                 mat.m01 * x + mat.m11 * y + mat.m21 * z + mat.m31,
-                 mat.m02 * x + mat.m12 * y + mat.m22 * z + mat.m32);
+    public Vector3d mulPosition(Matrix4d mat, Vector3d dest) {
+        dest.set(mat.m00() * x + mat.m10() * y + mat.m20() * z + mat.m30(),
+                 mat.m01() * x + mat.m11() * y + mat.m21() * z + mat.m31(),
+                 mat.m02() * x + mat.m12() * y + mat.m22() * z + mat.m32());
         return dest;
     }
 
@@ -1100,11 +1084,79 @@ public class Vector3d implements Externalizable {
      *          will hold the result
      * @return dest
      */
-    public Vector3d mulPoint(Matrix4f mat, Vector3d dest) {
-        dest.set(mat.m00 * x + mat.m10 * y + mat.m20 * z + mat.m30,
-                 mat.m01 * x + mat.m11 * y + mat.m21 * z + mat.m31,
-                 mat.m02 * x + mat.m12 * y + mat.m22 * z + mat.m32);
+    public Vector3d mulPosition(Matrix4f mat, Vector3d dest) {
+        dest.set(mat.m00() * x + mat.m10() * y + mat.m20() * z + mat.m30(),
+                 mat.m01() * x + mat.m11() * y + mat.m21() * z + mat.m31(),
+                 mat.m02() * x + mat.m12() * y + mat.m22() * z + mat.m32());
         return dest;
+    }
+
+    /**
+     * Multiply <code>this</code> by the given 4x4 matrix <code>mat</code> and return the <i>w</i> component
+     * of the resulting 4D vector.
+     * <p>
+     * This method assumes the <tt>w</tt> component of <code>this</code> to be <tt>1.0</tt>.
+     * 
+     * @param mat
+     *          the matrix to multiply this vector by
+     * @return the <i>w</i> component of the resulting 4D vector after multiplication
+     */
+    public double mulPositionW(Matrix4f mat) {
+        return mulPositionW(mat, this);
+    }
+
+    /**
+     * Multiply <code>this</code> by the given 4x4 matrix <code>mat</code>, store the
+     * result in <code>dest</code> and return the <i>w</i> component of the resulting 4D vector.
+     * <p>
+     * This method assumes the <tt>w</tt> component of <code>this</code> to be <tt>1.0</tt>.
+     * 
+     * @param mat
+     *          the matrix to multiply this vector by
+     * @param dest
+     *          will hold the <tt>(x, y, z)</tt> components of the resulting vector
+     * @return the <i>w</i> component of the resulting 4D vector after multiplication
+     */
+    public double mulPositionW(Matrix4f mat, Vector3d dest) {
+        double w = mat.m03() * x + mat.m13() * y + mat.m23() * z + mat.m33();
+        dest.set(mat.m00() * x + mat.m10() * y + mat.m20() * z + mat.m30(),
+                 mat.m01() * x + mat.m11() * y + mat.m21() * z + mat.m31(),
+                 mat.m02() * x + mat.m12() * y + mat.m22() * z + mat.m32());
+        return w;
+    }
+
+    /**
+     * Multiply <code>this</code> by the given 4x4 matrix <code>mat</code> and return the <i>w</i> component
+     * of the resulting 4D vector.
+     * <p>
+     * This method assumes the <tt>w</tt> component of <code>this</code> to be <tt>1.0</tt>.
+     * 
+     * @param mat
+     *          the matrix to multiply this vector by
+     * @return the <i>w</i> component of the resulting 4D vector after multiplication
+     */
+    public double mulPositionW(Matrix4d mat) {
+        return mulPositionW(mat, this);
+    }
+
+    /**
+     * Multiply <code>this</code> by the given 4x4 matrix <code>mat</code>, store the
+     * result in <code>dest</code> and return the <i>w</i> component of the resulting 4D vector.
+     * <p>
+     * This method assumes the <tt>w</tt> component of <code>this</code> to be <tt>1.0</tt>.
+     * 
+     * @param mat
+     *          the matrix to multiply this vector by
+     * @param dest
+     *          will hold the <tt>(x, y, z)</tt> components of the resulting vector
+     * @return the <i>w</i> component of the resulting 4D vector after multiplication
+     */
+    public double mulPositionW(Matrix4d mat, Vector3d dest) {
+        double w = mat.m03() * x + mat.m13() * y + mat.m23() * z + mat.m33();
+        dest.set(mat.m00() * x + mat.m10() * y + mat.m20() * z + mat.m30(),
+                 mat.m01() * x + mat.m11() * y + mat.m21() * z + mat.m31(),
+                 mat.m02() * x + mat.m12() * y + mat.m22() * z + mat.m32());
+        return w;
     }
 
     /**
@@ -1146,9 +1198,9 @@ public class Vector3d implements Externalizable {
      * @return dest
      */
     public Vector3d mulDirection(Matrix4d mat, Vector3d dest) {
-        dest.set(mat.m00 * x + mat.m10 * y + mat.m20 * z,
-                 mat.m01 * x + mat.m11 * y + mat.m21 * z,
-                 mat.m02 * x + mat.m12 * y + mat.m22 * z);
+        dest.set(mat.m00() * x + mat.m10() * y + mat.m20() * z,
+                 mat.m01() * x + mat.m11() * y + mat.m21() * z,
+                 mat.m02() * x + mat.m12() * y + mat.m22() * z);
         return dest;
     }
 
@@ -1165,9 +1217,9 @@ public class Vector3d implements Externalizable {
      * @return dest
      */
     public Vector3d mulDirection(Matrix4f mat, Vector3d dest) {
-        dest.set(mat.m00 * x + mat.m10 * y + mat.m20 * z,
-                 mat.m01 * x + mat.m11 * y + mat.m21 * z,
-                 mat.m02 * x + mat.m12 * y + mat.m22 * z);
+        dest.set(mat.m00() * x + mat.m10() * y + mat.m20() * z,
+                 mat.m01() * x + mat.m11() * y + mat.m21() * z,
+                 mat.m02() * x + mat.m12() * y + mat.m22() * z);
         return dest;
     }
 
@@ -1270,6 +1322,46 @@ public class Vector3d implements Externalizable {
     }
 
     /**
+     * Compute the quaternion representing a rotation of <code>this</code> vector to point along <code>toDir</code>
+     * and store the result in <code>dest</code>.
+     * <p>
+     * Because there can be multiple possible rotations, this method chooses the one with the shortest arc.
+     * 
+     * @see Quaterniond#rotationTo(Vector3d, Vector3d)
+     * 
+     * @param toDir
+     *          the destination direction
+     * @param dest
+     *          will hold the result
+     * @return dest
+     */
+    public Quaterniond rotationTo(Vector3d toDir, Quaterniond dest) {
+        return dest.rotationTo(this, toDir);
+    }
+
+    /**
+     * Compute the quaternion representing a rotation of <code>this</code> vector to point along <tt>(toDirX, toDirY, toDirZ)</tt>
+     * and store the result in <code>dest</code>.
+     * <p>
+     * Because there can be multiple possible rotations, this method chooses the one with the shortest arc.
+     * 
+     * @see Quaterniond#rotationTo(double, double, double, double, double, double)
+     * 
+     * @param toDirX
+     *          the x coordinate of the destination direction
+     * @param toDirY
+     *          the y coordinate of the destination direction
+     * @param toDirZ
+     *          the z coordinate of the destination direction
+     * @param dest
+     *          will hold the result
+     * @return dest
+     */
+    public Quaterniond rotationTo(double toDirX, double toDirY, double toDirZ, Quaterniond dest) {
+        return dest.rotationTo(x, y, z, toDirX, toDirY, toDirZ);
+    }
+
+    /**
      * Divide this Vector3d by the given scalar value.
      * 
      * @param scalar
@@ -1335,22 +1427,6 @@ public class Vector3d implements Externalizable {
         dest.y = this.y / y;
         dest.z = this.z / z;
         return dest;
-    }
-
-    /**
-     * Multiply <code>v</code> by the <code>scalar</code> value and store the result in <code>dest</code>.
-     * 
-     * @param v
-     *          the vector to multiply
-     * @param scalar
-     *          the scalar to multiply the given vector by
-     * @param dest
-     *          will hold the result
-     */
-    public static void mul(Vector3f v, double scalar, Vector3d dest) {
-        dest.x = v.x * scalar;
-        dest.y = v.y * scalar;
-        dest.z = v.z * scalar;
     }
 
     /**

@@ -63,10 +63,6 @@ public class Vector4i implements Externalizable {
      * Create a new {@link Vector4i} of <code>(0, 0, 0, 1)</code>.
      */
     public Vector4i() {
-        this.x = 0;
-        this.y = 0;
-        this.z = 0;
-        this.w = 0;
     }
 
     /**

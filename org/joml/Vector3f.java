@@ -691,10 +691,10 @@ public class Vector3f implements Externalizable {
      * @return dest
      */
     public Vector3f mulProject(Matrix4f mat, Vector3f dest) {
-        float invW = 1.0f / (mat.m03 * x + mat.m13 * y + mat.m23 * z + mat.m33);
-        dest.set((mat.m00 * x + mat.m10 * y + mat.m20 * z + mat.m30) * invW,
-                 (mat.m01 * x + mat.m11 * y + mat.m21 * z + mat.m31) * invW,
-                 (mat.m02 * x + mat.m12 * y + mat.m22 * z + mat.m32) * invW);
+        float invW = 1.0f / (mat.m03() * x + mat.m13() * y + mat.m23() * z + mat.m33());
+        dest.set((mat.m00() * x + mat.m10() * y + mat.m20() * z + mat.m30()) * invW,
+                 (mat.m01() * x + mat.m11() * y + mat.m21() * z + mat.m31()) * invW,
+                 (mat.m02() * x + mat.m12() * y + mat.m22() * z + mat.m32()) * invW);
         return dest;
     }
 
@@ -732,12 +732,11 @@ public class Vector3f implements Externalizable {
      * @return dest
      */
     public Vector3f mul(Matrix3f mat, Vector3f dest) {
-        dest.set(mat.m00 * x + mat.m10 * y + mat.m20 * z,
-                 mat.m01 * x + mat.m11 * y + mat.m21 * z,
-                 mat.m02 * x + mat.m12 * y + mat.m22 * z);
+        dest.set(mat.m00() * x + mat.m10() * y + mat.m20() * z,
+                 mat.m01() * x + mat.m11() * y + mat.m21() * z,
+                 mat.m02() * x + mat.m12() * y + mat.m22() * z);
         return dest;
     }
-
 
     /**
      * Multiply <code>this</code> by the given 4x4 matrix <code>mat</code>.
@@ -748,8 +747,8 @@ public class Vector3f implements Externalizable {
      *          the matrix to multiply this vector by
      * @return this
      */
-    public Vector3f mulPoint(Matrix4f mat) {
-        return mulPoint(mat, this);
+    public Vector3f mulPosition(Matrix4f mat) {
+        return mulPosition(mat, this);
     }
 
     /**
@@ -764,11 +763,45 @@ public class Vector3f implements Externalizable {
      *          will hold the result
      * @return dest
      */
-    public Vector3f mulPoint(Matrix4f mat, Vector3f dest) {
-        dest.set(mat.m00 * x + mat.m10 * y + mat.m20 * z + mat.m30,
-                 mat.m01 * x + mat.m11 * y + mat.m21 * z + mat.m31,
-                 mat.m02 * x + mat.m12 * y + mat.m22 * z + mat.m32);
+    public Vector3f mulPosition(Matrix4f mat, Vector3f dest) {
+        dest.set(mat.m00() * x + mat.m10() * y + mat.m20() * z + mat.m30(),
+                 mat.m01() * x + mat.m11() * y + mat.m21() * z + mat.m31(),
+                 mat.m02() * x + mat.m12() * y + mat.m22() * z + mat.m32());
         return dest;
+    }
+
+    /**
+     * Multiply <code>this</code> by the given 4x4 matrix <code>mat</code> and return the <i>w</i> component
+     * of the resulting 4D vector.
+     * <p>
+     * This method assumes the <tt>w</tt> component of <code>this</code> to be <tt>1.0</tt>.
+     * 
+     * @param mat
+     *          the matrix to multiply this vector by
+     * @return the <i>w</i> component of the resulting 4D vector after multiplication
+     */
+    public float mulPositionW(Matrix4f mat) {
+        return mulPositionW(mat, this);
+    }
+
+    /**
+     * Multiply <code>this</code> by the given 4x4 matrix <code>mat</code>, store the
+     * result in <code>dest</code> and return the <i>w</i> component of the resulting 4D vector.
+     * <p>
+     * This method assumes the <tt>w</tt> component of <code>this</code> to be <tt>1.0</tt>.
+     * 
+     * @param mat
+     *          the matrix to multiply this vector by
+     * @param dest
+     *          will hold the <tt>(x, y, z)</tt> components of the resulting vector
+     * @return the <i>w</i> component of the resulting 4D vector after multiplication
+     */
+    public float mulPositionW(Matrix4f mat, Vector3f dest) {
+        float w = mat.m03() * x + mat.m13() * y + mat.m23() * z + mat.m33();
+        dest.set(mat.m00() * x + mat.m10() * y + mat.m20() * z + mat.m30(),
+                 mat.m01() * x + mat.m11() * y + mat.m21() * z + mat.m31(),
+                 mat.m02() * x + mat.m12() * y + mat.m22() * z + mat.m32());
+        return w;
     }
 
     /**
@@ -797,9 +830,9 @@ public class Vector3f implements Externalizable {
      * @return dest
      */
     public Vector3f mulDirection(Matrix4f mat, Vector3f dest) {
-        dest.set(mat.m00 * x + mat.m10 * y + mat.m20 * z,
-                 mat.m01 * x + mat.m11 * y + mat.m21 * z,
-                 mat.m02 * x + mat.m12 * y + mat.m22 * z);
+        dest.set(mat.m00() * x + mat.m10() * y + mat.m20() * z,
+                 mat.m01() * x + mat.m11() * y + mat.m21() * z,
+                 mat.m02() * x + mat.m12() * y + mat.m22() * z);
         return dest;
     }
 
@@ -971,6 +1004,46 @@ public class Vector3f implements Externalizable {
     public Vector3f rotate(Quaternionf quat, Vector3f dest) {
         quat.transform(this, dest);
         return dest;
+    }
+
+    /**
+     * Compute the quaternion representing a rotation of <code>this</code> vector to point along <code>toDir</code>
+     * and store the result in <code>dest</code>.
+     * <p>
+     * Because there can be multiple possible rotations, this method chooses the one with the shortest arc.
+     * 
+     * @see Quaternionf#rotationTo(Vector3f, Vector3f)
+     * 
+     * @param toDir
+     *          the destination direction
+     * @param dest
+     *          will hold the result
+     * @return dest
+     */
+    public Quaternionf rotationTo(Vector3f toDir, Quaternionf dest) {
+        return dest.rotationTo(this, toDir);
+    }
+
+    /**
+     * Compute the quaternion representing a rotation of <code>this</code> vector to point along <tt>(toDirX, toDirY, toDirZ)</tt>
+     * and store the result in <code>dest</code>.
+     * <p>
+     * Because there can be multiple possible rotations, this method chooses the one with the shortest arc.
+     * 
+     * @see Quaternionf#rotationTo(float, float, float, float, float, float)
+     * 
+     * @param toDirX
+     *          the x coordinate of the destination direction
+     * @param toDirY
+     *          the y coordinate of the destination direction
+     * @param toDirZ
+     *          the z coordinate of the destination direction
+     * @param dest
+     *          will hold the result
+     * @return dest
+     */
+    public Quaternionf rotationTo(float toDirX, float toDirY, float toDirZ, Quaternionf dest) {
+        return dest.rotationTo(x, y, z, toDirX, toDirY, toDirZ);
     }
 
     /**

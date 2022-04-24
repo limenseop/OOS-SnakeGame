@@ -25,7 +25,7 @@ public class Window {
         this.height = height;
         this.fps_cap = fps;
         this.windowtitle = windowtitle;
-        createwindow();
+        create();
     }
     public void setBackgroundcolor(float r, float g, float b) {
             backgroundcolor[0] = r;
@@ -35,13 +35,13 @@ public class Window {
     public void stop() {
         GLFW.glfwTerminate();
     }
-    private void createwindow() {
+    private void create() {
         if (!GLFW.glfwInit()) {
             System.err.println("Error!!: GLFW.glfwinit() doesn't work.");
             return;
         }
         GLFW.glfwWindowHint(GLFW.GLFW_VISIBLE, GLFW.GLFW_FALSE);
-        GLFW.glfwWindowHint(GLFW.GLFW_RESIZABLE, GLFW.GLFW_FALSE);
+        GLFW.glfwWindowHint(GLFW.GLFW_RESIZABLE, GLFW.GLFW_TRUE);
         window = GLFW.glfwCreateWindow(width, height, windowtitle, 0, 0);
 
         if (window == 0) {
@@ -68,7 +68,10 @@ public class Window {
         GL11.glClearColor(backgroundcolor[0], backgroundcolor[1], backgroundcolor[2], 1.0f);
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
     }
-    public boolean closewindow() {
+    public boolean close() {
+        if (listener.isKeyPressed(GLFW_KEY_ESCAPE)) {
+            return true;
+        }
         return GLFW.glfwWindowShouldClose(window);
     }
     private double getTime() {
@@ -94,6 +97,9 @@ public class Window {
     public long getWindow() {
         return window;
     }
+    public double getcurrentFps() {
+        return processedtime;
+    }
     public Direction getDirection() {
         if (listener.isKeyPressed(GLFW_KEY_UP) && !listener.isKeyReleased(GLFW_KEY_UP))
             return Direction.NORTH;
@@ -105,5 +111,4 @@ public class Window {
             return Direction.EAST;
         return null;
     }
-
 }

@@ -1,12 +1,12 @@
 package src.models;
 
 public class Basicmodel extends Model {
-    public Basicmodel(float size) {
+    public Basicmodel() {
         super(new float[] {
-                -size, size, 0,  //TOP LEFT 0
-                size, size, 0,   //TOP RIGHT 1
-                size, -size, 0,  //BOTTOM RIGHT 2
-                -size, -size, 0, //BOTTOM LEFT 3
+                -1f, 1f, 0,  //TOP LEFT 0
+                1f, 1f, 0,   //TOP RIGHT 1
+                1f, -1f, 0,  //BOTTOM RIGHT 2
+                -1f, -1f, 0, //BOTTOM LEFT 3
         }, new float[] {
                 0,0,
                 1,0,

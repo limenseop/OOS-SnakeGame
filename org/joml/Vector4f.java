@@ -121,7 +121,7 @@ public class Vector4f implements Externalizable {
     public Vector4f(float d) {
         this(d, d, d, d);
     }
-    
+
     /**
      * Create a new {@link Vector4f} with the given component values.
      * 
@@ -785,10 +785,40 @@ public class Vector4f implements Externalizable {
      * @return dest
      */
     public Vector4f mul(Matrix4f mat, Vector4f dest) {
-        dest.set(mat.m00 * x + mat.m10 * y + mat.m20 * z + mat.m30 * w,
-                 mat.m01 * x + mat.m11 * y + mat.m21 * z + mat.m31 * w,
-                 mat.m02 * x + mat.m12 * y + mat.m22 * z + mat.m32 * w,
-                 mat.m03 * x + mat.m13 * y + mat.m23 * z + mat.m33 * w);
+        dest.set(mat.m00() * x + mat.m10() * y + mat.m20() * z + mat.m30() * w,
+                 mat.m01() * x + mat.m11() * y + mat.m21() * z + mat.m31() * w,
+                 mat.m02() * x + mat.m12() * y + mat.m22() * z + mat.m32() * w,
+                 mat.m03() * x + mat.m13() * y + mat.m23() * z + mat.m33() * w);
+        return dest;
+    }
+
+    /**
+     * Multiply this Vector4f by the given matrix mat and store the result in
+     * <code>this</code>.
+     * 
+     * @param mat
+     *          the matrix to multiply the vector with
+     * @return this
+     */
+    public Vector4f mul(Matrix4x3f mat) {
+        return mul(mat, this);
+    }
+
+    /**
+     * Multiply this Vector4f by the given matrix mat and store the result in
+     * <code>dest</code>.
+     * 
+     * @param mat
+     *          the matrix to multiply the vector with
+     * @param dest
+     *          the destination vector to hold the result
+     * @return dest
+     */
+    public Vector4f mul(Matrix4x3f mat, Vector4f dest) {
+        dest.set(mat.m00() * x + mat.m10() * y + mat.m20() * z + mat.m30() * w,
+                 mat.m01() * x + mat.m11() * y + mat.m21() * z + mat.m31() * w,
+                 mat.m02() * x + mat.m12() * y + mat.m22() * z + mat.m32() * w,
+                 w);
         return dest;
     }
 
@@ -803,10 +833,10 @@ public class Vector4f implements Externalizable {
      * @return dest
      */
     public Vector4f mulProject(Matrix4f mat, Vector4f dest) {
-        float invW = 1.0f / (mat.m03 * x + mat.m13 * y + mat.m23 * z + mat.m33 * w);
-        dest.set((mat.m00 * x + mat.m10 * y + mat.m20 * z + mat.m30 * w) * invW,
-                 (mat.m01 * x + mat.m11 * y + mat.m21 * z + mat.m31 * w) * invW,
-                 (mat.m02 * x + mat.m12 * y + mat.m22 * z + mat.m32 * w) * invW,
+        float invW = 1.0f / (mat.m03() * x + mat.m13() * y + mat.m23() * z + mat.m33() * w);
+        dest.set((mat.m00() * x + mat.m10() * y + mat.m20() * z + mat.m30() * w) * invW,
+                 (mat.m01() * x + mat.m11() * y + mat.m21() * z + mat.m31() * w) * invW,
+                 (mat.m02() * x + mat.m12() * y + mat.m22() * z + mat.m32() * w) * invW,
                  1.0f);
         return dest;
     }
