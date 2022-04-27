@@ -1,7 +1,7 @@
 package src.domain;
 
 import java.awt.*;
-import java.io.Serializable;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,6 +10,7 @@ public class Board implements Serializable {
     public static final int WIDTH = 40;
     public static final int HEIGHT = 40;
 
+    private String fileName = "user.acc";
     private Snake snake;
     private List<Point> fruitPosition;
     private List<Point> snakePoisition;
@@ -30,10 +31,24 @@ public class Board implements Serializable {
         fruitPosition.add(new Point(fruit_X, fruit_Y));
     }
 
+    public void loadGame(){
+        Board newBoard = loadFromFile();
+        this.snake = newBoard.snake;
+        this.fruitPosition = newBoard.fruitPosition;
+        this.snakePoisition = newBoard.snakePoisition;
+        this.board = newBoard.board;
+        this.score = newBoard.score;
+        this.running = newBoard.running;
+        this.paused = newBoard.paused;
+        this.rankings = newBoard.rankings;
+
+    }
+
     public synchronized void createFruit() {
 
         int fruit_X = (int) (Math.random() * 40);
         int fruit_Y = (int) (Math.random() * 40);
+
         if (fruitPosition.isEmpty()) {
 
             while (snake.check_If_Overlap(fruit_X, fruit_Y)) {
@@ -42,7 +57,6 @@ public class Board implements Serializable {
                 fruit_Y = (int) (Math.random() * 40);
 
             }
-
             fruitPosition.add(new Point(fruit_X, fruit_Y));
         }
     }
@@ -79,7 +93,15 @@ public class Board implements Serializable {
         Point checkhead = new Point(snake.getHead().getY(), snake.getHead().getX());
     }
 
-    public boolean move_Snake() {
+    public synchronized boolean move_Snake() {
+
+        if(paused == true){
+            try {
+                wait();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
 
         snake.move();
         update();
@@ -117,26 +139,16 @@ public class Board implements Serializable {
         }
         fruitPosition.clear();
         snake.re_Init();
-        update();
         createFruit();
+        update();
     }
 
     public boolean isPaused() {
         return paused;
     }
 
-    public synchronized boolean gamePause() {
-        try {
-            wait();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        return paused;
-    }
-
     public synchronized boolean switch_Pause() {
         if(paused == true){
-            notifyAll();
             paused = false;
         }
         else if (paused == false) {
@@ -171,5 +183,26 @@ public class Board implements Serializable {
     private boolean out_Of_Bounces(int x, int y) {
         if (x < 0 || x >= 40 || y < 0 || y >= 40) return true;
         return false;
+    }
+    public void gameTerminate(){
+        this.running =  false;
+    }
+
+    public void save_This_Game() throws IOException {
+        FileOutputStream fos=new FileOutputStream(fileName);
+        ObjectOutputStream oos=new ObjectOutputStream(fos);
+        oos.writeObject(this);
+    }
+
+    private Board loadFromFile(){
+        try {
+            FileInputStream fis = new FileInputStream(fileName);
+            ObjectInputStream ois = new ObjectInputStream(fis);
+            return(Board)ois.readObject();
+        }
+        catch(Exception e) {
+            System.out.println("error");
+        }
+        return null;
     }
 }

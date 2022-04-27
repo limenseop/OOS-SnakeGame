@@ -25,7 +25,7 @@ public class MainController extends JFrame implements Runnable, ActionListener ,
     public void run(){
         while((gameboard.gameRunning())) {
             if(gameboard.isPaused()){
-                gameboard.gamePause();
+                //gameboard.gamePause();
             }
             gameboard.move_Snake();
             gameboard.check_Fruit_Overlap();
@@ -94,6 +94,10 @@ public class MainController extends JFrame implements Runnable, ActionListener ,
     @Override
     public void keyReleased(KeyEvent e) {
         return;
+    }
+
+    public Board getGameboard() {
+        return gameboard;
     }
 }
 
