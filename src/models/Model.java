@@ -1,3 +1,7 @@
+/*
+ * Copyright LWJGL. All rights reserved.
+ * License terms: https://www.lwjgl.org/license
+ */
 package src.models;
 
 import org.lwjgl.BufferUtils;
@@ -9,8 +13,8 @@ import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL15.*;
 import static org.lwjgl.opengl.GL20.*;
 abstract class Model {
-    private int draw_count;
-    private int v_id, t_id, i_id;
+    protected int draw_count;
+    protected int v_id, t_id, i_id;
 
     private Model() {
 

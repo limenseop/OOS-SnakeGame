@@ -33,10 +33,10 @@ public class TileRenderer {
 
         camera.getProjection().mul(world, target);
         target.mul(tile_position);
-
         shader.setUniform("sampler", 0);
         shader.setUniform("projection", target);
-
         model.render();
+
+
     }
 }

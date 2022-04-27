@@ -13,24 +13,28 @@ public class Board {
     private int width, height, scale;
     private Matrix4f mainboard;
     private AABB[] bounding_boxes;
-    public Board() {
-        width = 42;
-        height = 42;
-        scale = 16;
+    private TileRenderer tilerenderer;
+    public Board(int width, int height, int scale) {
+        this.width = width;
+        this.height = height;
+        this.scale = scale;
         tiles = new byte[width * height];
         bounding_boxes = new AABB[width*height];
+        tilerenderer = new TileRenderer();
         mainboard = new Matrix4f()
                 .setTranslation(new Vector3f(0,0,0))
                 .scale(scale);
+        createBoard();
     }
 
-    public void render(TileRenderer rendered, Shader shader, Camera camera) {
+    public void render(Shader shader, Camera camera) {
         for (int i = 0; i < height; i++) {
             for (int j = 0; j < width; j++) {
-                rendered.renderTile(tiles[j + i * width], j, -i, shader, mainboard, camera);
+                tilerenderer.renderTile(tiles[j + i * width], j, -i, shader, mainboard, camera);
             }
         }
     }
+
     public void correctCameara(Camera camera, Window window) {
         Vector3f pos = camera.getPosition();
         int w = -width * scale * 2;
@@ -47,7 +51,7 @@ public class Board {
             pos.y = h - (window.getHeight()/2) - scale;
     }
 
-    public void setTile(Tile tile, int x, int y) {
+    private void setTile(Tile tile, int x, int y) {
         tiles[x + y * width] = tile.getId();
         if (tile.isSolid()) {
             bounding_boxes[x + y * width]
@@ -56,6 +60,14 @@ public class Board {
         else {
             bounding_boxes[x + y * width]
                     = null;
+        }
+    }
+    public void createBoard() {
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < height; j++) { 
+                if (i == 0 || j == 0 || i == width - 1 || j == height - 1)
+                    setTile(Tile.test_tile2, i, j);
+            }
         }
     }
     public AABB getTileBoundingBox(int x, int y) {
@@ -73,5 +85,10 @@ public class Board {
         }
     }
     public int getScale() {return scale;};
-
+    public int getWidth() {
+        return width;
+    }
+    public int getHeight() {
+        return height;
+    }
 }

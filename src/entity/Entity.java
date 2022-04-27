@@ -12,13 +12,13 @@ import src.models.Shader;
 import src.models.Texture;
 import src.windowhandle.Window;
 
-public class Player {
-    private Basicmodel model;
-    private Texture tex;
-    private Transform transform;
-    private Vector3f direction;
-    private AABB bounding_box;
-    public Player(float x, float y) {
+public class Entity {
+    protected Basicmodel model;
+    protected Texture tex;
+    protected Transform transform;
+    protected AABB bounding_box;
+
+    public Entity(float x, float y) {
         model = new Basicmodel();
         tex= new Texture("Cute-Snake-Transparent-PNG.png");
         transform = new Transform();
@@ -27,7 +27,6 @@ public class Player {
         bounding_box = new AABB(
                 new Vector2f(transform.pos.x, transform.pos.y), new Vector2f(1,1));
     }
-
     public void update(float delta, Window window, Camera camera, Board board) {
         if (window.getDirection() == Direction.WEST)
             transform.pos.add(new Vector3f(-delta,0,0));

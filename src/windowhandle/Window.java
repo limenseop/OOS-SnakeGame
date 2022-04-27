@@ -1,3 +1,7 @@
+/*
+ * Copyright LWJGL. All rights reserved.
+ * License terms: https://www.lwjgl.org/license
+ */
 package src.windowhandle;
 
 import org.lwjgl.glfw.GLFW;
@@ -27,11 +31,6 @@ public class Window {
         this.windowtitle = windowtitle;
         create();
     }
-    public void setBackgroundcolor(float r, float g, float b) {
-            backgroundcolor[0] = r;
-            backgroundcolor[1] = g;
-            backgroundcolor[2] = b;
-    }
     public void stop() {
         GLFW.glfwTerminate();
     }
@@ -57,7 +56,7 @@ public class Window {
         GLFWVidMode videomode = GLFW.glfwGetVideoMode(GLFW.glfwGetPrimaryMonitor());
         GLFW.glfwSetWindowPos(window, (videomode.width() - width) / 2, (videomode.height() - height) / 2);
         GLFW.glfwShowWindow(window);
-
+        GLFW.glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
         time = getTime();
     }
     public void swapBuffer() {
@@ -75,8 +74,9 @@ public class Window {
         return GLFW.glfwWindowShouldClose(window);
     }
     private double getTime() {
-        return (double) System.nanoTime() / (double) 1000000000;
+        return GLFW.glfwGetTime();
     }
+
     public boolean isUpdating() {
         double nexttime = getTime();
         double passedtime = nexttime - time;
@@ -97,7 +97,10 @@ public class Window {
     public long getWindow() {
         return window;
     }
-    public double getcurrentFps() {
+    public int getcurrentFps() {
+        return (int)processedtime * fps_cap;
+    }
+    public double getProcessedtime() {
         return processedtime;
     }
     public Direction getDirection() {
