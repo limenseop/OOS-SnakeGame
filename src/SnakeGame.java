@@ -25,12 +25,12 @@ public class SnakeGame {
         Shader shader = new Shader("shader");
         Camera cam = new Camera(mainwindow.getWidth(), mainwindow.getHeight());
         Board mainboard = new Board(BOARD_WIDTH, BOARD_HEIGHT, BOARD_SCALE);
-        Entity snake = new Entity((float) BOARD_WIDTH, -(float) BOARD_HEIGHT);
+        Entity snake = new Entity((float) BOARD_WIDTH, -(float) BOARD_HEIGHT, SNAKE_SPEED);
 
         while(!mainwindow.close()){
             if (mainwindow.isUpdating()) {
                 mainwindow.update();
-                snake.update((float)mainwindow.getProcessedtime()*SNAKE_SPEED, mainwindow, cam, mainboard);
+                snake.update(mainwindow, cam, mainboard);
                 mainboard.correctCameara(cam, mainwindow);
 
                 mainboard.render(shader, cam);

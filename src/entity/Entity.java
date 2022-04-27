@@ -13,30 +13,37 @@ import src.models.Texture;
 import src.windowhandle.Window;
 
 public class Entity {
-    protected Basicmodel model;
-    protected Texture tex;
-    protected Transform transform;
-    protected AABB bounding_box;
+    private Basicmodel model;
+    private Texture tex;
+    private Transform transform;
+    private AABB bounding_box;
+    private Vector3f movement;
+    private float delta;
 
-    public Entity(float x, float y) {
+    public Entity(float x, float y, float delta) {
         model = new Basicmodel();
         tex= new Texture("Cute-Snake-Transparent-PNG.png");
+        this.delta = delta;
+        movement = new Vector3f(0, this.delta, 0);
         transform = new Transform();
         transform.scale = new Vector3f(16,16,1);
         transform.pos = new Vector3f(x, y, 0);
         bounding_box = new AABB(
                 new Vector2f(transform.pos.x, transform.pos.y), new Vector2f(1,1));
     }
-    public void update(float delta, Window window, Camera camera, Board board) {
+    public void update(Window window, Camera camera, Board board) {
+        //움직임
         if (window.getDirection() == Direction.WEST)
-            transform.pos.add(new Vector3f(-delta,0,0));
+            movement = new Vector3f(-delta,0,0);
         if (window.getDirection() == Direction.EAST)
-            transform.pos.add(new Vector3f(delta, 0, 0));
+            movement = new Vector3f(delta,0,0);
         if (window.getDirection() == Direction.NORTH)
-            transform.pos.add(new Vector3f(0, delta, 0));
+            movement = new Vector3f(0,delta,0);
         if (window.getDirection() == Direction.SOUTH)
-            transform.pos.add(new Vector3f(0, -delta, 0));
+            movement = new Vector3f(0,-delta,0);
+        transform.pos.add(movement);
 
+        //충돌박스 생성 및 충돌인식
         bounding_box.getCenter().set(transform.pos.x, transform.pos.y);
         AABB[] boxes = new AABB[25];
         for (int i = 0; i < 5; i++) {
@@ -69,7 +76,6 @@ public class Entity {
                 System.out.println("충돌발생!");
             }
         }
-
         camera.getPosition().lerp(transform.pos.mul(-board.getScale(), new Vector3f()), 0.1f);
         //camera.setPosition(transform.pos.mul(-board.getScale(), new Vector3f()));
     }

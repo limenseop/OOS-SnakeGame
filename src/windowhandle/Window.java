@@ -73,7 +73,7 @@ public class Window {
         }
         return GLFW.glfwWindowShouldClose(window);
     }
-    private double getTime() {
+    public static double getTime() {
         return GLFW.glfwGetTime();
     }
 

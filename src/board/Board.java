@@ -44,7 +44,6 @@ public class Board {
             pos.x = -(window.getWidth()/2) + scale;
         if (pos.x < w + (window.getWidth()/2) + scale)
             pos.x = w + (window.getWidth()/2) + scale;
-
         if (pos.y < (window.getHeight()/2) - scale)
             pos.y = (window.getHeight()/2) - scale;
         if (pos.y > h - (window.getHeight()/2) - scale)
