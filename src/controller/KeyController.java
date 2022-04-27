@@ -7,6 +7,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.io.*;
 
 public class KeyController extends JFrame {
 
@@ -36,26 +37,40 @@ public class KeyController extends JFrame {
 
             @Override
             public void keyPressed(KeyEvent e) {
-                switch(e.getKeyCode()){
-                    case 37 :{
-                        if(!paused_Option)
-                        gameboard.change_Direction_Snake(Direction.WEST);
-                        break;
+                if((!paused_Option)){
+                    switch (e.getKeyCode()) {
+                        case 37: {
+                                gameboard.change_Direction_Snake(Direction.WEST);
+                            break;
+                        }
+                        case 38: {
+                                gameboard.change_Direction_Snake(Direction.NORTH);
+                            break;
+                        }
+                        case 39: {
+                                gameboard.change_Direction_Snake(Direction.EAST);
+                            break;
+                        }
+                        case 40: {
+                                gameboard.change_Direction_Snake(Direction.SOUTH);
+                            break;
+                        }
                     }
-                    case 38 :{
-                        if(!paused_Option)
-                        gameboard.change_Direction_Snake(Direction.NORTH);
-                        break;
-                    }
-                    case 39 :{
-                        if(!paused_Option)
-                        gameboard.change_Direction_Snake(Direction.EAST);
-                        break;
-                    }
-                    case 40 :{
-                        if(!paused_Option)
-                        gameboard.change_Direction_Snake(Direction.SOUTH);
-                        break;
+                }
+                else{
+                    switch(e.getKeyChar()){
+                        case 's' : {
+                            try {
+                                save_This_Game();
+                                System.out.println("game saved!");
+                            } catch (IOException ex) {
+                                ex.printStackTrace();
+                            }
+                            break;
+                        }
+                        case 'l' : {
+                            break;
+                        }
                     }
                 }
             }
@@ -67,5 +82,14 @@ public class KeyController extends JFrame {
         });
     }
 
+    public void save_This_Game() throws IOException {
+        FileOutputStream fos=new FileOutputStream("user.acc");
+        ObjectOutputStream oos=new ObjectOutputStream(fos);
+        oos.writeObject(gameboard);
+    }
 
+
+    public Board getGameboard() {
+        return gameboard;
+    }
 }
