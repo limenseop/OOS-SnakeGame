@@ -19,16 +19,17 @@ public class snakeBody implements Serializable {
 
     private transient Basicmodel model;
     private transient Texture tex;
-    private Transform transform;
+    private float positionX;
+    private float positionY;
+    private transient Transform transform;
     private Direction direction;
+    private boolean active;
 
     public snakeBody(float positionX, float positionY, Direction direction) {
-        model = new Basicmodel();
-        tex= new Texture("Cute-Snake-Transparent-PNG.png");
-        transform = new Transform();
-        transform.scale = new Vector3f(16,16,1);
-        transform.pos = new Vector3f(positionX, positionY, 0);
+        this.positionX = positionX;
+        this.positionY = positionY;
         this.direction = direction;
+        setSelf();
     }
 
     public float getX() {
@@ -50,23 +51,23 @@ public class snakeBody implements Serializable {
     public void move(){
         switch (direction){
             case EAST:{
-                //positionX = positionX + 0.3f;
-                transform.pos.add(0.3f,0,0);
+                positionX = positionX + 0.4f;
+                transform.pos.add(0.4f,0,0);
                 break;
             }
             case WEST:{
-                //positionX = positionX - 0.3f;
-                transform.pos.add(-0.3f,0,0);
+                positionX = positionX - 0.4f;
+                transform.pos.add(-0.4f,0,0);
                 break;
             }
             case NORTH:{
-                //positionY = positionY + 0.3f;
-                transform.pos.add(0,0.3f,0);
+                positionY = positionY + 0.4f;
+                transform.pos.add(0,0.4f,0);
                 break;
             }
             case SOUTH:{
-                //positionY = positionY - 0.3f;
-                transform.pos.add(0,-0.3f,0);
+                positionY = positionY - 0.4f;
+                transform.pos.add(0,-0.4f,0);
                 break;
             }
         }
@@ -92,6 +93,14 @@ public class snakeBody implements Serializable {
           tex.bind(0);
           model.render();
 
+      }
+
+      public void setSelf(){
+          model = new Basicmodel();
+          tex= new Texture("Cute-Snake-Transparent-PNG.png");
+          transform = new Transform();
+          transform.scale = new Vector3f(16,16,1);
+          transform.pos = new Vector3f(positionX, positionY, 0);
       }
 
 }

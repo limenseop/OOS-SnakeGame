@@ -37,32 +37,31 @@ public class Snake implements Serializable {
     }
 
     public boolean grow(){
-
         snakeBody tail = body.get(body.size()-1);
 
-        int x = (int)tail.getX();
-        int y = (int)tail.getY();
+        float x = tail.getX();
+        float y = tail.getY();
         float new_X = 0;
         float new_Y = 0;
 
         switch(direction){
             case NORTH : {
                 new_X = x;
-                new_Y = y-0.3f;
+                new_Y = y-0.4f;
                 break;
             }
             case SOUTH : {
                 new_X = x;
-                new_Y = y+0.3f;
+                new_Y = y+0.4f;
                 break;
             }
             case EAST : {
-                new_X = x+0.3f;
+                new_X = x+0.4f;
                 new_Y = y;
                 break;
             }
             case WEST : {
-                new_X = x-0.3f;
+                new_X = x-0.4f;
                 new_Y = y;
                 break;
             }
@@ -98,7 +97,6 @@ public class Snake implements Serializable {
                 body.get(i).move();
             }
             else{
-                System.out.println("result = " + savedX);
                 body.get(i).movePosition(savedX,savedY,savedDirection);
             }
             savedX = prev_savedX;
@@ -136,10 +134,24 @@ public class Snake implements Serializable {
         body.clear();
         System.out.println("Snake.setInit");
         body.add(new snakeBody(42,-42,Direction.NORTH));
-        body.add(new snakeBody(43,-43,Direction.NORTH));
-        body.add(new snakeBody(44,-44,Direction.NORTH));
+        body.add(new snakeBody(42,-43,Direction.NORTH));
+        body.add(new snakeBody(42,-44,Direction.NORTH));
+        body.add(new snakeBody(42,-42,Direction.NORTH));
+        body.add(new snakeBody(42,-41,Direction.NORTH));
+        body.add(new snakeBody(42,-40,Direction.NORTH));
+        body.add(new snakeBody(42,-39,Direction.NORTH));
+        body.add(new snakeBody(42,-38,Direction.NORTH));
+        body.add(new snakeBody(42,-37,Direction.NORTH));
         head = body.get(0);
         System.out.println("this.head = " + this.head);
+    }
+
+    public void setSnake(Snake snakes){
+        body.clear();
+        for (snakeBody snakeBody : snakes.body) {
+            this.body.add(snakeBody);
+        }
+        head = this.body.get(0);
     }
 
 
@@ -147,6 +159,14 @@ public class Snake implements Serializable {
         for (snakeBody snakeBody : body) {
             snakeBody.render(shader,cam);
         }
+    }
+
+    public void reLoad(){
+        for (snakeBody snakeBody : body) {
+            snakeBody.setSelf();
+            System.out.println("snakeBody = " + snakeBody);
+        }
+
     }
 
 }

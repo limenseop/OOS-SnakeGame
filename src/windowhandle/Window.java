@@ -21,9 +21,6 @@ public class Window {
     private float[] backgroundcolor = new float[] {0.0f, 0.0f, 0.0f};
     private EventListener listener;
 
-    private Window() {
-
-    }
     public Window(int width, int height, int fps, String windowtitle) {
         this.width = width;
         this.height = height;
@@ -88,6 +85,11 @@ public class Window {
         }
         return false;
     }
+
+    public void timeHandle(){
+        time = getTime();
+    }
+
     public int getWidth() {
         return width;
     }

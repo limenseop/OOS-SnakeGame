@@ -28,7 +28,7 @@ public class MainController extends JFrame implements Runnable, ActionListener ,
                 //gameboard.gamePause();
             }
             gameboard.move_Snake();
-            gameboard.check_Fruit_Overlap();
+            //gameboard.check_Fruit_Overlap();
             gameboard.check_Game_Terminated();
             try {
                 sleep(300);

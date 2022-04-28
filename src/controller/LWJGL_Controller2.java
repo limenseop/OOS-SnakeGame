@@ -32,9 +32,6 @@ public class LWJGL_Controller2 {
 
     private GameState state = GameState.GAME_ACTIVE;
     private GameBoard gameboard;
-    private long window;
-    private static int WIDTH = 80;
-    private static int HEIGHT = 60;
 
     public LWJGL_Controller2(GameBoard gameboard,Window window, Shader shader,Camera cam,Board board){
         this.mainwindow = window;
@@ -61,7 +58,6 @@ public class LWJGL_Controller2 {
                     case GAME_ACTIVE -> {
                         //snake 방향변경
                         if (key == 262 && action == GLFW.GLFW_PRESS) {
-                            System.out.println("adfadfasdfadsfa");
                             gameboard.change_Direction_Snake(Direction.EAST);
                         }
                         if (key == 263 && action == GLFW.GLFW_PRESS) {
@@ -92,6 +88,13 @@ public class LWJGL_Controller2 {
                         }
                         if(key == GLFW.GLFW_KEY_2 && action == GLFW.GLFW_PRESS){
                             gameboard.re_Play();
+                            gameboard.update(cam,mainboard);
+                            mainboard.correctCameara(cam, mainwindow);
+
+                            mainboard.render(shader, cam);
+                            gameboard.render(shader,cam);
+                            state = GameState.GAME_ACTIVE;
+                            mainwindow.timeHandle();
                             //restart game
                         }
                         if(key==GLFW.GLFW_KEY_3 && action == GLFW.GLFW_PRESS){
@@ -104,6 +107,12 @@ public class LWJGL_Controller2 {
                         }
                         if(key==GLFW.GLFW_KEY_4 && action == GLFW.GLFW_PRESS){
                             gameboard.loadGame();
+                            gameboard.update(cam,mainboard);
+                            mainboard.correctCameara(cam, mainwindow);
+
+                            mainboard.render(shader, cam);
+                            //gameboard.render(shader,cam);
+                            state = GameState.GAME_ACTIVE;
                             //load game
                         }
                         if(key==GLFW.GLFW_KEY_5 && action == GLFW.GLFW_PRESS){
@@ -136,10 +145,14 @@ public class LWJGL_Controller2 {
                 case GAME_ACTIVE -> {
                     if (mainwindow.isUpdating()) {
                         mainwindow.update();
+
+                        //
                         gameboard.move_Snake();
-                        gameboard.check_Fruit_Overlap();
+                        gameboard.check_Fruit_Overlap(mainwindow);
                         gameboard.check_Game_Terminated();
                         gameboard.update(cam,mainboard);
+                        //
+
                         mainboard.correctCameara(cam, mainwindow);
 
                         mainboard.render(shader, cam);
@@ -155,6 +168,7 @@ public class LWJGL_Controller2 {
                     mainboard.render(shader, cam);
                     gameboard.render(shader,cam);
                     mainwindow.swapBuffer();
+                    mainwindow.timeHandle();
                     break;
                 }
                 case GAME_MENU -> {
@@ -163,6 +177,7 @@ public class LWJGL_Controller2 {
                     mainboard.render(shader, cam);
                     gameboard.render(shader,cam);
                     mainwindow.swapBuffer();
+                    mainwindow.timeHandle();
                     break;
                 }
             }

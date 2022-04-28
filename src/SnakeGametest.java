@@ -5,7 +5,6 @@
 package src;
 
 import src.board.Board;
-import src.controller.LWJGL_Controller;
 import src.controller.LWJGL_Controller2;
 import src.controller.MainController;
 import src.domain.EntitySnake;
@@ -33,7 +32,6 @@ public class SnakeGametest {
         Board mainboard = new Board(BOARD_WIDTH, BOARD_HEIGHT, BOARD_SCALE);
         Entity snake = new Entity((float) BOARD_WIDTH, -(float) BOARD_HEIGHT, SNAKE_SPEED);
         MainController controller = new MainController();
-        LWJGL_Controller tester = new LWJGL_Controller();
         Snake snake2 = new Snake();
         GameBoard gb = new GameBoard(snake2);
         LWJGL_Controller2 newone = new LWJGL_Controller2(gb,mainwindow,shader,cam,mainboard);
