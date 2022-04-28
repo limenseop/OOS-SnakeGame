@@ -5,6 +5,7 @@
 package src;
 
 import src.board.Board;
+import src.domain.EntitySnake;
 import src.entity.Entity;
 import src.models.Camera;
 import src.models.Shader;
@@ -25,7 +26,7 @@ public class SnakeGame {
         Shader shader = new Shader("shader");
         Camera cam = new Camera(mainwindow.getWidth(), mainwindow.getHeight());
         Board mainboard = new Board(BOARD_WIDTH, BOARD_HEIGHT, BOARD_SCALE);
-        Entity snake = new Entity((float) BOARD_WIDTH, -(float) BOARD_HEIGHT, SNAKE_SPEED);
+        Entity snake = new Entity(42, -43, SNAKE_SPEED);
 
         while(!mainwindow.close()){
             if (mainwindow.isUpdating()) {
@@ -34,7 +35,7 @@ public class SnakeGame {
                 mainboard.correctCameara(cam, mainwindow);
 
                 mainboard.render(shader, cam);
-                snake.render(shader, cam);
+                snake.render(shader,cam);
                 mainwindow.swapBuffer();
                 System.out.println("fps:"+mainwindow.getcurrentFps());
             }
