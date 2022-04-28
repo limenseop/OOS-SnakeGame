@@ -2,7 +2,7 @@ package src.controller;
 
 import org.lwjgl.glfw.*;
 import org.lwjgl.system.MemoryUtil;
-import src.domain.Board;
+import src.domain.GameBoard;
 import src.domain.Direction;
 
 import java.io.IOException;
@@ -14,10 +14,10 @@ public class LWJGL_Controller {
 
     private GameState state;
     private Thread controller;
-    private Board gameboard;
+    private GameBoard gameboard;
     private long window;
-    private static int WIDTH = 800;
-    private static int HEIGHT = 600;
+    private static int WIDTH = 80;
+    private static int HEIGHT = 60;
 
 
     public void run(MainController controller){
@@ -132,7 +132,7 @@ public class LWJGL_Controller {
                     gameboard.move_Snake();
                     gameboard.check_Fruit_Overlap();
                     gameboard.check_Game_Terminated();
-                    gameboard.brief();
+
                     try {
                         sleep(300);
                      }

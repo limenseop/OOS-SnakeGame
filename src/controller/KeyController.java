@@ -1,6 +1,6 @@
 package src.controller;
 
-import src.domain.Board;
+import src.domain.GameBoard;
 import src.domain.Direction;
 
 import javax.swing.*;
@@ -11,10 +11,10 @@ import java.io.*;
 
 public class KeyController extends JFrame {
 
-    private Board gameboard;
+    private GameBoard gameboard;
     private boolean paused_Option = false;
 
-    public KeyController(Board gameboard) throws HeadlessException {
+    public KeyController(GameBoard gameboard) throws HeadlessException {
         this.gameboard = gameboard;
         setTitle("hello");
         setSize(10,10);
@@ -89,7 +89,7 @@ public class KeyController extends JFrame {
     }
 
 
-    public Board getGameboard() {
+    public GameBoard getGameboard() {
         return gameboard;
     }
 }

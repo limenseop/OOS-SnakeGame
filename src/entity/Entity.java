@@ -80,6 +80,10 @@ public class Entity {
         //camera.setPosition(transform.pos.mul(-board.getScale(), new Vector3f()));
     }
 
+    public Transform getTransform() {
+        return transform;
+    }
+
     public void render(Shader shader, Camera camera) {
         shader.bind();
         shader.setUniform("sampler", 0);

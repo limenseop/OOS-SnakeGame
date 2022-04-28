@@ -8,7 +8,7 @@ class tester {
     @Test
     public void gamestart() throws InterruptedException {
         Snake snake = new Snake();
-        Board board = new Board(snake);
+        GameBoard board = new GameBoard(snake);
        MainController tester = new MainController();
        tester.init(board);
        Thread testth = new Thread(tester);

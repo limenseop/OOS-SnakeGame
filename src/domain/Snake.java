@@ -1,6 +1,10 @@
 package src.domain;
 
+import src.models.Camera;
+import src.models.Shader;
+
 import java.awt.*;
+import java.awt.geom.Point2D;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,9 +23,15 @@ public class Snake implements Serializable {
 
     public Snake(){
         body = new ArrayList<>();
-        body.add(new snakeBody(20,20,Direction.NORTH));
-        body.add(new snakeBody(20,19,Direction.NORTH));
-        body.add(new snakeBody(20,18,Direction.NORTH));
+        body.add(new snakeBody(42,-42,Direction.NORTH));
+        body.add(new snakeBody(42,-43,Direction.NORTH));
+        body.add(new snakeBody(42,-44,Direction.NORTH));
+        body.add(new snakeBody(42,-42,Direction.NORTH));
+        body.add(new snakeBody(42,-41,Direction.NORTH));
+        body.add(new snakeBody(42,-40,Direction.NORTH));
+        body.add(new snakeBody(42,-39,Direction.NORTH));
+        body.add(new snakeBody(42,-38,Direction.NORTH));
+        body.add(new snakeBody(42,-37,Direction.NORTH));
         direction = Direction.NORTH;
         head = body.get(0);
     }
@@ -32,27 +42,27 @@ public class Snake implements Serializable {
 
         int x = (int)tail.getX();
         int y = (int)tail.getY();
-        int new_X = 0;
-        int new_Y = 0;
+        float new_X = 0;
+        float new_Y = 0;
 
         switch(direction){
             case NORTH : {
                 new_X = x;
-                new_Y = y-1;
+                new_Y = y-0.3f;
                 break;
             }
             case SOUTH : {
                 new_X = x;
-                new_Y = y+1;
+                new_Y = y+0.3f;
                 break;
             }
             case EAST : {
-                new_X = x+1;
+                new_X = x+0.3f;
                 new_Y = y;
                 break;
             }
             case WEST : {
-                new_X = x-1;
+                new_X = x-0.3f;
                 new_Y = y;
                 break;
             }
@@ -74,23 +84,34 @@ public class Snake implements Serializable {
     }
 
     public void move(){
-        Direction prev = direction;
-        Direction prev_buf = direction;
-        for (snakeBody snakeBody : body) {
-            snakeBody.move();
-            prev_buf = snakeBody.getDirection();
-            if(!snakeBody.equals(head)){
-                snakeBody.changeDirection(prev);
+        float prev_savedX = 0;
+        float prev_savedY = 0;
+        float savedX = 0;
+        float savedY = 0;
+        Direction savedDirection = Direction.NORTH;
+        List<snakeBody> prev_body = body;
+        for(int i = 0;i<body.toArray().length;i++){
+            prev_savedX = body.get(i).getX();
+            prev_savedY = body.get(i).getY();
+            savedDirection = body.get(i).getDirection();
+            if(i == 0){
+                body.get(i).move();
             }
-            prev = prev_buf;
+            else{
+                System.out.println("result = " + savedX);
+                body.get(i).movePosition(savedX,savedY,savedDirection);
+            }
+            savedX = prev_savedX;
+            savedY = prev_savedY;
         }
         if(check_If_collapse()){
-            System.out.println("collapse occurs!");
+
         }
     }
 
+
     public boolean check_If_collapse(){
-        Point headPoint = new Point(head.getX(),head.getY());
+        Point headPoint = new Point((int)head.getX(),(int)head.getY());
         for (snakeBody snakeBody : body) {
             if(snakeBody.equals(head)) continue;
             if(head.getX() == snakeBody.getX() && head.getY() == snakeBody.getY()){
@@ -101,9 +122,11 @@ public class Snake implements Serializable {
         return false;
     }
 
-    public boolean check_If_Overlap(int x, int y){
+    public boolean check_If_Overlap(float x, float y){
+        Point2D.Float checker = new Point2D.Float(x,y);
         for (snakeBody snakeBody : body) {
-            if(x == snakeBody.getX() && y == snakeBody.getY())
+            Point2D.Float body = new Point2D.Float(snakeBody.getX(), snakeBody.getY());
+            if(checker.distance(body)<1)
                 return true;
         }
         return false;
@@ -112,18 +135,18 @@ public class Snake implements Serializable {
     public void re_Init() {
         body.clear();
         System.out.println("Snake.setInit");
-        body.add(new snakeBody(20,20,Direction.NORTH));
-        body.add(new snakeBody(20,19,Direction.NORTH));
-        body.add(new snakeBody(20,18,Direction.NORTH));
+        body.add(new snakeBody(42,-42,Direction.NORTH));
+        body.add(new snakeBody(43,-43,Direction.NORTH));
+        body.add(new snakeBody(44,-44,Direction.NORTH));
         head = body.get(0);
         System.out.println("this.head = " + this.head);
     }
 
-    public List<Point> getBody(){
-        List<Point> buffer = new ArrayList<>();
+
+    public void render(Shader shader, Camera cam){
         for (snakeBody snakeBody : body) {
-            buffer.add(snakeBody.getPoint());
+            snakeBody.render(shader,cam);
         }
-        return buffer;
     }
+
 }
