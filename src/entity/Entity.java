@@ -19,11 +19,18 @@ public class Entity {
     private AABB bounding_box;
     private Vector3f movement;
     private float delta;
+    private float[] tex_coord;
 
     public Entity(float x, float y, float delta) {
         model = new Basicmodel();
         tex= new Texture("Cute-Snake-Transparent-PNG.png");
         this.delta = delta;
+        tex_coord = new float[] {
+                0,0,
+                1,0,
+                1,1,
+                0,1
+        };
         movement = new Vector3f(0, this.delta, 0);
         transform = new Transform();
         transform.scale = new Vector3f(16,16,1);
@@ -33,14 +40,42 @@ public class Entity {
     }
     public void update(Window window, Camera camera, Board board, Entity_beta body) {
         //움직임
-        if (window.getDirection() == Direction.WEST)
+        if (window.getDirection() == Direction.WEST) {
             movement = new Vector3f(-delta,0,0);
-        if (window.getDirection() == Direction.EAST)
+            tex_coord = new float[] {
+                    1,0,
+                    1,1,
+                    0,1,
+                    0,0
+            };
+        }
+        else if (window.getDirection() == Direction.EAST) {
             movement = new Vector3f(delta,0,0);
-        if (window.getDirection() == Direction.NORTH)
+            tex_coord = new float[] {
+                    0,1,
+                    0,0,
+                    1,0,
+                    1,1
+            };
+        }
+        else if (window.getDirection() == Direction.NORTH) {
             movement = new Vector3f(0,delta,0);
-        if (window.getDirection() == Direction.SOUTH)
-            movement = new Vector3f(0,-delta,0);
+            tex_coord = new float[] {
+                    0,0,
+                    1,0,
+                    1,1,
+                    0,1
+            };
+        }
+        else if (window.getDirection() == Direction.SOUTH) {
+            movement = new Vector3f(0, -delta, 0);
+            tex_coord = new float[] {
+                    1,1,
+                    0,1,
+                    0,0,
+                    1,0
+            };
+        }
         transform.pos.add(movement);
 
         //충돌박스 생성 및 충돌인식
@@ -102,8 +137,10 @@ public class Entity {
         shader.setUniform("sampler", 0);
         shader.setUniform("projection", transform.getProjection(camera.getProjection()));
         tex.bind(0);
+        model.spin(tex_coord);
         model.render();
     }
+
     public Transform getTransform() {
         return transform;
     }

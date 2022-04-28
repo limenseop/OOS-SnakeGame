@@ -37,6 +37,11 @@ abstract class Model {
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
         glBindBuffer(GL_ARRAY_BUFFER, 0);
     }
+    public void spin(float[] tex_coords) {
+        glBindBuffer(GL_ARRAY_BUFFER, t_id);
+        glBufferData(GL_ARRAY_BUFFER, createBuffer(tex_coords), GL_STATIC_DRAW);
+    }
+
     public void render() {
         glEnableVertexAttribArray(0);
         glEnableVertexAttribArray(1);
@@ -69,4 +74,5 @@ abstract class Model {
         buffer.flip();
         return buffer;
     }
+
 }
