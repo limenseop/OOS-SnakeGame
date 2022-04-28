@@ -1,4 +1,4 @@
-package src.entity;
+package src.domain;
 
 import org.joml.Vector2f;
 import org.joml.Vector3f;
@@ -6,6 +6,7 @@ import src.Direction;
 import src.board.Board;
 import src.collision.AABB;
 import src.collision.Collision;
+import src.entity.Transform;
 import src.models.Basicmodel;
 import src.models.Camera;
 import src.models.Shader;
@@ -14,7 +15,7 @@ import src.windowhandle.Window;
 
 import java.io.Serializable;
 
-public class Entity{
+public class Apple{
     private Basicmodel model;
     private Texture tex;
     private Transform transform;
@@ -22,9 +23,9 @@ public class Entity{
     private Vector3f movement;
     private float delta;
 
-    public Entity(float x, float y, float delta) {
+    public Apple(float x, float y, float delta) {
         model = new Basicmodel();
-        tex= new Texture("tile2.png");
+        tex= new Texture("Cute-Snake-Transparent-PNG.png");
         this.delta = delta;
         movement = new Vector3f(0, this.delta, 0);
         transform = new Transform();

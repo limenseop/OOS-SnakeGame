@@ -8,6 +8,7 @@ import src.models.Basicmodel;
 import src.models.Camera;
 import src.models.Shader;
 import src.models.Texture;
+import src.windowhandle.Window;
 
 import java.awt.*;
 import java.awt.geom.Point2D;
@@ -36,31 +37,28 @@ public class GameBoard implements Serializable {
     }
 
     public void loadGame(){
-        GameBoard newBoard = loadFromFile();
-        this.snake = newBoard.snake;
-        this.fruitPosition = newBoard.fruitPosition;
-        this.score = newBoard.score;
-        this.running = newBoard.running;
-        this.paused = newBoard.paused;
-        this.rankings = newBoard.rankings;
-
+        SaveData saveData = loadFromFile();
+        this.snake = saveData.getSnake();
+        this.score = saveData.getScore();
+        this.paused = saveData.isPaused();
+        this.running = saveData.isRunning();
+        fruitPosition.remove(0);
+        fruitPosition.add(saveData.getFruit());
     }
 
     public void createFruit() {
 
         float fruit_X = (float) ((Math.random() * 78) + 2);
-        float fruit_Y = (float) ((Math.random() * -82) + 2);
+        float fruit_Y = (float) ((Math.random() * -78) - 2);
 
         if (fruitPosition.isEmpty()) {
-
 
             while (snake.check_If_Overlap(fruit_X, fruit_Y)) {
 
                 fruit_X = (float) ((Math.random() * 78) + 2);
-                fruit_Y = (float) ((Math.random() * -82) + 2);
+                fruit_Y = (float) ((Math.random() * -78) - 2);
 
             }
-            System.out.println("created at : " + fruit_X + "     " + fruit_Y);
             fruitPosition.add(new Entity(fruit_X,fruit_Y,0));
         }
     }
@@ -128,24 +126,28 @@ public class GameBoard implements Serializable {
     }
 
 
-    public boolean check_Fruit_Overlap() {
+    public boolean check_Fruit_Overlap(Window main) {
 
+        long start = System.currentTimeMillis();
         Point2D fruit = new Point2D.Float(fruitPosition.get(0).getTransform().pos.x,fruitPosition.get(0).getTransform().pos.y);
         float headX = snake.getHead().getX();
         float headY = snake.getHead().getY();
         Point2D head = new Point2D.Float(headX,headY);
-        if(head.distance(fruit)<1){
+        if(head.distance(fruit)<1.3){
             fruitPosition.remove(0);
-            for(int i = 0;i<10;i++)
+            score = score + 100;
+            for(int i = 0;i<2;i++)
             snake.grow();
             createFruit();
+            long interval = System.currentTimeMillis() - start;
+            System.out.println("interval : " + interval);
             return true;
         }
         return false;
     }
 
     private boolean out_Of_Bounces(int x, int y) {
-        if (x < 2 || x >= 82 || y < -82 || y >= -2) return true;
+        if (x < 2.5 || x >= 81.5 || y < -81.5 || y >= -2.5) return true;
         return false;
     }
     public void gameTerminate(){
@@ -153,16 +155,19 @@ public class GameBoard implements Serializable {
     }
 
     public void save_This_Game() throws IOException {
+        SaveData saved = new SaveData(snake,score,running,paused,fruitPosition.get(0));
         FileOutputStream fos=new FileOutputStream(fileName);
         ObjectOutputStream oos=new ObjectOutputStream(fos);
-        oos.writeObject(this);
+        oos.writeObject(saved);
     }
 
-    private GameBoard loadFromFile(){
+    private SaveData loadFromFile(){
         try {
             FileInputStream fis = new FileInputStream(fileName);
             ObjectInputStream ois = new ObjectInputStream(fis);
-            return(GameBoard)ois.readObject();
+            SaveData saved = (SaveData) ois.readObject();
+            saved.reload();
+            return saved;
         }
         catch(Exception e) {
             System.out.println("error");
