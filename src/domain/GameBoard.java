@@ -5,7 +5,7 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Board implements Serializable {
+public class GameBoard implements Serializable {
 
     public static final int WIDTH = 40;
     public static final int HEIGHT = 40;
@@ -22,7 +22,7 @@ public class Board implements Serializable {
 
     // board = 40 * 40 size (demo)
 
-    public Board(Snake snake) {
+    public GameBoard(Snake snake) {
         this.snake = snake;
         fruitPosition = new ArrayList<>();
         rankings = new ArrayList<>();
@@ -32,7 +32,7 @@ public class Board implements Serializable {
     }
 
     public void loadGame(){
-        Board newBoard = loadFromFile();
+        GameBoard newBoard = loadFromFile();
         this.snake = newBoard.snake;
         this.fruitPosition = newBoard.fruitPosition;
         this.snakePoisition = newBoard.snakePoisition;
@@ -194,11 +194,11 @@ public class Board implements Serializable {
         oos.writeObject(this);
     }
 
-    private Board loadFromFile(){
+    private GameBoard loadFromFile(){
         try {
             FileInputStream fis = new FileInputStream(fileName);
             ObjectInputStream ois = new ObjectInputStream(fis);
-            return(Board)ois.readObject();
+            return(GameBoard)ois.readObject();
         }
         catch(Exception e) {
             System.out.println("error");

@@ -2,8 +2,9 @@ package src.controller;
 
 import org.lwjgl.glfw.*;
 import org.lwjgl.system.MemoryUtil;
-import src.domain.Board;
+import src.domain.GameBoard;
 import src.domain.Direction;
+import src.domain.GameState;
 
 import java.io.IOException;
 
@@ -14,7 +15,7 @@ public class LWJGL_Controller {
 
     private GameState state;
     private Thread controller;
-    private Board gameboard;
+    private GameBoard gameboard;
     private long window;
     private static int WIDTH = 800;
     private static int HEIGHT = 600;
