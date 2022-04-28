@@ -6,9 +6,12 @@ public class AABB {
     private Vector2f center;
     private Vector2f half_extent;
 
-    public AABB(Vector2f center, Vector2f half_extent) {
+    private boolean eatable;
+
+    public AABB(Vector2f center, Vector2f half_extent, boolean eatable) {
         this.center = center;
         this.half_extent = half_extent;
+        this.eatable = eatable;
     }
     public Collision getCollision(AABB box2) {
         Vector2f distance = box2.center.sub(center, new Vector2f());
@@ -41,7 +44,9 @@ public class AABB {
     public Vector2f getHalf_extent() {
         return half_extent;
     }
-
+    public boolean isEatable() {
+        return eatable;
+    }
     public Vector2f getCenter() {
         return center;
     }

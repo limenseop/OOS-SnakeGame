@@ -4,6 +4,7 @@ import org.joml.Matrix4f;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 import src.collision.AABB;
+import src.entity.Entity;
 import src.models.Camera;
 import src.models.Shader;
 import src.windowhandle.Window;
@@ -14,12 +15,14 @@ public class Board {
     private Matrix4f mainboard;
     private AABB[] bounding_boxes;
     private TileRenderer tilerenderer;
+    private AppleBuilder applebuilder;
     public Board(int width, int height, int scale) {
         this.width = width;
         this.height = height;
         this.scale = scale;
         tiles = new byte[width * height];
         bounding_boxes = new AABB[width*height];
+        applebuilder = new AppleBuilder(width, height);
         tilerenderer = new TileRenderer();
         mainboard = new Matrix4f()
                 .setTranslation(new Vector3f(0,0,0))
@@ -49,12 +52,19 @@ public class Board {
         if (pos.y > h - (window.getHeight()/2) - scale)
             pos.y = h - (window.getHeight()/2) - scale;
     }
-
+    public void appleupdate(Entity snake) {
+        applebuilder.createFruit(snake);
+        setTile(Tile.apple, applebuilder.getFruitPosition().x, applebuilder.getFruitPosition().y);
+    }
     private void setTile(Tile tile, int x, int y) {
         tiles[x + y * width] = tile.getId();
-        if (tile.isSolid()) {
+        if (tile.isEatable()) {
             bounding_boxes[x + y * width]
-                    = new AABB(new Vector2f(x*2, -y*2), new Vector2f(1,1));
+                    = new AABB(new Vector2f(x*2, -y*2), new Vector2f(1,1), true);
+        }
+        else if (tile.isSolid()) {
+            bounding_boxes[x + y * width]
+                    = new AABB(new Vector2f(x*2, -y*2), new Vector2f(1,1), false);
         }
         else {
             bounding_boxes[x + y * width]
@@ -65,7 +75,7 @@ public class Board {
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) { 
                 if (i == 0 || j == 0 || i == width - 1 || j == height - 1)
-                    setTile(Tile.test_tile2, i, j);
+                    setTile(Tile.tile2, i, j);
             }
         }
     }
@@ -89,5 +99,10 @@ public class Board {
     }
     public int getHeight() {
         return height;
+    }
+    public void eaten() {
+        //사과가 먹힐 때
+        applebuilder.changeFlag();
+        setTile(Tile.tile, applebuilder.getFruitPosition().x, applebuilder.getFruitPosition().y);
     }
 }

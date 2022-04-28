@@ -29,9 +29,9 @@ public class Entity {
         transform.scale = new Vector3f(16,16,1);
         transform.pos = new Vector3f(x, y, 0);
         bounding_box = new AABB(
-                new Vector2f(transform.pos.x, transform.pos.y), new Vector2f(1,1));
+                new Vector2f(transform.pos.x, transform.pos.y), new Vector2f(1,1), false);
     }
-    public void update(Window window, Camera camera, Board board) {
+    public void update(Window window, Camera camera, Board board, Entity_beta body) {
         //움직임
         if (window.getDirection() == Direction.WEST)
             movement = new Vector3f(-delta,0,0);
@@ -46,6 +46,7 @@ public class Entity {
         //충돌박스 생성 및 충돌인식
         bounding_box.getCenter().set(transform.pos.x, transform.pos.y);
         AABB[] boxes = new AABB[25];
+        AABB bodybox = body.getBounding_box();
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 5; j++) {
                 boxes[i + j * 5] = board.getTileBoundingBox(
@@ -55,25 +56,41 @@ public class Entity {
             }
         }
         AABB box = null;
-        for (int i = 0; i < boxes.length; i++) {
-            if (boxes[i] != null) {
+        for (AABB aabb : boxes) {
+            if (aabb != null) {
                 if (box == null)
-                    box = boxes[i];
+                    box = aabb;
 
                 Vector2f length1 = box.getCenter().sub(transform.pos.x, transform.pos.y, new Vector2f());
-                Vector2f length2 = boxes[i].getCenter().sub(transform.pos.x, transform.pos.y, new Vector2f());
+                Vector2f length2 = aabb.getCenter().sub(transform.pos.x, transform.pos.y, new Vector2f());
 
                 if (length1.lengthSquared() > length2.lengthSquared()) {
-                    box = boxes[i];
+                    box = aabb;
                 }
             }
         }
+        if (bodybox != null) {
+            if (box == null)
+                box = bodybox;
+            Vector2f length1 = box.getCenter().sub(transform.pos.x, transform.pos.y, new Vector2f());
+            Vector2f length2 = bodybox.getCenter().sub(transform.pos.x, transform.pos.y, new Vector2f());
+
+            if (length1.lengthSquared() > length2.lengthSquared()) {
+                box = bodybox;
+            }
+        }
+
         if (box != null) {
             Collision data = bounding_box.getCollision(box);
             if (data.isIntersecting) {
                 bounding_box.correctPosition(box, data);
                 transform.pos.set(bounding_box.getCenter(),0);
-                System.out.println("충돌발생!");
+                if (box.isEatable()) {
+                    board.eaten();
+                    System.out.println("사과냠냠!");
+                }
+                else
+                    System.out.println("충돌발생!");
             }
         }
         camera.getPosition().lerp(transform.pos.mul(-board.getScale(), new Vector3f()), 0.1f);
@@ -86,5 +103,8 @@ public class Entity {
         shader.setUniform("projection", transform.getProjection(camera.getProjection()));
         tex.bind(0);
         model.render();
+    }
+    public Transform getTransform() {
+        return transform;
     }
 }
