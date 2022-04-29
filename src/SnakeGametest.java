@@ -9,7 +9,6 @@ import src.controller.LWJGL_Controller2;
 import src.controller.MainController;
 import src.domain.GameBoard;
 import src.domain.Snake;
-import src.entity.Entity;
 import src.models.Camera;
 import src.models.Shader;
 import src.windowhandle.Window;
@@ -29,7 +28,6 @@ public class SnakeGametest {
         Shader shader = new Shader("shader");
         Camera cam = new Camera(mainwindow.getWidth(), mainwindow.getHeight());
         Board mainboard = new Board(BOARD_WIDTH, BOARD_HEIGHT, BOARD_SCALE);
-        Entity snake = new Entity((float) BOARD_WIDTH, -(float) BOARD_HEIGHT, SNAKE_SPEED);
         MainController controller = new MainController();
         Snake snake2 = new Snake();
         GameBoard gb = new GameBoard(snake2);

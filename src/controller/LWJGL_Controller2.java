@@ -1,7 +1,6 @@
 package src.controller;
 
 import org.lwjgl.glfw.*;
-import org.lwjgl.system.MemoryUtil;
 import src.board.Board;
 import src.domain.GameBoard;
 import src.domain.Direction;
@@ -9,7 +8,9 @@ import src.domain.Renderer;
 import src.models.Camera;
 import src.models.Shader;
 import src.models.Texture;
+import src.windowhandle.MouseHandler;
 import src.windowhandle.Window;
+
 
 import java.io.IOException;
 
@@ -33,6 +34,7 @@ public class LWJGL_Controller2 {
     private Renderer renderer;
     private Texture snakeTex;
     private Texture appleTex;
+    private MouseHandler mouseListener;
 
 
     private GameState state = GameState.GAME_ACTIVE;
@@ -54,6 +56,7 @@ public class LWJGL_Controller2 {
     }
 
     private void init(){
+        mouseListener = new MouseHandler(mainwindow.getWindow());
         state = GameState.GAME_ACTIVE;
         renderer = new Renderer();
         snakeTex = new Texture("Cute-Snake-Transparent-PNG.png");
@@ -89,7 +92,7 @@ public class LWJGL_Controller2 {
                         break;
                     }
 
-                    case GAME_MENU -> {
+                    /*case GAME_MENU -> {
                         if(key == GLFW.GLFW_KEY_1 && action == GLFW.GLFW_PRESS){
                             state = GameState.GAME_ACTIVE;
                             //resume
@@ -97,7 +100,6 @@ public class LWJGL_Controller2 {
                         if(key == GLFW.GLFW_KEY_2 && action == GLFW.GLFW_PRESS){
                             gameboard.re_Play();
                             mainboard.correctCameara(cam, mainwindow);
-
                             mainboard.render(shader, cam);
                             state = GameState.GAME_ACTIVE;
                             mainwindow.timeHandle();
@@ -130,7 +132,7 @@ public class LWJGL_Controller2 {
                         if (key == GLFW.GLFW_KEY_P && action == GLFW.GLFW_PRESS) {
                             state = GameState.GAME_ACTIVE;
                         }
-                    }
+                    }*/
 
                 }
             }
@@ -168,6 +170,9 @@ public class LWJGL_Controller2 {
                     break;
                 }
                 case GAME_PAUSED -> {
+                    double mouse_X = mouseListener.getMousePressedX();
+                    double mouse_Y = mouseListener.getMousePressedY();
+                    mouseListener.eventsUpdater();
                     mainwindow.update();
                     mainboard.correctCameara(cam, mainwindow);
                     mainboard.render(shader, cam);
@@ -177,6 +182,7 @@ public class LWJGL_Controller2 {
                     break;
                 }
                 case GAME_MENU -> {
+                    mouseListener.eventsUpdater();
                     mainwindow.update();
                     mainboard.correctCameara(cam, mainwindow);
                     mainboard.render(shader, cam);
