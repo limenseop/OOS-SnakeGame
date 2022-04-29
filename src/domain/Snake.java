@@ -13,6 +13,10 @@ public class Snake implements Serializable {
 
     private snakeBody head;
 
+    public Direction getDirection() {
+        return direction;
+    }
+
     private List<snakeBody> body;
 
     private Direction direction;

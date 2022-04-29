@@ -37,7 +37,7 @@ public class GameBoard implements Serializable {
         return rankings;
     }
 
-    public void loadGame(){
+    public void loadGame() throws Exception{
         GameBoard saveData = loadFromFile();
         this.snake = saveData.getSnake();
         this.score = saveData.getScore();
@@ -162,16 +162,10 @@ public class GameBoard implements Serializable {
         return snake;
     }
 
-    private GameBoard loadFromFile(){
-        try {
+    private GameBoard loadFromFile() throws Exception{
             FileInputStream fis = new FileInputStream(fileName);
             ObjectInputStream ois = new ObjectInputStream(fis);
             GameBoard newboard = (GameBoard) ois.readObject();
             return newboard;
-        }
-        catch(Exception e) {
-            System.out.println("error");
-        }
-        return null;
     }
 }

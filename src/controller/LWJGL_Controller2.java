@@ -58,7 +58,7 @@ public class LWJGL_Controller2 {
 
     private void init(){
         mouseListener = new MouseHandler(mainwindow.getWindow());
-        state = GameState.GAME_ACTIVE;
+        state = GameState.GAME_INIT;
         renderer = new Renderer();
         snakeTex = new Texture("Cute-Snake-Transparent-PNG.png");
         appleTex = new Texture("tile2.png");
@@ -108,33 +108,30 @@ public class LWJGL_Controller2 {
         while(gameboard.gameRunning()){
             switch(state){
                 case GAME_INIT -> {
-
+                    if(mainwindow.isUpdating()) {
+                        mouseOptionHandle();
+                        mainwindow.update();
+                        mainboard.render(shader, cam);
+                        renderer.mainmenurender(shader, cam);
+                        mainwindow.swapBuffer();
+                    }
                 }
                 case GAME_ACTIVE -> {
                     if (mainwindow.isUpdating()) {
                         mainwindow.update();
-
-                        //
                         gameboard.move_Snake();
                         gameboard.check_Fruit_Overlap();
                         gameboard.check_Game_Terminated();
                         renderer.setBoard(gameboard);
-                        //
-
                         mainboard.correctCameara(cam, mainwindow);
-
                         mainboard.render(shader, cam);
                         renderer.render(shader,cam,mainboard);
                         mainwindow.swapBuffer();
-                        //System.out.println("fps:"+mainwindow.getcurrentFps());
                     }
                     break;
                 }
                 case GAME_PAUSED -> {
-                    double mouse_X = mouseListener.getMousePressedX();
-                    double mouse_Y = mouseListener.getMousePressedY();
-                    mouseListener.eventsUpdater();
-                    mouseHandle(mouse_X,mouse_Y);
+                    mouseOptionHandle();
                     mainwindow.update();
                     mainboard.correctCameara(cam, mainwindow);
                     mainboard.render(shader, cam);
@@ -144,10 +141,7 @@ public class LWJGL_Controller2 {
                     break;
                 }
                 case GAME_MENU -> {
-                    double mouse_X = mouseListener.getMousePressedX();
-                    double mouse_Y = mouseListener.getMousePressedY();
-                    mouseListener.eventsUpdater();
-                    mouseHandle(mouse_X,mouse_Y);
+                    mouseOptionHandle();
                     mainwindow.update();
                     mainboard.correctCameara(cam, mainwindow);
                     mainboard.render(shader, cam);
@@ -163,11 +157,39 @@ public class LWJGL_Controller2 {
         }
     }
 
+    private void mouseOptionHandle() {
+        double mouse_X = mouseListener.getMousePressedX();
+        double mouse_Y = mouseListener.getMousePressedY();
+        mouseListener.eventsUpdater();
+        mouseHandle(mouse_X,mouse_Y);
+    }
+
     private void mouseHandle(double cursorX,double cursorY){
         if(cursorX == 0 && cursorY == 0) return;
         Point2D cursor = new Point2D.Float((float) cursorX, (float) cursorY);
         System.out.println("cursor = " + cursor);
         switch (state){
+            case GAME_INIT -> {
+                if(cursorX>=253 && cursorX<=396 && cursorY>=224 && cursorY<=270){
+                    state = GameState.GAME_ACTIVE;
+                }
+                else if(cursorX >= 253 && cursorX<=396 && cursorY>=311 && cursorY<=360){
+                    try {
+                        gameboard.loadGame();
+                        mainboard.correctCameara(cam, mainwindow);
+                        mainboard.render(shader, cam);
+                    }catch(Exception e){
+                        System.out.println("e = " + e);
+                    }
+                    state = GameState.GAME_ACTIVE;
+                }
+                else if(cursorX>=191 && cursorX<=460 && cursorY>=398 && cursorY<=446){
+                    gameboard.showRanking();
+                }
+                else if(cursorX>=262 && cursorX<=390 && cursorY>=490 && cursorY<=535){
+                    gameboard.gameTerminate();
+                }
+            }
             case GAME_MENU -> {
                 System.out.println("hello_menu");
                 /*if(){

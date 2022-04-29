@@ -3,10 +3,7 @@ package src.domain;
 import org.joml.Vector3f;
 import src.board.Board;
 import src.entity.Transform;
-import src.models.Basicmodel;
-import src.models.Camera;
-import src.models.Shader;
-import src.models.Texture;
+import src.models.*;
 
 import java.awt.*;
 import java.awt.geom.Point2D;
@@ -18,15 +15,19 @@ public class Renderer {
     private Texture SnakeBodyTex;
     private Texture SnakeHeadTex;
     private Texture appleTex;
+    private Texture mainmenuTex;
     private Basicmodel model;
+    private Snakemodel snakemodel;
     private List<snakeBody> snake;
     private snakeBody head;
     private Transform fruitPosition;
+    private Menumodel meunmodel;
 
     public Renderer() {
         SnakeBodyTex = new Texture("SnakeGame_SnakeBody.png");
         SnakeHeadTex = new Texture("SnakeGame_SnakeHead.png");
         appleTex = new Texture("apple.png");
+        mainmenuTex = new Texture("Background.png");
         transform = new Transform();
         transform.scale = new Vector3f(16,16,1);
         transform.pos = new Vector3f(0,0,0);
@@ -34,6 +35,8 @@ public class Renderer {
         fruitPosition.scale = new Vector3f(16,16,1);
         fruitPosition.pos = new Vector3f(0,0,0);
         model = new Basicmodel();
+        snakemodel = new Snakemodel();
+        meunmodel = new Menumodel();
     }
 
     public void setBoard(GameBoard board){
@@ -55,6 +58,7 @@ public class Renderer {
             model.render();
         }
 
+        snakemodel.spin(snake.get(0).getDirection());
         transform.pos.set(head.getPositionX(),head.getPositionY(),0);
         shader.bind();
         shader.setUniform("sampler", 0);
@@ -71,6 +75,15 @@ public class Renderer {
         appleTex.bind(0);
         model.render();
     }
+
+    public void mainmenurender(Shader shader, Camera camera) {
+        shader.bind();
+        shader.setUniform("sampler", 0);
+        shader.setUniform("projection", transform.getProjection(camera.getProjection()));
+        mainmenuTex.bind(0);
+        meunmodel.render();
+    }
+
 
     private void setFocus(Camera camera, Board board){
         Transform focus = new Transform();
