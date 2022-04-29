@@ -5,8 +5,10 @@ import org.lwjgl.system.MemoryUtil;
 import src.board.Board;
 import src.domain.GameBoard;
 import src.domain.Direction;
+import src.domain.Renderer;
 import src.models.Camera;
 import src.models.Shader;
+import src.models.Texture;
 import src.windowhandle.Window;
 
 import java.io.IOException;
@@ -28,6 +30,9 @@ public class LWJGL_Controller2 {
     private Shader shader;
     private Camera cam;
     private Board mainboard;
+    private Renderer renderer;
+    private Texture snakeTex;
+    private Texture appleTex;
 
 
     private GameState state = GameState.GAME_ACTIVE;
@@ -50,6 +55,9 @@ public class LWJGL_Controller2 {
 
     private void init(){
         state = GameState.GAME_ACTIVE;
+        renderer = new Renderer();
+        snakeTex = new Texture("Cute-Snake-Transparent-PNG.png");
+        appleTex = new Texture("tile2.png");
         GLFWKeyCallback keyCallback_ESC = new GLFWKeyCallback() {
             @Override
             public void invoke(long window, int key, int scancode, int action, int mods) {
@@ -88,11 +96,9 @@ public class LWJGL_Controller2 {
                         }
                         if(key == GLFW.GLFW_KEY_2 && action == GLFW.GLFW_PRESS){
                             gameboard.re_Play();
-                            gameboard.update(cam,mainboard);
                             mainboard.correctCameara(cam, mainwindow);
 
                             mainboard.render(shader, cam);
-                            gameboard.render(shader,cam);
                             state = GameState.GAME_ACTIVE;
                             mainwindow.timeHandle();
                             //restart game
@@ -107,7 +113,6 @@ public class LWJGL_Controller2 {
                         }
                         if(key==GLFW.GLFW_KEY_4 && action == GLFW.GLFW_PRESS){
                             gameboard.loadGame();
-                            gameboard.update(cam,mainboard);
                             mainboard.correctCameara(cam, mainwindow);
 
                             mainboard.render(shader, cam);
@@ -148,15 +153,15 @@ public class LWJGL_Controller2 {
 
                         //
                         gameboard.move_Snake();
-                        gameboard.check_Fruit_Overlap(mainwindow);
+                        gameboard.check_Fruit_Overlap();
                         gameboard.check_Game_Terminated();
-                        gameboard.update(cam,mainboard);
+                        renderer.setBoard(gameboard);
                         //
 
                         mainboard.correctCameara(cam, mainwindow);
 
                         mainboard.render(shader, cam);
-                        gameboard.render(shader,cam);
+                        renderer.render(shader,cam,mainboard);
                         mainwindow.swapBuffer();
                         System.out.println("fps:"+mainwindow.getcurrentFps());
                     }
@@ -166,7 +171,7 @@ public class LWJGL_Controller2 {
                     mainwindow.update();
                     mainboard.correctCameara(cam, mainwindow);
                     mainboard.render(shader, cam);
-                    gameboard.render(shader,cam);
+                    renderer.render(shader,cam,mainboard);
                     mainwindow.swapBuffer();
                     mainwindow.timeHandle();
                     break;
@@ -175,7 +180,7 @@ public class LWJGL_Controller2 {
                     mainwindow.update();
                     mainboard.correctCameara(cam, mainwindow);
                     mainboard.render(shader, cam);
-                    gameboard.render(shader,cam);
+                    renderer.render(shader,cam,mainboard);
                     mainwindow.swapBuffer();
                     mainwindow.timeHandle();
                     break;

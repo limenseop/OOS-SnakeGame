@@ -7,7 +7,6 @@ package src;
 import src.board.Board;
 import src.controller.LWJGL_Controller2;
 import src.controller.MainController;
-import src.domain.EntitySnake;
 import src.domain.GameBoard;
 import src.domain.Snake;
 import src.entity.Entity;

@@ -11,7 +11,7 @@ import java.util.List;
 
 public class Snake implements Serializable {
 
-    snakeBody head;
+    private snakeBody head;
 
     private List<snakeBody> body;
 
@@ -19,6 +19,10 @@ public class Snake implements Serializable {
 
     public snakeBody getHead() {
         return head;
+    }
+
+    public List<snakeBody> getBody() {
+        return body;
     }
 
     public Snake(){
@@ -39,8 +43,8 @@ public class Snake implements Serializable {
     public boolean grow(){
         snakeBody tail = body.get(body.size()-1);
 
-        float x = tail.getX();
-        float y = tail.getY();
+        float x = tail.getPositionX();
+        float y = tail.getPositionY();
         float new_X = 0;
         float new_Y = 0;
 
@@ -90,8 +94,8 @@ public class Snake implements Serializable {
         Direction savedDirection = Direction.NORTH;
         List<snakeBody> prev_body = body;
         for(int i = 0;i<body.toArray().length;i++){
-            prev_savedX = body.get(i).getX();
-            prev_savedY = body.get(i).getY();
+            prev_savedX = body.get(i).getPositionX();
+            prev_savedY = body.get(i).getPositionY();
             savedDirection = body.get(i).getDirection();
             if(i == 0){
                 body.get(i).move();
@@ -109,10 +113,10 @@ public class Snake implements Serializable {
 
 
     public boolean check_If_collapse(){
-        Point headPoint = new Point((int)head.getX(),(int)head.getY());
+        Point headPoint = new Point((int)head.getPositionX(),(int)head.getPositionY());
         for (snakeBody snakeBody : body) {
             if(snakeBody.equals(head)) continue;
-            if(head.getX() == snakeBody.getX() && head.getY() == snakeBody.getY()){
+            if(head.getPositionX() == snakeBody.getPositionX() && head.getPositionY() == snakeBody.getPositionY()){
                 System.out.println("collapse occurs!!");
                 return true;
             }
@@ -123,7 +127,7 @@ public class Snake implements Serializable {
     public boolean check_If_Overlap(float x, float y){
         Point2D.Float checker = new Point2D.Float(x,y);
         for (snakeBody snakeBody : body) {
-            Point2D.Float body = new Point2D.Float(snakeBody.getX(), snakeBody.getY());
+            Point2D.Float body = new Point2D.Float(snakeBody.getPositionX(), snakeBody.getPositionY());
             if(checker.distance(body)<1)
                 return true;
         }
@@ -153,20 +157,4 @@ public class Snake implements Serializable {
         }
         head = this.body.get(0);
     }
-
-
-    public void render(Shader shader, Camera cam){
-        for (snakeBody snakeBody : body) {
-            snakeBody.render(shader,cam);
-        }
-    }
-
-    public void reLoad(){
-        for (snakeBody snakeBody : body) {
-            snakeBody.setSelf();
-            System.out.println("snakeBody = " + snakeBody);
-        }
-
-    }
-
 }
