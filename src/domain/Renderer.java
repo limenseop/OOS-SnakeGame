@@ -14,6 +14,7 @@ public class Renderer {
     private Texture appleTex;
     private Texture mainmenuTex;
     private Basicmodel model;
+    private Snakemodel snakemodel;
     private List<snakeBody> snake;
     private snakeBody head;
     private Transform fruitPosition;
@@ -30,6 +31,7 @@ public class Renderer {
         fruitPosition.scale = new Vector3f(16,16,1);
         fruitPosition.pos = new Vector3f(0,0,0);
         model = new Basicmodel();
+        snakemodel = new Snakemodel();
         meunmodel = new Menumodel();
     }
 
@@ -39,7 +41,7 @@ public class Renderer {
         fruitPosition.pos.set((float) board.getFruitPosition().get(0).getX(), (float) board.getFruitPosition().get(0).getY(),0);
     }
 
-    public void render(Shader shader, Camera camera,Board board) {
+    public void render(Shader shader, Camera camera,Board board, Direction direction) {
         setFocus(camera,board);
         for (snakeBody point : snake) {
             transform.pos.set(point.getPositionX(),point.getPositionY(),0);
@@ -47,7 +49,8 @@ public class Renderer {
             shader.setUniform("sampler", 0);
             shader.setUniform("projection", transform.getProjection(camera.getProjection()));
             SnakeTex.bind(0);
-            model.render();
+            snakemodel.spin(direction);
+            snakemodel.render();
         }
         shader.bind();
         shader.setUniform("sampler", 0);
@@ -68,6 +71,6 @@ public class Renderer {
         Transform focus = new Transform();
         focus.scale = new Vector3f(16,16,1);
         focus.pos = new Vector3f((float) head.getPositionX(), (float) head.getPositionY(),0);
-        camera.getPosition().lerp(focus.pos.mul(-board.getScale(), new Vector3f()), 0.1f);
+        camera.getPosition().lerp(focus.pos.mul(-board.getScale(), new Vector3f()), 0.5f);
     }
 }

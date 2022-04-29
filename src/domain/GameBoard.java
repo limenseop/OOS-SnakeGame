@@ -174,4 +174,7 @@ public class GameBoard implements Serializable {
         }
         return null;
     }
+    public Direction getSnakedirection() {
+        return snake.getDirection();
+    }
 }
