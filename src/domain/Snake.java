@@ -157,4 +157,7 @@ public class Snake implements Serializable {
         }
         head = this.body.get(0);
     }
+    public Direction getDirection() {
+        return direction;
+    }
 }

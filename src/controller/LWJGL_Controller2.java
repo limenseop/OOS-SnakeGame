@@ -163,8 +163,7 @@ public class LWJGL_Controller2 {
                         mainboard.correctCameara(cam, mainwindow);
 
                         mainboard.render(shader, cam);
-                        renderer.render(shader,cam,mainboard);
-                        renderer.mainmenurender(shader,cam);
+                        renderer.render(shader,cam,mainboard, gameboard.getSnakedirection());
                         mainwindow.swapBuffer();
                         System.out.println("fps:"+mainwindow.getcurrentFps());
                     }
@@ -177,7 +176,8 @@ public class LWJGL_Controller2 {
                     mainwindow.update();
                     mainboard.correctCameara(cam, mainwindow);
                     mainboard.render(shader, cam);
-                    renderer.render(shader,cam,mainboard);
+                    renderer.render(shader,cam,mainboard, gameboard.getSnakedirection());
+                    renderer.mainmenurender(shader,cam);
                     mainwindow.swapBuffer();
                     mainwindow.timeHandle();
                     break;
@@ -187,7 +187,7 @@ public class LWJGL_Controller2 {
                     mainwindow.update();
                     mainboard.correctCameara(cam, mainwindow);
                     mainboard.render(shader, cam);
-                    renderer.render(shader,cam,mainboard);
+                    renderer.render(shader,cam,mainboard, gameboard.getSnakedirection());
                     mainwindow.swapBuffer();
                     mainwindow.timeHandle();
                     break;
