@@ -7,9 +7,7 @@ import src.board.Board;
 import src.windowhandle.Window;
 
 import java.awt.*;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
 
 public class RenderSnake {
     private Entity_head head;
