@@ -21,7 +21,7 @@ public class GameBoard implements Serializable {
     private String fileName = "user.acc";
     private Snake snake;
 
-    private List<Entity> fruitPosition;
+    private List<Point2D> fruitPosition;
     private int score = 0;
     private boolean running = true;
     private boolean paused = false;
@@ -36,14 +36,26 @@ public class GameBoard implements Serializable {
         createFruit();
     }
 
+    public int getScore() {
+        return score;
+    }
+
+    public boolean isRunning() {
+        return running;
+    }
+
+    public List<Ranking> getRankings() {
+        return rankings;
+    }
+
     public void loadGame(){
-        SaveData saveData = loadFromFile();
+        GameBoard saveData = loadFromFile();
         this.snake = saveData.getSnake();
         this.score = saveData.getScore();
         this.paused = saveData.isPaused();
         this.running = saveData.isRunning();
         fruitPosition.remove(0);
-        fruitPosition.add(saveData.getFruit());
+        fruitPosition.add(saveData.getFruitPosition().get(0));
     }
 
     public void createFruit() {
@@ -59,12 +71,8 @@ public class GameBoard implements Serializable {
                 fruit_Y = (float) ((Math.random() * -78) - 2);
 
             }
-            fruitPosition.add(new Entity(fruit_X,fruit_Y,0));
+            fruitPosition.add(new Point2D.Float(fruit_X,fruit_Y));
         }
-    }
-
-    public synchronized void update(Camera cam, Board brd) {
-        snake.getHead().focus(cam,brd);
     }
 
 
@@ -83,8 +91,8 @@ public class GameBoard implements Serializable {
 
     public void check_Game_Terminated() {
 
-        int headX = (int)snake.getHead().getX();
-        int headY = (int)snake.getHead().getY();
+        int headX = (int)snake.getHead().getPositionX();
+        int headY = (int)snake.getHead().getPositionY();
 
         if (out_Of_Bounces(headX, headY) || snake.check_If_collapse()) {
             running = false;
@@ -126,17 +134,17 @@ public class GameBoard implements Serializable {
     }
 
 
-    public boolean check_Fruit_Overlap(Window main) {
+    public boolean check_Fruit_Overlap() {
 
         long start = System.currentTimeMillis();
-        Point2D fruit = new Point2D.Float(fruitPosition.get(0).getTransform().pos.x,fruitPosition.get(0).getTransform().pos.y);
-        float headX = snake.getHead().getX();
-        float headY = snake.getHead().getY();
+        Point2D fruit = fruitPosition.get(0);
+        float headX = snake.getHead().getPositionX();
+        float headY = snake.getHead().getPositionY();
         Point2D head = new Point2D.Float(headX,headY);
         if(head.distance(fruit)<1.3){
             fruitPosition.remove(0);
             score = score + 100;
-            for(int i = 0;i<2;i++)
+            for(int i = 0;i<5;i++)
             snake.grow();
             createFruit();
             long interval = System.currentTimeMillis() - start;
@@ -147,7 +155,7 @@ public class GameBoard implements Serializable {
     }
 
     private boolean out_Of_Bounces(int x, int y) {
-        if (x < 2.5 || x >= 81.5 || y < -81.5 || y >= -2.5) return true;
+        if (x < 0 || x >=80 || y < -80 || y >= -2.5) return true;
         return false;
     }
     public void gameTerminate(){
@@ -155,30 +163,29 @@ public class GameBoard implements Serializable {
     }
 
     public void save_This_Game() throws IOException {
-        SaveData saved = new SaveData(snake,score,running,paused,fruitPosition.get(0));
         FileOutputStream fos=new FileOutputStream(fileName);
         ObjectOutputStream oos=new ObjectOutputStream(fos);
-        oos.writeObject(saved);
+        oos.writeObject(this);
     }
 
-    private SaveData loadFromFile(){
+    public List<Point2D> getFruitPosition() {
+        return fruitPosition;
+    }
+
+    public Snake getSnake() {
+        return snake;
+    }
+
+    private GameBoard loadFromFile(){
         try {
             FileInputStream fis = new FileInputStream(fileName);
             ObjectInputStream ois = new ObjectInputStream(fis);
-            SaveData saved = (SaveData) ois.readObject();
-            saved.reload();
-            return saved;
+            GameBoard newboard = (GameBoard) ois.readObject();
+            return newboard;
         }
         catch(Exception e) {
             System.out.println("error");
         }
         return null;
-    }
-
-    public void render(Shader shader, Camera cam){
-        snake.render(shader,cam);
-        for (Entity entity : fruitPosition) {
-            entity.render(shader,cam);
-        }
     }
 }

@@ -38,10 +38,6 @@ public class SaveData implements Serializable {
         return paused;
     }
 
-    public void reload(){
-        snake.reLoad();
-    }
-
     public Entity getFruit(){
         return new Entity(fruitX,fruitY,0);
     }
