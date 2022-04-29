@@ -64,12 +64,12 @@ public class Snake implements Serializable {
                 break;
             }
             case EAST : {
-                new_X = x+0.4f;
+                new_X = x-0.4f;
                 new_Y = y;
                 break;
             }
             case WEST : {
-                new_X = x-0.4f;
+                new_X = x+0.4f;
                 new_Y = y;
                 break;
             }
@@ -109,9 +109,6 @@ public class Snake implements Serializable {
             }
             savedX = prev_savedX;
             savedY = prev_savedY;
-        }
-        if(check_If_collapse()){
-
         }
     }
 

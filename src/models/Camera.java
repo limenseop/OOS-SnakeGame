@@ -29,4 +29,9 @@ public class Camera {
         target = projection.mul(pos, target);
         return target;
     }
+    //mainwindow.getWidth(), mainwindow.getHeight())
+    public void reinit(int width, int height){
+        position = new Vector3f(0, 0, 0);
+        projection = new Matrix4f().setOrtho2D(-width/2, width/2, -height/2,height/2);
+    }
 }

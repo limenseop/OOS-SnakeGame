@@ -36,6 +36,7 @@ public class LWJGL_Controller2 {
     private Texture snakeTex;
     private Texture appleTex;
     private MouseHandler mouseListener;
+    private boolean on_Running = true;
 
 
     private GameState state = GameState.GAME_ACTIVE;
@@ -87,7 +88,7 @@ public class LWJGL_Controller2 {
                         }
 
                         if (key == GLFW.GLFW_KEY_P && action == GLFW.GLFW_PRESS) {
-                            state = GameState.GAME_PAUSED;
+                            state = GameState.GAME_MENU;
                         }
                         break;
                     }
@@ -100,11 +101,10 @@ public class LWJGL_Controller2 {
     private void terminate(){
         Callbacks.glfwFreeCallbacks(mainwindow.getWindow());
         GLFW.glfwDestroyWindow(mainwindow.getWindow());
-        //GLFW.glfwSetErrorCallback(null).free();
     }
 
     private void loop() {
-
+    while(on_Running){
         while(gameboard.gameRunning()){
             switch(state){
                 case GAME_INIT -> {
@@ -112,7 +112,7 @@ public class LWJGL_Controller2 {
                         mouseOptionHandle();
                         mainwindow.update();
                         mainboard.render(shader, cam);
-                        renderer.mainmenurender(shader, cam);
+                        renderer.mainmenurender(shader, mainboard);
                         mainwindow.swapBuffer();
                     }
                 }
@@ -130,31 +130,23 @@ public class LWJGL_Controller2 {
                     }
                     break;
                 }
-                case GAME_PAUSED -> {
-                    mouseOptionHandle();
-                    mainwindow.update();
-                    mainboard.correctCameara(cam, mainwindow);
-                    mainboard.render(shader, cam);
-                    renderer.render(shader,cam,mainboard);
-                    mainwindow.swapBuffer();
-                    mainwindow.timeHandle();
-                    break;
-                }
                 case GAME_MENU -> {
                     mouseOptionHandle();
                     mainwindow.update();
                     mainboard.correctCameara(cam, mainwindow);
                     mainboard.render(shader, cam);
                     renderer.render(shader,cam,mainboard);
+                    renderer.pausemenurender(shader,mainboard);
                     mainwindow.swapBuffer();
                     mainwindow.timeHandle();
                     break;
                 }
-                case GAME_TERMINATE -> {
-
-                }
             }
         }
+        state = GameState.GAME_INIT;
+        gameboard.re_Play();
+        renderer.setZeroFocus(cam,mainboard);
+    }
     }
 
     private void mouseOptionHandle() {
@@ -171,6 +163,7 @@ public class LWJGL_Controller2 {
         switch (state){
             case GAME_INIT -> {
                 if(cursorX>=253 && cursorX<=396 && cursorY>=224 && cursorY<=270){
+                    gameboard.re_Play();
                     state = GameState.GAME_ACTIVE;
                 }
                 else if(cursorX >= 253 && cursorX<=396 && cursorY>=311 && cursorY<=360){
@@ -188,52 +181,34 @@ public class LWJGL_Controller2 {
                 }
                 else if(cursorX>=262 && cursorX<=390 && cursorY>=490 && cursorY<=535){
                     gameboard.gameTerminate();
+                    on_Running = false;
                 }
             }
             case GAME_MENU -> {
-                System.out.println("hello_menu");
-                /*if(){
+                System.out.println("hello pause");
+                if(cursorX>=206 && cursorX<=441 && cursorY >=272 && cursorY<=320){
                     state = GameState.GAME_ACTIVE;
                     //resume
                 }
-                else if(){
+                else if(cursorX>=195 && cursorX<=445 && cursorY>=356 && cursorY<=405){
                     gameboard.re_Play();
-                    mainboard.correctCameara(cam, mainwindow);
-                    mainboard.render(shader, cam);
                     state = GameState.GAME_ACTIVE;
-                    mainwindow.timeHandle();
                     //replay
                 }
-                else if(){
+                else if(cursorX>=252 && cursorX<=395 && cursorY>=443 && cursorY<=492){
                     try {
                         gameboard.save_This_Game();
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                    //save
+                    //game save
                 }
-                else if(){
-                    gameboard.loadGame();
-                    mainboard.correctCameara(cam, mainwindow);
-                    mainboard.render(shader, cam);
-                    //load game
-                }*/
-                break;
-            }
-            case GAME_PAUSED -> {
-                System.out.println("hello pause");
-                /*if(){
-                    state = GameState.GAME_ACTIVE;
-                    //resume
-                }*/
+                else if(cursorX>=263 && cursorX<=385 && cursorY>=530 && cursorY<=574){
+                    state = GameState.GAME_INIT;
+                }
+
                 break;
             }
         }
     }
-
-    private void game_Terminate(){
-
-    }
-
-
 }

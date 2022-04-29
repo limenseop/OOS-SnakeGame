@@ -78,7 +78,7 @@ public class GameBoard implements Serializable {
 
     }
 
-    public void check_Game_Terminated() {
+    public boolean check_Game_Terminated() {
 
         int headX = (int)snake.getHead().getPositionX();
         int headY = (int)snake.getHead().getPositionY();
@@ -86,6 +86,7 @@ public class GameBoard implements Serializable {
         if (out_Of_Bounces(headX, headY) || snake.check_If_collapse()) {
             running = false;
         }
+        return running;
     }
 
     public boolean gameRunning(){
@@ -93,6 +94,7 @@ public class GameBoard implements Serializable {
     }
 
     public void re_Play(){
+        running = true;
         score = 0;
         fruitPosition.clear();
         snake.re_Init();

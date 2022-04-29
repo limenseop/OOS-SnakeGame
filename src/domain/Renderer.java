@@ -1,5 +1,6 @@
 package src.domain;
 
+import org.joml.Matrix4f;
 import org.joml.Vector3f;
 import src.board.Board;
 import src.entity.Transform;
@@ -16,11 +17,13 @@ public class Renderer {
     private Texture SnakeHeadTex;
     private Texture appleTex;
     private Texture mainmenuTex;
+    private Texture pauseMenuTex;
     private Basicmodel model;
     private Snakemodel snakemodel;
     private List<snakeBody> snake;
     private snakeBody head;
     private Transform fruitPosition;
+    private Transform zeroTransform;
     private Menumodel meunmodel;
 
     public Renderer() {
@@ -28,6 +31,7 @@ public class Renderer {
         SnakeHeadTex = new Texture("SnakeGame_SnakeHead.png");
         appleTex = new Texture("apple.png");
         mainmenuTex = new Texture("Background.png");
+        pauseMenuTex = new Texture("Pause_Buttons.png");
         transform = new Transform();
         transform.scale = new Vector3f(16,16,1);
         transform.pos = new Vector3f(0,0,0);
@@ -37,6 +41,9 @@ public class Renderer {
         model = new Basicmodel();
         snakemodel = new Snakemodel();
         meunmodel = new Menumodel();
+        zeroTransform = new Transform();
+        zeroTransform.scale = new Vector3f(16,16,1);
+        zeroTransform.pos = new Vector3f(0,0,0);
     }
 
     public void setBoard(GameBoard board){
@@ -76,19 +83,30 @@ public class Renderer {
         model.render();
     }
 
-    public void mainmenurender(Shader shader, Camera camera) {
-        shader.bind();
-        shader.setUniform("sampler", 0);
-        shader.setUniform("projection", transform.getProjection(camera.getProjection()));
-        mainmenuTex.bind(0);
-        meunmodel.render();
+    public void mainmenurender(Shader shader, Board mainboard) {
+            shader.bind();
+            shader.setUniform("sampler", 0);
+            shader.setUniform("projection", new Matrix4f().setOrtho2D(-mainboard.getWidth() / 2, mainboard.getWidth() / 2, -mainboard.getHeight() / 2, mainboard.getHeight() / 2));
+            mainmenuTex.bind(0);
+            meunmodel.render();
     }
 
+    public void pausemenurender(Shader shader, Board mainboard) {
+        shader.bind();
+        shader.setUniform("sampler", 0);
+        shader.setUniform("projection", new Matrix4f().setOrtho2D(-mainboard.getWidth() / 2, mainboard.getWidth() / 2, -mainboard.getHeight() / 2, mainboard.getHeight() / 2));
+        pauseMenuTex.bind(0);
+        meunmodel.render();
+    }
 
     private void setFocus(Camera camera, Board board){
         Transform focus = new Transform();
         focus.scale = new Vector3f(16,16,1);
         focus.pos = new Vector3f((float) head.getPositionX(), (float) head.getPositionY(),0);
         camera.getPosition().lerp(focus.pos.mul(-board.getScale(), new Vector3f()), 0.1f);
+    }
+
+    public void setZeroFocus(Camera camera, Board board){
+        camera.getPosition().lerp(zeroTransform.pos.mul(-board.getScale(), new Vector3f()), 0.1f);
     }
 }
