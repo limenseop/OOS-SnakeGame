@@ -1,6 +1,5 @@
 package src.entity;
 
-
 import src.domain.Direction;
 import src.board.Board;
 import src.models.Shader;
@@ -51,6 +50,7 @@ public class Entity_head extends Entity {
         }
         super.update(position, camera, board);
     }
+    @Override
         public void render(Shader shader, Camera camera) {
             shader.bind();
             shader.setUniform("sampler", 0);

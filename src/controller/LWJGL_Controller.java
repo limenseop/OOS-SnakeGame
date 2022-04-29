@@ -4,6 +4,7 @@ import org.lwjgl.glfw.*;
 import org.lwjgl.system.MemoryUtil;
 import src.domain.Board;
 import src.domain.Direction;
+import src.domain.GameState;
 
 import java.io.IOException;
 
