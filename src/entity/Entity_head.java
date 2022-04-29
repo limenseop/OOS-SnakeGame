@@ -11,7 +11,7 @@ public class Entity_head extends Entity {
     private float[] tex_coord;
 
     public Entity_head(float x, float y) {
-        super(x, y, "Cute-Snake-Transparent-PNG.png");
+        super(x, y, "Snakehead.png");
         tex_coord = new float[] {
                 0,0,
                 1,0,
