@@ -1,5 +1,6 @@
 package src.domain;
 
+import org.joml.Matrix4f;
 import org.joml.Vector3f;
 import src.board.Board;
 import src.entity.Transform;
@@ -13,6 +14,7 @@ public class Renderer {
     private Texture SnakeTex;
     private Texture appleTex;
     private Texture mainmenuTex;
+    private Texture SnakebodyTex;
     private Basicmodel model;
     private Snakemodel snakemodel;
     private List<snakeBody> snake;
@@ -21,9 +23,10 @@ public class Renderer {
     private Menumodel meunmodel;
 
     public Renderer() {
-        SnakeTex = new Texture("Cute-Snake-Transparent-PNG.png");
+        SnakeTex = new Texture("New Piskel.png");
         appleTex = new Texture("apple.png");
-        mainmenuTex = new Texture("Background.png");
+        SnakebodyTex = new Texture("SnakeGame_SnakeBody.png");
+        mainmenuTex = new Texture("Pause_Buttons.png");
         transform = new Transform();
         transform.scale = new Vector3f(16,16,1);
         transform.pos = new Vector3f(0,0,0);
@@ -43,14 +46,20 @@ public class Renderer {
 
     public void render(Shader shader, Camera camera,Board board, Direction direction) {
         setFocus(camera,board);
-        for (snakeBody point : snake) {
-            transform.pos.set(point.getPositionX(),point.getPositionY(),0);
+        transform.pos.set(snake.get(0).getPositionX(),snake.get(0).getPositionY(),0);
+        shader.bind();
+        shader.setUniform("sampler", 0);
+        shader.setUniform("projection", transform.getProjection(camera.getProjection()));
+        SnakeTex.bind(0);
+        snakemodel.spin(direction);
+        snakemodel.render();
+        for (int i = 3; i < snake.size(); i++) {
+            transform.pos.set(snake.get(i).getPositionX(), snake.get(i).getPositionY(), 0);
             shader.bind();
             shader.setUniform("sampler", 0);
             shader.setUniform("projection", transform.getProjection(camera.getProjection()));
-            SnakeTex.bind(0);
-            snakemodel.spin(direction);
-            snakemodel.render();
+            SnakebodyTex.bind(0);
+            model.render();
         }
         shader.bind();
         shader.setUniform("sampler", 0);
@@ -58,19 +67,19 @@ public class Renderer {
         appleTex.bind(0);
         model.render();
     }
-    public void mainmenurender(Shader shader, Camera camera) {
+    public void mainmenurender(Shader shader, Board mainboard) {
         shader.bind();
         shader.setUniform("sampler", 0);
-        shader.setUniform("projection", transform.getProjection(camera.getProjection()));
+        shader.setUniform("projection", new Matrix4f().setOrtho2D(-mainboard.getWidth()/2, mainboard.getWidth()/2, -mainboard.getHeight()/2,mainboard.getHeight()/2));
         mainmenuTex.bind(0);
         meunmodel.render();
     }
 
-
     private void setFocus(Camera camera, Board board){
         Transform focus = new Transform();
-        focus.scale = new Vector3f(16,16,1);
+        focus.scale = new Vector3f(16);
         focus.pos = new Vector3f((float) head.getPositionX(), (float) head.getPositionY(),0);
-        camera.getPosition().lerp(focus.pos.mul(-board.getScale(), new Vector3f()), 0.5f);
+        //camera.getPosition().lerp(focus.pos.mul(-board.getScale(), new Vector3f()), 1.0f);
+        camera.setPosition(focus.pos.mul(-board.getScale(), new Vector3f()));
     }
 }

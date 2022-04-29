@@ -17,7 +17,6 @@ public class Window {
     private String windowtitle;
     private long window;
     private float[] backgroundcolor = new float[] {0.0f, 0.0f, 0.0f};
-    private MouseHandler listener;
 
     public Window(int width, int height, int fps, String windowtitle) {
         this.width = width;
@@ -47,7 +46,6 @@ public class Window {
         GL11.glEnable(GL11.GL_TEXTURE_2D);
         GL11.glEnable(GL11.GL_BLEND);        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 
-        listener = new MouseHandler(window);
 
         GLFWVidMode videomode = GLFW.glfwGetVideoMode(GLFW.glfwGetPrimaryMonitor());
         GLFW.glfwSetWindowPos(window, (videomode.width() - width) / 2, (videomode.height() - height) / 2);
@@ -95,8 +93,5 @@ public class Window {
     }
     public int getcurrentFps() {
         return (int)processedtime * fps_cap;
-    }
-    public double getProcessedtime() {
-        return processedtime;
     }
 }
