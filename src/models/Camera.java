@@ -11,11 +11,9 @@ public class Camera {
         position = new Vector3f(0, 0, 0);
         projection = new Matrix4f().setOrtho2D(-width/2, width/2, -height/2,height/2);
     }
-
     public void setPosition(Vector3f position) {
         this.position = position;
     }
-
     public void addPosition(Vector3f position) {
         this.position.add(position);
     }

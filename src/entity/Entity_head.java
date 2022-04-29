@@ -1,5 +1,6 @@
 package src.entity;
 
+import org.joml.Vector3f;
 import src.domain.Direction;
 import src.board.Board;
 import src.models.Shader;
@@ -48,7 +49,8 @@ public class Entity_head extends Entity {
                     1, 0
             };
         }
-        super.update(position, camera, board);
+        super.update(position);
+        camera.getPosition().lerp(transform.pos.mul(-board.getScale(), new Vector3f()), 1.0f);
     }
     @Override
         public void render(Shader shader, Camera camera) {

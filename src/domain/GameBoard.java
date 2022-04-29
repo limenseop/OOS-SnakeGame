@@ -5,7 +5,7 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Board implements Serializable {
+public class GameBoard implements Serializable {
 
     public static final int WIDTH = 40;
     public static final int HEIGHT = 40;
@@ -22,7 +22,7 @@ public class Board implements Serializable {
 
     // board = 40 * 40 size (demo)
 
-    public Board(Snake snake) {
+    public GameBoard(Snake snake) {
         this.snake = snake;
         fruitPosition = new ArrayList<>();
         rankings = new ArrayList<>();
@@ -32,7 +32,7 @@ public class Board implements Serializable {
     }
 
     public void loadGame(){
-        Board newBoard = loadFromFile();
+        GameBoard newBoard = loadFromFile();
         this.snake = newBoard.snake;
         this.fruitPosition = newBoard.fruitPosition;
         this.snakePoisition = newBoard.snakePoisition;
@@ -90,7 +90,6 @@ public class Board implements Serializable {
             }
             System.out.println("buffer = " + buffer);
         }
-        Point checkhead = new Point(snake.getHead().getY(), snake.getHead().getX());
     }
 
     public synchronized boolean move_Snake() {
@@ -180,6 +179,15 @@ public class Board implements Serializable {
         return false;
     }
 
+    public List<Point> getFruitPosition() {
+        return fruitPosition;
+    }
+
+    public List<Point> getSnakePoisition() {
+        return snakePoisition;
+    }
+
+    public Direction getHeadDirection() { return snake.getDirection(); }
     private boolean out_Of_Bounces(int x, int y) {
         if (x < 0 || x >= 40 || y < 0 || y >= 40) return true;
         return false;
@@ -194,15 +202,17 @@ public class Board implements Serializable {
         oos.writeObject(this);
     }
 
-    private Board loadFromFile(){
+    private GameBoard loadFromFile(){
         try {
             FileInputStream fis = new FileInputStream(fileName);
             ObjectInputStream ois = new ObjectInputStream(fis);
-            return(Board)ois.readObject();
+            return(GameBoard)ois.readObject();
         }
         catch(Exception e) {
             System.out.println("error");
         }
         return null;
     }
+
+
 }

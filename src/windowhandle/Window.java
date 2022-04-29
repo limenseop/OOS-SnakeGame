@@ -98,4 +98,14 @@ public class Window {
     public double getProcessedtime() {
         return processedtime;
     }
+
+    public void timeHandle() {
+        double nexttime = getTime();
+        double passedtime = nexttime - time;
+        processedtime += passedtime;
+        time = nexttime;
+        while (processedtime > (1.0 / fps_cap)) {
+            processedtime -= 1.0 / fps_cap;
+        }
+    }
 }

@@ -1,6 +1,6 @@
 package src.controller;
 
-import src.domain.Board;
+import src.domain.GameBoard;
 import src.domain.Direction;
 
 import javax.swing.*;
@@ -11,11 +11,11 @@ import static java.lang.Thread.sleep;
 
 public class MainController extends JFrame implements Runnable, ActionListener ,KeyListener {
 
-    private Board gameboard;
+    private GameBoard gameboard;
     private KeyController checker;
     int counter = 0;
 
-    public void init(Board board){
+    public void init(GameBoard board){
         gameboard = board;
     }
 
@@ -32,7 +32,7 @@ public class MainController extends JFrame implements Runnable, ActionListener ,
             gameboard.check_Game_Terminated();
             gameboard.brief();
             try {
-                sleep(300);
+                sleep(400);
             }
             catch (InterruptedException e) {
                 e.printStackTrace();
@@ -50,10 +50,10 @@ public class MainController extends JFrame implements Runnable, ActionListener ,
         oos.writeObject(gameboard);
     }
 
-    public Board load_Game() throws IOException, ClassNotFoundException {
+    public GameBoard load_Game() throws IOException, ClassNotFoundException {
         FileInputStream fis=new FileInputStream("user.acc");
         ObjectInputStream ois=new ObjectInputStream(fis);
-        gameboard=(Board)ois.readObject();
+        gameboard=(GameBoard)ois.readObject();
         return gameboard;
     }
 
@@ -96,7 +96,7 @@ public class MainController extends JFrame implements Runnable, ActionListener ,
         return;
     }
 
-    public Board getGameboard() {
+    public GameBoard getGameboard() {
         return gameboard;
     }
 }

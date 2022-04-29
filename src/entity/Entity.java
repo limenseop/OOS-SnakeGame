@@ -1,28 +1,24 @@
 package src.entity;
 
 import org.joml.Vector3f;
-import src.board.Board;
-import src.models.Basicmodel;
-import src.models.Camera;
-import src.models.Shader;
-import src.models.Texture;
+import src.models.*;
+
 import java.awt.*;
 
 public class Entity {
-    protected Basicmodel model;
+    protected Snakemodel model;
     protected Texture tex;
     protected Transform transform;
 
     public Entity(float x, float y, String filename) {
-        model = new Basicmodel();
+        model = new Snakemodel();
         tex = new Texture(filename);
         transform = new Transform();
         transform.scale = new Vector3f(16,16,1);
         transform.pos = new Vector3f(x, y, 0);
     }
-    public void update(Point position, Camera camera, Board board) {
+    public void update(Point position) {
         transform.pos.set((float)position.x * 2, (float)position.y * -2, 0);
-        camera.getPosition().lerp(transform.pos.mul(-board.getScale(), new Vector3f()), 0.1f);
     }
 
     public void render(Shader shader, Camera camera) {

@@ -2,7 +2,7 @@ package src.controller;
 
 import org.lwjgl.glfw.*;
 import org.lwjgl.system.MemoryUtil;
-import src.domain.Board;
+import src.domain.GameBoard;
 import src.domain.Direction;
 import src.domain.GameState;
 
@@ -14,23 +14,23 @@ public class LWJGL_Controller {
 
 
     private GameState state;
-    private Thread controller;
-    private Board gameboard;
+    private GameBoard gameboard;
     private long window;
     private static int WIDTH = 800;
     private static int HEIGHT = 600;
 
+    public LWJGL_Controller(GameBoard gameboard) {
+        this.gameboard = gameboard;
+    }
 
-    public void run(MainController controller){
-        init(controller);
+    public void run(){
+        init();
         loop();
         terminate();
     }
 
-    private void init(MainController controller){
+    private void init( ){
         state = GameState.GAME_ACTIVE;
-        this.controller = new Thread(controller);
-        this.gameboard = controller.getGameboard();
         GLFWErrorCallback.createPrint(System.err).set();
         if(!GLFW.glfwInit()){
             throw new IllegalStateException("Unable to initialize GLFW");

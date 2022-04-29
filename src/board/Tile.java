@@ -5,7 +5,6 @@ public class Tile {
     public static byte num_of_tile = 0;
 
     public static final Tile tile = new Tile("tile1");
-    public static final Tile tile2 = new Tile("tile2");
     public static final Tile apple = new Tile("appleontile");
     private byte id;
     private String texture;
