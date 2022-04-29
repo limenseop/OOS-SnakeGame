@@ -7,35 +7,19 @@ import src.domain.Direction;
 import src.domain.Renderer;
 import src.models.Camera;
 import src.models.Shader;
-import src.models.Texture;
 import src.windowhandle.MouseHandler;
 import src.windowhandle.Window;
 
 
-import java.io.IOException;
-
-import static java.lang.Thread.sleep;
-
 public class LWJGL_Controller2 {
-
-    public static final int MAINWINDOWSIZE_WIDTH = 650;
-    public static final int MAINWINDOWSIZE_HEIGHT = 650;
-    public static final int MAXIMUM_FPS = 60;
-    public static final String GAME_TITLE = "Snake Game Ver1.0";
-    public static final int BOARD_WIDTH = 42;
-    public static final int BOARD_HEIGHT = 42;
-    public static final int BOARD_SCALE = 16;
-    public static final float SNAKE_SPEED = 0.3f;
 
     private Window mainwindow;
     private Shader shader;
     private Camera cam;
     private Board mainboard;
     private Renderer renderer;
-    private Texture snakeTex;
-    private Texture appleTex;
     private MouseHandler mouseListener;
-
+    private Recordingname recordingname;
 
     private GameState state = GameState.GAME_ACTIVE;
     private GameBoard gameboard;
@@ -46,10 +30,12 @@ public class LWJGL_Controller2 {
         this.cam = cam;
         this.gameboard = gameboard;
         this.mainboard = board;
+        recordingname = new Recordingname();
     }
 
 
     public void run(){
+        Recordingname.SimpleJButton button = recordingname.new SimpleJButton();
         init();
         loop();
         terminate();
@@ -59,8 +45,6 @@ public class LWJGL_Controller2 {
         mouseListener = new MouseHandler(mainwindow.getWindow());
         state = GameState.GAME_ACTIVE;
         renderer = new Renderer();
-        snakeTex = new Texture("Cute-Snake-Transparent-PNG.png");
-        appleTex = new Texture("tile2.png");
         GLFWKeyCallback keyCallback_ESC = new GLFWKeyCallback() {
             @Override
             public void invoke(long window, int key, int scancode, int action, int mods) {
@@ -160,8 +144,7 @@ public class LWJGL_Controller2 {
                         renderer.setBoard(gameboard);
                         //
 
-                        mainboard.correctCameara(cam, mainwindow);
-
+                        //mainboard.correctCameara(cam, mainwindow);
                         mainboard.render(shader, cam);
                         renderer.render(shader,cam,mainboard, gameboard.getSnakedirection());
                         mainwindow.swapBuffer();
@@ -177,9 +160,10 @@ public class LWJGL_Controller2 {
                     mainboard.correctCameara(cam, mainwindow);
                     mainboard.render(shader, cam);
                     renderer.render(shader,cam,mainboard, gameboard.getSnakedirection());
-                    renderer.mainmenurender(shader,cam);
+                    renderer.mainmenurender(shader, mainboard);
                     mainwindow.swapBuffer();
                     mainwindow.timeHandle();
+                    System.out.println(recordingname.getName());
                     break;
                 }
                 case GAME_MENU -> {
