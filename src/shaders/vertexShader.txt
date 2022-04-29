@@ -1,0 +1,12 @@
+#version 330 core
+
+layout(location = 0) in vec2 vertexData;
+layout(location = 1) in vec2 texData;
+
+out vec2 texCoords;
+
+void main()
+{
+    texCoords = texData;
+    gl_Position = vec4(vertexData.xy, 0, 1.0);
+}
