@@ -164,6 +164,7 @@ public class LWJGL_Controller2 {
 
                         mainboard.render(shader, cam);
                         renderer.render(shader,cam,mainboard);
+                        renderer.mainmenurender(shader,cam);
                         mainwindow.swapBuffer();
                         System.out.println("fps:"+mainwindow.getcurrentFps());
                     }
