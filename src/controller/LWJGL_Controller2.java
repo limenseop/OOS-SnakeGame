@@ -12,6 +12,7 @@ import src.windowhandle.MouseHandler;
 import src.windowhandle.Window;
 
 
+import java.awt.geom.Point2D;
 import java.io.IOException;
 
 import static java.lang.Thread.sleep;
@@ -65,7 +66,6 @@ public class LWJGL_Controller2 {
             @Override
             public void invoke(long window, int key, int scancode, int action, int mods) {
                 switch (state) {
-
                     case GAME_ACTIVE -> {
                         //snake 방향변경
                         if (key == 262 && action == GLFW.GLFW_PRESS) {
@@ -91,49 +91,6 @@ public class LWJGL_Controller2 {
                         }
                         break;
                     }
-
-                    /*case GAME_MENU -> {
-                        if(key == GLFW.GLFW_KEY_1 && action == GLFW.GLFW_PRESS){
-                            state = GameState.GAME_ACTIVE;
-                            //resume
-                        }
-                        if(key == GLFW.GLFW_KEY_2 && action == GLFW.GLFW_PRESS){
-                            gameboard.re_Play();
-                            mainboard.correctCameara(cam, mainwindow);
-                            mainboard.render(shader, cam);
-                            state = GameState.GAME_ACTIVE;
-                            mainwindow.timeHandle();
-                            //restart game
-                        }
-                        if(key==GLFW.GLFW_KEY_3 && action == GLFW.GLFW_PRESS){
-                            try {
-                                gameboard.save_This_Game();
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-                            //save game
-                        }
-                        if(key==GLFW.GLFW_KEY_4 && action == GLFW.GLFW_PRESS){
-                            gameboard.loadGame();
-                            mainboard.correctCameara(cam, mainwindow);
-
-                            mainboard.render(shader, cam);
-                            //gameboard.render(shader,cam);
-                            state = GameState.GAME_ACTIVE;
-                            //load game
-                        }
-                        if(key==GLFW.GLFW_KEY_5 && action == GLFW.GLFW_PRESS){
-                            gameboard.gameTerminate();
-                            //game terminate
-                        }
-                    }
-
-                    case GAME_PAUSED -> {
-                        if (key == GLFW.GLFW_KEY_P && action == GLFW.GLFW_PRESS) {
-                            state = GameState.GAME_ACTIVE;
-                        }
-                    }*/
-
                 }
             }
         };
@@ -147,8 +104,12 @@ public class LWJGL_Controller2 {
     }
 
     private void loop() {
+
         while(gameboard.gameRunning()){
             switch(state){
+                case GAME_INIT -> {
+
+                }
                 case GAME_ACTIVE -> {
                     if (mainwindow.isUpdating()) {
                         mainwindow.update();
@@ -165,7 +126,7 @@ public class LWJGL_Controller2 {
                         mainboard.render(shader, cam);
                         renderer.render(shader,cam,mainboard);
                         mainwindow.swapBuffer();
-                        System.out.println("fps:"+mainwindow.getcurrentFps());
+                        //System.out.println("fps:"+mainwindow.getcurrentFps());
                     }
                     break;
                 }
@@ -173,6 +134,7 @@ public class LWJGL_Controller2 {
                     double mouse_X = mouseListener.getMousePressedX();
                     double mouse_Y = mouseListener.getMousePressedY();
                     mouseListener.eventsUpdater();
+                    mouseHandle(mouse_X,mouse_Y);
                     mainwindow.update();
                     mainboard.correctCameara(cam, mainwindow);
                     mainboard.render(shader, cam);
@@ -182,7 +144,10 @@ public class LWJGL_Controller2 {
                     break;
                 }
                 case GAME_MENU -> {
+                    double mouse_X = mouseListener.getMousePressedX();
+                    double mouse_Y = mouseListener.getMousePressedY();
                     mouseListener.eventsUpdater();
+                    mouseHandle(mouse_X,mouse_Y);
                     mainwindow.update();
                     mainboard.correctCameara(cam, mainwindow);
                     mainboard.render(shader, cam);
@@ -191,7 +156,62 @@ public class LWJGL_Controller2 {
                     mainwindow.timeHandle();
                     break;
                 }
+                case GAME_TERMINATE -> {
+
+                }
             }
         }
     }
+
+    private void mouseHandle(double cursorX,double cursorY){
+        if(cursorX == 0 && cursorY == 0) return;
+        Point2D cursor = new Point2D.Float((float) cursorX, (float) cursorY);
+        System.out.println("cursor = " + cursor);
+        switch (state){
+            case GAME_MENU -> {
+                System.out.println("hello_menu");
+                /*if(){
+                    state = GameState.GAME_ACTIVE;
+                    //resume
+                }
+                else if(){
+                    gameboard.re_Play();
+                    mainboard.correctCameara(cam, mainwindow);
+                    mainboard.render(shader, cam);
+                    state = GameState.GAME_ACTIVE;
+                    mainwindow.timeHandle();
+                    //replay
+                }
+                else if(){
+                    try {
+                        gameboard.save_This_Game();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    //save
+                }
+                else if(){
+                    gameboard.loadGame();
+                    mainboard.correctCameara(cam, mainwindow);
+                    mainboard.render(shader, cam);
+                    //load game
+                }*/
+                break;
+            }
+            case GAME_PAUSED -> {
+                System.out.println("hello pause");
+                /*if(){
+                    state = GameState.GAME_ACTIVE;
+                    //resume
+                }*/
+                break;
+            }
+        }
+    }
+
+    private void game_Terminate(){
+
+    }
+
+
 }

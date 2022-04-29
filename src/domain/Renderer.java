@@ -15,7 +15,8 @@ import java.util.List;
 public class Renderer {
 
     Transform transform;
-    private Texture SnakeTex;
+    private Texture SnakeBodyTex;
+    private Texture SnakeHeadTex;
     private Texture appleTex;
     private Basicmodel model;
     private List<snakeBody> snake;
@@ -23,7 +24,8 @@ public class Renderer {
     private Transform fruitPosition;
 
     public Renderer() {
-        SnakeTex = new Texture("Cute-Snake-Transparent-PNG.png");
+        SnakeBodyTex = new Texture("SnakeGame_SnakeBody.png");
+        SnakeHeadTex = new Texture("SnakeGame_SnakeHead.png");
         appleTex = new Texture("apple.png");
         transform = new Transform();
         transform.scale = new Vector3f(16,16,1);
@@ -42,14 +44,27 @@ public class Renderer {
 
     public void render(Shader shader, Camera camera,Board board) {
         setFocus(camera,board);
-        for (snakeBody point : snake) {
+        for(int i = 0;i<snake.size();i++){
+            if(i == 0) continue;
+            snakeBody point = snake.get(i);
             transform.pos.set(point.getPositionX(),point.getPositionY(),0);
             shader.bind();
             shader.setUniform("sampler", 0);
             shader.setUniform("projection", transform.getProjection(camera.getProjection()));
-            SnakeTex.bind(0);
+            SnakeBodyTex.bind(0);
             model.render();
         }
+
+        transform.pos.set(head.getPositionX(),head.getPositionY(),0);
+        shader.bind();
+        shader.setUniform("sampler", 0);
+        shader.setUniform("projection", transform.getProjection(camera.getProjection()));
+        SnakeHeadTex.bind(0);
+        model.render();
+
+
+
+
         shader.bind();
         shader.setUniform("sampler", 0);
         shader.setUniform("projection", fruitPosition.getProjection(camera.getProjection()));
