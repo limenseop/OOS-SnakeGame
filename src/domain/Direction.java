@@ -2,11 +2,8 @@
  * Copyright LWJGL. All rights reserved.
  * License terms: https://www.lwjgl.org/license
  */
-package src;
+package src.domain;
 
-public class SnakeGame {
-
-    public static void main(String[] args) {
-
-    }
+public enum Direction {
+    WEST,EAST,NORTH,SOUTH
 }

@@ -1,7 +1,7 @@
 package src.entity;
 
 
-import src.Direction;
+import src.domain.Direction;
 import src.board.Board;
 import src.models.Shader;
 import src.models.Camera;
@@ -19,7 +19,6 @@ public class Entity_head extends Entity {
                 0,1
         };
     }
-
     public void update(Direction direction, Point position, Camera camera, Board board) {
         if (direction == Direction.WEST) {
             tex_coord = new float[]{

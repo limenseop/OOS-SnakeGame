@@ -8,10 +8,8 @@ import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GL11;
-import src.Direction;
 
 import static org.lwjgl.glfw.GLFW.*;
-import static org.lwjgl.glfw.GLFW.GLFW_KEY_RIGHT;
 
 public class Window {
     private int width, height, fps_cap;
@@ -19,7 +17,6 @@ public class Window {
     private String windowtitle;
     private long window;
     private float[] backgroundcolor = new float[] {0.0f, 0.0f, 0.0f};
-    private EventListener listener;
 
     private Window() {
 
@@ -53,7 +50,6 @@ public class Window {
         GL11.glEnable(GL11.GL_BLEND);
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 
-        listener = new EventListener(window);
 
         GLFWVidMode videomode = GLFW.glfwGetVideoMode(GLFW.glfwGetPrimaryMonitor());
         GLFW.glfwSetWindowPos(window, (videomode.width() - width) / 2, (videomode.height() - height) / 2);
@@ -70,9 +66,6 @@ public class Window {
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
     }
     public boolean close() {
-        if (listener.isKeyPressed(GLFW_KEY_ESCAPE)) {
-            return true;
-        }
         return GLFW.glfwWindowShouldClose(window);
     }
     public static double getTime() {
@@ -104,16 +97,5 @@ public class Window {
     }
     public double getProcessedtime() {
         return processedtime;
-    }
-    public Direction getDirection() {
-        if (listener.isKeyPressed(GLFW_KEY_UP) && !listener.isKeyReleased(GLFW_KEY_UP))
-            return Direction.NORTH;
-        else if (listener.isKeyPressed(GLFW_KEY_DOWN) && !listener.isKeyReleased(GLFW_KEY_DOWN))
-            return Direction.SOUTH;
-        else if (listener.isKeyPressed(GLFW_KEY_LEFT) && !listener.isKeyReleased(GLFW_KEY_LEFT))
-            return Direction.WEST;
-        else if (listener.isKeyPressed(GLFW_KEY_RIGHT) && !listener.isKeyReleased(GLFW_KEY_RIGHT))
-            return Direction.EAST;
-        return null;
     }
 }
