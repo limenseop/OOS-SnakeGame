@@ -1,16 +1,5 @@
 package src.domain;
 
-import org.joml.Vector3f;
-import src.board.Board;
-import src.entity.Entity;
-import src.entity.Transform;
-import src.models.Basicmodel;
-import src.models.Camera;
-import src.models.Shader;
-import src.models.Texture;
-import src.windowhandle.Window;
-
-import java.awt.*;
 import java.awt.geom.Point2D;
 import java.io.*;
 import java.util.ArrayList;
@@ -136,7 +125,6 @@ public class GameBoard implements Serializable {
 
     public boolean check_Fruit_Overlap() {
 
-        long start = System.currentTimeMillis();
         Point2D fruit = fruitPosition.get(0);
         float headX = snake.getHead().getPositionX();
         float headY = snake.getHead().getPositionY();
@@ -144,18 +132,16 @@ public class GameBoard implements Serializable {
         if(head.distance(fruit)<1.3){
             fruitPosition.remove(0);
             score = score + 100;
-            for(int i = 0;i<5;i++)
+            for(int i = 0;i<8;i++)
             snake.grow();
             createFruit();
-            long interval = System.currentTimeMillis() - start;
-            System.out.println("interval : " + interval);
             return true;
         }
         return false;
     }
 
     private boolean out_Of_Bounces(int x, int y) {
-        if (x < 0 || x >=80 || y < -80 || y >= -2.5) return true;
+        if (x < 0 || x >=82 || y < -80 || y >= -2) return true;
         return false;
     }
     public void gameTerminate(){
