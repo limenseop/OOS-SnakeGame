@@ -37,6 +37,7 @@ public class LWJGL_Controller2 {
     private Texture appleTex;
     private MouseHandler mouseListener;
     private boolean on_Running = true;
+    private String input= "";
 
 
     private GameState state = GameState.GAME_ACTIVE;
@@ -84,13 +85,23 @@ public class LWJGL_Controller2 {
 
                         //메뉴로 이동
                         if (key == GLFW.GLFW_KEY_ESCAPE && action == GLFW.GLFW_PRESS) {
-                            state = GameState.GAME_MENU;
+                            state = GameState.GAME_TYPING;
                         }
 
                         if (key == GLFW.GLFW_KEY_P && action == GLFW.GLFW_PRESS) {
                             state = GameState.GAME_MENU;
                         }
                         break;
+                    }
+                    case GAME_TYPING -> {
+                        if(action == GLFW.GLFW_PRESS  && isValid(key)){
+                            input = input + (char)key;
+                            System.out.println("input = " + input);
+                        }
+                        else if(action == GLFW.GLFW_PRESS && key == GLFW.GLFW_KEY_ENTER){
+                            gameboard.setNickname(input);
+                            input = "";
+                        }
                     }
                 }
             }
@@ -141,8 +152,19 @@ public class LWJGL_Controller2 {
                     mainwindow.timeHandle();
                     break;
                 }
+                case GAME_TYPING -> {
+                    mainwindow.update();
+                    mainboard.correctCameara(cam, mainwindow);
+                    mainboard.render(shader, cam);
+                    renderer.render(shader,cam,mainboard);
+                    renderer.pausemenurender(shader,mainboard);
+                    mainwindow.swapBuffer();
+                    mainwindow.timeHandle();
+                    break;
+                }
             }
         }
+        gameboard.recordRanking();
         state = GameState.GAME_INIT;
         gameboard.re_Play();
         renderer.setZeroFocus(cam,mainboard);
@@ -211,4 +233,13 @@ public class LWJGL_Controller2 {
             }
         }
     }
+
+    private boolean isValid(int ascii){
+        if((ascii>=48 && ascii<=57)
+        ||(ascii>=65 && ascii<=90)
+        ||(ascii>=97 && ascii<=122)) return true;
+        return false;
+    }
+
+
 }

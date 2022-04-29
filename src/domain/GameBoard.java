@@ -15,8 +15,12 @@ public class GameBoard implements Serializable {
     private boolean running = true;
     private boolean paused = false;
     private List<Ranking> rankings;
+    private String nickname;
 
-    // board = 40 * 40 size (demo)
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+        System.out.println("nickname = " + nickname);
+    }
 
     public GameBoard(Snake snake) {
         this.snake = snake;
@@ -117,7 +121,7 @@ public class GameBoard implements Serializable {
 
 
     public void recordRanking(){
-        rankings.add(new Ranking("hello",score));
+        rankings.add(new Ranking(nickname,score));
     }
 
     public List<Ranking> showRanking(){
