@@ -53,3 +53,8 @@ Class Explanation
 - SnakeGame의 진행동안 이루어져야 하는 모든 operation을 통제하는 class
 - Snake의 통제, Fruit의 생성, score의 갱신, Ranking의 관리, save & load
 - method : loadGame, createFruit, move_Snake, change_Direction_Snake, setNickname, check_fruit_overlap, save_this_game, loadGame
+
+4. Controller
+- gameBoard와 renderer, LWGJL window의 interaction을 중개해주는 class
+- keyboard Event handler를 정의
+- loop : 실질적인 operation
