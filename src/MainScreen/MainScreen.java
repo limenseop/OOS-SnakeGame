@@ -133,27 +133,6 @@ public class MainScreen extends JFrame {
 
 		createTexture("Background.png");
 
-		playButton.setBounds(250, 230, 150, 50);
-		playButton.setBorderPainted(false);
-		playButton.setContentAreaFilled(false);
-		playButton.setFocusPainted(false);
-		playButton.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseEntered(MouseEvent e) {
-				playButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
-			}
-
-			@Override
-			public void mouseExited(MouseEvent e) {
-				playButton.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-			}
-
-			@Override
-			public void mousePressed(MouseEvent e) {
-				System.exit(0);
-			}
-		});
-		add(playButton);
 
 		while (!GLFW.glfwWindowShouldClose(window)) {
 
