@@ -3,8 +3,10 @@ package src.domain;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
 import src.board.Board;
+import src.board.TileRenderer;
 import src.entity.Transform;
 import src.models.*;
+import src.windowhandle.Window;
 
 import java.util.List;
 
@@ -21,8 +23,12 @@ public class Renderer {
     private snakeBody head;
     private Transform fruitPosition;
     private Menumodel meunmodel;
+    private Board mainboard;
+    private TileRenderer tiles;
 
     public Renderer() {
+        mainboard = new Board(42, 42, 16);
+        tiles = new TileRenderer();
         SnakeTex = new Texture("New Piskel.png");
         appleTex = new Texture("apple.png");
         SnakebodyTex = new Texture("SnakeGame_SnakeBody.png");
@@ -44,8 +50,10 @@ public class Renderer {
         fruitPosition.pos.set((float) board.getFruitPosition().get(0).getX(), (float) board.getFruitPosition().get(0).getY(),0);
     }
 
-    public void render(Shader shader, Camera camera,Board board, Direction direction) {
-        setFocus(camera,board);
+    public void render(Shader shader, Camera camera, Window window, Direction direction) {
+        //mainboard.correctCameara(camera, window);
+        mainboard.render(tiles ,shader, camera, window);
+        setFocus(camera,mainboard);
         transform.pos.set(snake.get(0).getPositionX(),snake.get(0).getPositionY(),0);
         shader.bind();
         shader.setUniform("sampler", 0);
@@ -67,7 +75,7 @@ public class Renderer {
         appleTex.bind(0);
         model.render();
     }
-    public void mainmenurender(Shader shader, Board mainboard) {
+    public void mainmenurender(Shader shader) {
         shader.bind();
         shader.setUniform("sampler", 0);
         shader.setUniform("projection", new Matrix4f().setOrtho2D(-mainboard.getWidth()/2, mainboard.getWidth()/2, -mainboard.getHeight()/2,mainboard.getHeight()/2));
@@ -79,7 +87,7 @@ public class Renderer {
         Transform focus = new Transform();
         focus.scale = new Vector3f(16);
         focus.pos = new Vector3f((float) head.getPositionX(), (float) head.getPositionY(),0);
-        //camera.getPosition().lerp(focus.pos.mul(-board.getScale(), new Vector3f()), 1.0f);
-        camera.setPosition(focus.pos.mul(-board.getScale(), new Vector3f()));
+        camera.getPosition().lerp(focus.pos.mul(-board.getScale(), new Vector3f()), 1.0f);
+        //camera.setPosition(focus.pos.mul(-board.getScale(), new Vector3f()));
     }
 }
