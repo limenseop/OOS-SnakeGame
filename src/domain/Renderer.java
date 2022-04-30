@@ -26,6 +26,9 @@ public class Renderer {
     private Transform zeroTransform;
     private Menumodel meunmodel;
 
+    //private TrueTypeFont font;
+    private Font awtFont;
+
     public Renderer() {
         SnakeBodyTex = new Texture("SnakeGame_SnakeBody.png");
         SnakeHeadTex = new Texture("SnakeGame_SnakeHead.png");

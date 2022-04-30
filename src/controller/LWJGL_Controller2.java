@@ -240,6 +240,4 @@ public class LWJGL_Controller2 {
         ||(ascii>=97 && ascii<=122)) return true;
         return false;
     }
-
-
 }
