@@ -122,6 +122,7 @@ public class LWJGL_Controller2 {
                         renderer.mainmenurender(shader, mainboard);
                         mainwindow.swapBuffer();
                     }
+                    break;
                 }
                 case GAME_ACTIVE -> {
                     if (mainwindow.isUpdating()) {
