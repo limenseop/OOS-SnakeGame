@@ -2,7 +2,7 @@ package src.domain;
 
 import java.io.Serializable;
 
-public class Ranking implements Serializable {
+public class Ranking implements Serializable,Comparable<Ranking>{
 
     private String id;
     private int score;
@@ -23,4 +23,15 @@ public class Ranking implements Serializable {
     public void setId(String id) { this.id = id; }
 
     public void setScore(int score) { this.score = score; }
+
+    @Override
+    public int compareTo(Ranking o) {
+        if(o.score<score){
+            return 1;
+        }
+        else if(o.score>score){
+            return -1;
+        }
+        return 0;
+    }
 }

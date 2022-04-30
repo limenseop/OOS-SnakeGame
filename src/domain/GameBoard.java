@@ -3,42 +3,31 @@ package src.domain;
 import java.awt.geom.Point2D;
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class GameBoard implements Serializable {
 
     private String fileName = "user.acc";
+    private String RankingFile = "Rank.acc";
     private Snake snake;
 
     private List<Point2D> fruitPosition;
     private int score = 0;
     private boolean running = true;
     private boolean paused = false;
-    private List<Ranking> rankings;
+    private transient List<Ranking> rankings;
     private String nickname;
-
-    public void setNickname(String nickname) {
-        this.nickname = nickname;
-        System.out.println("nickname = " + nickname);
-    }
 
     public GameBoard(Snake snake) {
         this.snake = snake;
         fruitPosition = new ArrayList<>();
-        rankings = new ArrayList<>();
+        try {
+            rankings = load_Ranking();
+        }catch (Exception e){
+            rankings = new ArrayList<>();
+        }
         createFruit();
-    }
-
-    public int getScore() {
-        return score;
-    }
-
-    public boolean isRunning() {
-        return running;
-    }
-
-    public List<Ranking> getRankings() {
-        return rankings;
     }
 
     public void loadGame() throws Exception{
@@ -89,8 +78,14 @@ public class GameBoard implements Serializable {
 
         if (out_Of_Bounces(headX, headY) || snake.check_If_collapse()) {
             running = false;
+            recordRanking();
         }
         return running;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+        System.out.println("nickname = " + nickname);
     }
 
     public boolean gameRunning(){
@@ -104,30 +99,6 @@ public class GameBoard implements Serializable {
         snake.re_Init();
         createFruit();
     }
-
-    public boolean isPaused() {
-        return paused;
-    }
-
-    public synchronized boolean switch_Pause() {
-        if(paused == true){
-            paused = false;
-        }
-        else if (paused == false) {
-            paused = true;
-        }
-        return paused;
-    }
-
-
-    public void recordRanking(){
-        rankings.add(new Ranking(nickname,score));
-    }
-
-    public List<Ranking> showRanking(){
-        return rankings;
-    }
-
 
     public boolean check_Fruit_Overlap() {
 
@@ -146,18 +117,16 @@ public class GameBoard implements Serializable {
         return false;
     }
 
-    private boolean out_Of_Bounces(int x, int y) {
-        if (x < 0 || x >=82 || y < -80 || y >= -2) return true;
-        return false;
-    }
-    public void gameTerminate(){
-        this.running =  false;
-    }
-
     public void save_This_Game() throws IOException {
         FileOutputStream fos=new FileOutputStream(fileName);
         ObjectOutputStream oos=new ObjectOutputStream(fos);
         oos.writeObject(this);
+    }
+
+    public void save_Ranking() throws IOException{
+        FileOutputStream fos=new FileOutputStream(RankingFile);
+        ObjectOutputStream oos=new ObjectOutputStream(fos);
+        oos.writeObject(this.rankings);
     }
 
     public List<Point2D> getFruitPosition() {
@@ -168,10 +137,56 @@ public class GameBoard implements Serializable {
         return snake;
     }
 
-    private GameBoard loadFromFile() throws Exception{
-            FileInputStream fis = new FileInputStream(fileName);
-            ObjectInputStream ois = new ObjectInputStream(fis);
-            GameBoard newboard = (GameBoard) ois.readObject();
-            return newboard;
+    public void gameTerminate(){
+        this.running =  false;
     }
+
+    public int getScore() {
+        return score;
+    }
+
+    public boolean isRunning() {
+        return running;
+    }
+
+    public boolean isPaused() {
+        return paused;
+    }
+
+    public List<Ranking> showRanking(){
+        return rankings;
+    }
+
+
+
+    private GameBoard loadFromFile() throws Exception{
+        FileInputStream fis = new FileInputStream(fileName);
+        ObjectInputStream ois = new ObjectInputStream(fis);
+        GameBoard newboard = (GameBoard) ois.readObject();
+        return newboard;
+    }
+
+    private List<Ranking> load_Ranking() throws IOException, ClassNotFoundException {
+        FileInputStream fis = new FileInputStream(RankingFile);
+        ObjectInputStream ois = new ObjectInputStream(fis);
+        List<Ranking> loaded_Ranking = (List<Ranking>) ois.readObject();
+        return loaded_Ranking;
+    }
+
+    private boolean out_Of_Bounces(int x, int y) {
+        if (x < 0 || x >=82 || y < -80 || y >= -2) return true;
+        return false;
+    }
+
+    private void recordRanking(){
+        System.out.println("recorded!");
+        rankings.add(new Ranking(nickname,score));
+        System.out.println("rankings = " + rankings.size());
+        sort_Ranking();
+    }
+
+    private void sort_Ranking(){
+        Collections.sort(rankings,Collections.reverseOrder());
+    }
+
 }

@@ -7,7 +7,6 @@ import src.domain.Direction;
 import src.domain.Renderer;
 import src.models.Camera;
 import src.models.Shader;
-import src.models.Texture;
 import src.windowhandle.MouseHandler;
 import src.windowhandle.Window;
 
@@ -33,11 +32,10 @@ public class LWJGL_Controller2 {
     private Camera cam;
     private Board mainboard;
     private Renderer renderer;
-    private Texture snakeTex;
-    private Texture appleTex;
     private MouseHandler mouseListener;
     private boolean on_Running = true;
     private String input= "";
+    private Recordingname recordingname;
 
 
     private GameState state = GameState.GAME_ACTIVE;
@@ -49,6 +47,7 @@ public class LWJGL_Controller2 {
         this.cam = cam;
         this.gameboard = gameboard;
         this.mainboard = board;
+        recordingname = new Recordingname();
     }
 
 
@@ -62,8 +61,6 @@ public class LWJGL_Controller2 {
         mouseListener = new MouseHandler(mainwindow.getWindow());
         state = GameState.GAME_INIT;
         renderer = new Renderer();
-        snakeTex = new Texture("Cute-Snake-Transparent-PNG.png");
-        appleTex = new Texture("tile2.png");
         GLFWKeyCallback keyCallback_ESC = new GLFWKeyCallback() {
             @Override
             public void invoke(long window, int key, int scancode, int action, int mods) {
@@ -85,7 +82,7 @@ public class LWJGL_Controller2 {
 
                         //메뉴로 이동
                         if (key == GLFW.GLFW_KEY_ESCAPE && action == GLFW.GLFW_PRESS) {
-                            state = GameState.GAME_TYPING;
+                            state = GameState.GAME_MENU;
                         }
 
                         if (key == GLFW.GLFW_KEY_P && action == GLFW.GLFW_PRESS) {
@@ -93,7 +90,7 @@ public class LWJGL_Controller2 {
                         }
                         break;
                     }
-                    case GAME_TYPING -> {
+                   /*case GAME_TYPING -> {
                         if(action == GLFW.GLFW_PRESS  && isValid(key)){
                             input = input + (char)key;
                             System.out.println("input = " + input);
@@ -102,7 +99,7 @@ public class LWJGL_Controller2 {
                             gameboard.setNickname(input);
                             input = "";
                         }
-                    }
+                    }*/
                 }
             }
         };
@@ -122,7 +119,6 @@ public class LWJGL_Controller2 {
                     if(mainwindow.isUpdating()) {
                         mouseOptionHandle();
                         mainwindow.update();
-                        mainboard.render(shader, cam);
                         renderer.mainmenurender(shader, mainboard);
                         mainwindow.swapBuffer();
                     }
@@ -145,26 +141,23 @@ public class LWJGL_Controller2 {
                     mouseOptionHandle();
                     mainwindow.update();
                     mainboard.correctCameara(cam, mainwindow);
-                    mainboard.render(shader, cam);
-                    renderer.render(shader,cam,mainboard);
                     renderer.pausemenurender(shader,mainboard);
                     mainwindow.swapBuffer();
                     mainwindow.timeHandle();
                     break;
                 }
-                case GAME_TYPING -> {
+                /*case GAME_TYPING -> {
                     mainwindow.update();
                     mainboard.correctCameara(cam, mainwindow);
                     mainboard.render(shader, cam);
-                    renderer.render(shader,cam,mainboard);
-                    renderer.pausemenurender(shader,mainboard);
+                    //renderer.render(shader,cam,mainboard);
+                    //renderer.pausemenurender(shader,mainboard);
                     mainwindow.swapBuffer();
                     mainwindow.timeHandle();
                     break;
-                }
+                }*/
             }
         }
-        gameboard.recordRanking();
         state = GameState.GAME_INIT;
         gameboard.re_Play();
         renderer.setZeroFocus(cam,mainboard);
@@ -202,12 +195,16 @@ public class LWJGL_Controller2 {
                     gameboard.showRanking();
                 }
                 else if(cursorX>=262 && cursorX<=390 && cursorY>=490 && cursorY<=535){
+                    try {
+                        gameboard.save_Ranking();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                     gameboard.gameTerminate();
                     on_Running = false;
                 }
             }
             case GAME_MENU -> {
-                System.out.println("hello pause");
                 if(cursorX>=206 && cursorX<=441 && cursorY >=272 && cursorY<=320){
                     state = GameState.GAME_ACTIVE;
                     //resume
@@ -228,7 +225,6 @@ public class LWJGL_Controller2 {
                 else if(cursorX>=263 && cursorX<=385 && cursorY>=530 && cursorY<=574){
                     state = GameState.GAME_INIT;
                 }
-
                 break;
             }
         }

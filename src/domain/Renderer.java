@@ -31,7 +31,7 @@ public class Renderer {
 
     public Renderer() {
         SnakeBodyTex = new Texture("SnakeGame_SnakeBody.png");
-        SnakeHeadTex = new Texture("SnakeGame_SnakeHead.png");
+        SnakeHeadTex = new Texture("New Piskel.png");
         appleTex = new Texture("apple.png");
         mainmenuTex = new Texture("Background.png");
         pauseMenuTex = new Texture("Pause_Buttons.png");
@@ -57,28 +57,21 @@ public class Renderer {
 
     public void render(Shader shader, Camera camera,Board board) {
         setFocus(camera,board);
-        for(int i = 0;i<snake.size();i++){
-            if(i == 0) continue;
-            snakeBody point = snake.get(i);
-            transform.pos.set(point.getPositionX(),point.getPositionY(),0);
+        transform.pos.set(snake.get(0).getPositionX(),snake.get(0).getPositionY(),0);
+        shader.bind();
+        shader.setUniform("sampler", 0);
+        shader.setUniform("projection", transform.getProjection(camera.getProjection()));
+        SnakeHeadTex.bind(0);
+        snakemodel.spin(snake.get(0).getDirection());
+        snakemodel.render();
+        for (int i = 3; i < snake.size(); i++) {
+            transform.pos.set(snake.get(i).getPositionX(), snake.get(i).getPositionY(), 0);
             shader.bind();
             shader.setUniform("sampler", 0);
             shader.setUniform("projection", transform.getProjection(camera.getProjection()));
             SnakeBodyTex.bind(0);
             model.render();
         }
-
-        snakemodel.spin(snake.get(0).getDirection());
-        transform.pos.set(head.getPositionX(),head.getPositionY(),0);
-        shader.bind();
-        shader.setUniform("sampler", 0);
-        shader.setUniform("projection", transform.getProjection(camera.getProjection()));
-        SnakeHeadTex.bind(0);
-        model.render();
-
-
-
-
         shader.bind();
         shader.setUniform("sampler", 0);
         shader.setUniform("projection", fruitPosition.getProjection(camera.getProjection()));
