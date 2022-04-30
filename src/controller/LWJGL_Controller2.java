@@ -1,7 +1,6 @@
 package src.controller;
 
 import org.lwjgl.glfw.*;
-import src.board.Board;
 import src.domain.GameBoard;
 import src.domain.Direction;
 import src.domain.Renderer;
@@ -16,7 +15,6 @@ public class LWJGL_Controller2 {
     private Window mainwindow;
     private Shader shader;
     private Camera cam;
-    private Board mainboard;
     private Renderer renderer;
     private MouseHandler mouseListener;
     private Recordingname recordingname;
@@ -24,18 +22,17 @@ public class LWJGL_Controller2 {
     private GameState state = GameState.GAME_ACTIVE;
     private GameBoard gameboard;
 
-    public LWJGL_Controller2(GameBoard gameboard,Window window, Shader shader,Camera cam,Board board){
+    public LWJGL_Controller2(GameBoard gameboard,Window window, Camera cam){
         this.mainwindow = window;
-        this.shader = shader;
+        this.shader = new Shader("shader");
         this.cam = cam;
         this.gameboard = gameboard;
-        this.mainboard = board;
         recordingname = new Recordingname();
     }
 
 
     public void run(){
-        Recordingname.SimpleJButton button = recordingname.new SimpleJButton();
+        //Recordingname.SimpleJButton button = recordingname.new SimpleJButton();
         init();
         loop();
         terminate();
@@ -136,7 +133,6 @@ public class LWJGL_Controller2 {
                 case GAME_ACTIVE -> {
                     if (mainwindow.isUpdating()) {
                         mainwindow.update();
-
                         //
                         gameboard.move_Snake();
                         gameboard.check_Fruit_Overlap();
@@ -144,9 +140,7 @@ public class LWJGL_Controller2 {
                         renderer.setBoard(gameboard);
                         //
 
-                        //mainboard.correctCameara(cam, mainwindow);
-                        mainboard.render(shader, cam);
-                        renderer.render(shader,cam,mainboard, gameboard.getSnakedirection());
+                        renderer.render(shader,cam, mainwindow, gameboard.getSnakedirection());
                         mainwindow.swapBuffer();
                         System.out.println("fps:"+mainwindow.getcurrentFps());
                     }
@@ -157,10 +151,8 @@ public class LWJGL_Controller2 {
                     double mouse_Y = mouseListener.getMousePressedY();
                     mouseListener.eventsUpdater();
                     mainwindow.update();
-                    mainboard.correctCameara(cam, mainwindow);
-                    mainboard.render(shader, cam);
-                    renderer.render(shader,cam,mainboard, gameboard.getSnakedirection());
-                    renderer.mainmenurender(shader, mainboard);
+                    renderer.render(shader,cam,mainwindow, gameboard.getSnakedirection());
+                    renderer.mainmenurender(shader);
                     mainwindow.swapBuffer();
                     mainwindow.timeHandle();
                     System.out.println(recordingname.getName());
@@ -169,9 +161,7 @@ public class LWJGL_Controller2 {
                 case GAME_MENU -> {
                     mouseListener.eventsUpdater();
                     mainwindow.update();
-                    mainboard.correctCameara(cam, mainwindow);
-                    mainboard.render(shader, cam);
-                    renderer.render(shader,cam,mainboard, gameboard.getSnakedirection());
+                    renderer.render(shader,cam, mainwindow, gameboard.getSnakedirection());
                     mainwindow.swapBuffer();
                     mainwindow.timeHandle();
                     break;

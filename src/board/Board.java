@@ -7,26 +7,31 @@ import src.models.Shader;
 import src.windowhandle.Window;
 
 public class Board {
+    private final int view = 22;
     private byte[] tiles;
     private int width, height, scale;
     private Matrix4f mainboard;
-    private TileRenderer tilerenderer;
+
     public Board(int width, int height, int scale) {
         this.width = width;
         this.height = height;
         this.scale = scale;
         tiles = new byte[width * height];
-        tilerenderer = new TileRenderer();
         mainboard = new Matrix4f()
                 .setTranslation(new Vector3f(0,0,0))
                 .scale(scale);
         createBoard();
     }
 
-    public void render(Shader shader, Camera camera) {
-        for (int i = 0; i < height; i++) {
-            for (int j = 0; j < width; j++) {
-                tilerenderer.renderTile(tiles[j + i * width], j, -i, shader, mainboard, camera);
+    public void render(TileRenderer render,Shader shader, Camera camera, Window window) {
+        int posX = ((int)camera.getPosition().x + (window.getWidth()/2)) / (scale * 2);
+        int posY = ((int)camera.getPosition().y - (window.getHeight()/2)) / (scale * 2);
+        for (int i = 0; i < view; i++) {
+            for (int j = 0 ; j < view; j++) {
+                Tile t = getTile(i-posX, j+posY);
+                if (t != null) {
+                    render.renderTile(t, i-posX, -j-posY, shader, mainboard, camera);
+                }
             }
         }
     }
@@ -51,8 +56,8 @@ public class Board {
     }
     public void createBoard() {
         for (int i = 0; i < width; i++) {
-            for (int j = 0; j < height; j++) { 
-                if (i == 0 || j == 0 || i == width - 1 || j == height - 1)
+            for (int j = 0; j < height; j++) {
+                if (i <= 0 || j <= 0 || i >= 41 || j >= 41)
                     setTile(Tile.test_tile2, i, j);
             }
         }
@@ -70,5 +75,9 @@ public class Board {
     }
     public int getHeight() {
         return height;
+    }
+
+    public byte[] getTiles() {
+        return tiles;
     }
 }
