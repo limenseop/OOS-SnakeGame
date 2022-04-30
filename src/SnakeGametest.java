@@ -4,15 +4,23 @@
  */
 package src;
 
+import org.joml.Vector3f;
 import src.board.Board;
 import src.controller.LWJGL_Controller2;
 import src.domain.GameBoard;
 import src.domain.Snake;
+import src.font.FontRenderer;
+import src.font.FontTexture;
 import src.models.Camera;
 import src.models.Shader;
 import src.windowhandle.Window;
 
+import java.awt.*;
+
 public class SnakeGametest {
+
+
+
     public static final int MAINWINDOWSIZE_WIDTH = 650;
     public static final int MAINWINDOWSIZE_HEIGHT = 650;
     public static final int MAXIMUM_FPS = 60;
@@ -29,6 +37,7 @@ public class SnakeGametest {
         Board mainboard = new Board(BOARD_WIDTH, BOARD_HEIGHT, BOARD_SCALE);
         Snake snake2 = new Snake();
         GameBoard gb = new GameBoard(snake2);
+        //LWJGL_Controller2 newone = new LWJGL_Controller2(gb,mainwindow,shader,cam,mainboard);
         LWJGL_Controller2 newone = new LWJGL_Controller2(gb,mainwindow,shader,cam,mainboard);
         newone.run();
     }

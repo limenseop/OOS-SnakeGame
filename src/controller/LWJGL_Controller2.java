@@ -1,18 +1,24 @@
 package src.controller;
 
+import org.joml.Vector3f;
 import org.lwjgl.glfw.*;
 import src.board.Board;
 import src.domain.GameBoard;
 import src.domain.Direction;
+import src.domain.Ranking;
 import src.domain.Renderer;
+import src.font.FontRenderer;
+import src.font.FontTexture;
 import src.models.Camera;
 import src.models.Shader;
 import src.windowhandle.MouseHandler;
 import src.windowhandle.Window;
 
 
+import java.awt.*;
 import java.awt.geom.Point2D;
 import java.io.IOException;
+import java.util.List;
 
 import static java.lang.Thread.sleep;
 
@@ -37,6 +43,11 @@ public class LWJGL_Controller2 {
     private String input= "";
     private Recordingname recordingname;
 
+    private FontRenderer fontRenderer;
+    private Font font;
+    private FontTexture fontTexture;
+
+
 
     private GameState state = GameState.GAME_ACTIVE;
     private GameBoard gameboard;
@@ -58,6 +69,11 @@ public class LWJGL_Controller2 {
     }
 
     private void init(){
+
+        fontRenderer = new FontRenderer();
+        font = new Font("Time Roman", Font.PLAIN, 40);
+        fontTexture = new FontTexture(font, "US-ASCII");
+
         mouseListener = new MouseHandler(mainwindow.getWindow());
         state = GameState.GAME_INIT;
         renderer = new Renderer();
@@ -82,7 +98,7 @@ public class LWJGL_Controller2 {
 
                         //메뉴로 이동
                         if (key == GLFW.GLFW_KEY_ESCAPE && action == GLFW.GLFW_PRESS) {
-                            state = GameState.GAME_MENU;
+                            state = GameState.GAME_TYPING;
                         }
 
                         if (key == GLFW.GLFW_KEY_P && action == GLFW.GLFW_PRESS) {
@@ -90,16 +106,22 @@ public class LWJGL_Controller2 {
                         }
                         break;
                     }
-                   /*case GAME_TYPING -> {
+                   case GAME_TYPING -> {
                         if(action == GLFW.GLFW_PRESS  && isValid(key)){
                             input = input + (char)key;
-                            System.out.println("input = " + input);
                         }
                         else if(action == GLFW.GLFW_PRESS && key == GLFW.GLFW_KEY_ENTER){
                             gameboard.setNickname(input);
+                            System.out.println("ho!!!");
                             input = "";
+                            state = GameState.GAME_ACTIVE;
                         }
-                    }*/
+                    }
+                    case GAME_RANKING -> {
+                        if (key == GLFW.GLFW_KEY_ESCAPE && action == GLFW.GLFW_PRESS) {
+                            state = GameState.GAME_INIT;
+                        }
+                    }
                 }
             }
         };
@@ -122,7 +144,6 @@ public class LWJGL_Controller2 {
                         renderer.mainmenurender(shader, mainboard);
                         mainwindow.swapBuffer();
                     }
-                    break;
                 }
                 case GAME_ACTIVE -> {
                     if (mainwindow.isUpdating()) {
@@ -147,16 +168,28 @@ public class LWJGL_Controller2 {
                     mainwindow.timeHandle();
                     break;
                 }
-                /*case GAME_TYPING -> {
+                case GAME_TYPING -> {
                     mainwindow.update();
                     mainboard.correctCameara(cam, mainwindow);
                     mainboard.render(shader, cam);
                     //renderer.render(shader,cam,mainboard);
-                    //renderer.pausemenurender(shader,mainboard);
+                    renderer.rankingRendering(shader,mainboard);
+                    renderRankings();
                     mainwindow.swapBuffer();
                     mainwindow.timeHandle();
                     break;
-                }*/
+                }
+                case GAME_RANKING -> {
+                    mainwindow.update();
+                    mainboard.correctCameara(cam, mainwindow);
+                    mainboard.render(shader, cam);
+                    //renderer.render(shader,cam,mainboard);
+                    renderer.rankingRendering(shader,mainboard);
+                    renderRankings();
+                    mainwindow.swapBuffer();
+                    mainwindow.timeHandle();
+                    break;
+                }
             }
         }
         state = GameState.GAME_INIT;
@@ -193,7 +226,7 @@ public class LWJGL_Controller2 {
                     state = GameState.GAME_ACTIVE;
                 }
                 else if(cursorX>=191 && cursorX<=460 && cursorY>=398 && cursorY<=446){
-                    gameboard.showRanking();
+                    state = GameState.GAME_RANKING;
                 }
                 else if(cursorX>=262 && cursorX<=390 && cursorY>=490 && cursorY<=535){
                     try {
@@ -237,4 +270,33 @@ public class LWJGL_Controller2 {
         ||(ascii>=97 && ascii<=122)) return true;
         return false;
     }
+
+    private void renderRankings(){
+        List<Ranking> ranks = gameboard.getRankings();
+        String id = "";
+        int score = 0;
+        String text;
+        System.out.println("ranks.size() = " + ranks.size());
+        if(ranks.size()>=5){
+            for(int i = 0;i<5;i++){
+                id = ranks.get(0).getId();
+                score = ranks.get(0).getScore();
+                text = "rank"+(i+1)+"   nickname = " + id + "   Score : " + score;
+                fontRenderer.renderString(fontTexture,text,100,300 + 100 * i,new Vector3f(11,11,0));
+            }
+        }
+        else{
+            int count = 0;
+            for (Ranking rank : ranks) {
+                id = rank.getId();
+                score = rank.getScore();
+                text = "rank"+(count+1)+"   nickname = " + id + "           Score : " + score;
+                fontRenderer.renderString(fontTexture,text,100,300 + 100 * count,new Vector3f(11,11,0));
+                count = count + 1;
+            }
+        }
+        String pressESC = "Press ESC to back!";
+        fontRenderer.renderString(fontTexture,pressESC,335,900,new Vector3f(11,11,0));
+    }
+
 }

@@ -85,7 +85,7 @@ public class GameBoard implements Serializable {
 
     public void setNickname(String nickname) {
         this.nickname = nickname;
-        System.out.println("nickname = " + nickname);
+        System.out.println("this.nickname = " + this.nickname);
     }
 
     public boolean gameRunning(){
@@ -152,6 +152,8 @@ public class GameBoard implements Serializable {
     public boolean isPaused() {
         return paused;
     }
+
+    public List<Ranking> getRankings() { return rankings; }
 
     public List<Ranking> showRanking(){
         return rankings;

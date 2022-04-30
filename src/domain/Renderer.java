@@ -18,6 +18,7 @@ public class Renderer {
     private Texture appleTex;
     private Texture mainmenuTex;
     private Texture pauseMenuTex;
+    private Texture RankingTex;
     private Basicmodel model;
     private Snakemodel snakemodel;
     private List<snakeBody> snake;
@@ -35,6 +36,7 @@ public class Renderer {
         appleTex = new Texture("apple.png");
         mainmenuTex = new Texture("Background.png");
         pauseMenuTex = new Texture("Pause_Buttons.png");
+        RankingTex = new Texture("RankingBackground.png");
         transform = new Transform();
         transform.scale = new Vector3f(16,16,1);
         transform.pos = new Vector3f(0,0,0);
@@ -94,6 +96,15 @@ public class Renderer {
         pauseMenuTex.bind(0);
         meunmodel.render();
     }
+
+    public void rankingRendering(Shader shader, Board mainboard) {
+        shader.bind();
+        shader.setUniform("sampler", 0);
+        shader.setUniform("projection", new Matrix4f().setOrtho2D(-mainboard.getWidth() / 2, mainboard.getWidth() / 2, -mainboard.getHeight() / 2, mainboard.getHeight() / 2));
+        RankingTex.bind(0);
+        meunmodel.render();
+    }
+
 
     private void setFocus(Camera camera, Board board){
         Transform focus = new Transform();
