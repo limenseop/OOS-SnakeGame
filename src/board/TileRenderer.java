@@ -2,8 +2,6 @@
  * Copyright LWJGL. All rights reserved.
  * License terms: https://www.lwjgl.org/license
  */
-
-
 package src.board;
 
 import org.joml.Matrix4f;
@@ -29,10 +27,10 @@ public class TileRenderer {
             }
         }
     }
-    public void renderTile(byte id, int x, int y, Shader shader, Matrix4f world, Camera camera) {
+    public void renderTile(Tile tile, int x, int y, Shader shader, Matrix4f world, Camera camera) {
         shader.bind();
-        if (tile_textures.containsKey(Tile.tiles[id].getTexture()))
-            tile_textures.get(Tile.tiles[id].getTexture()).bind(0);
+        if (tile_textures.containsKey(tile.getTexture()))
+            tile_textures.get(tile.getTexture()).bind(0);
 
         Matrix4f tile_position = new Matrix4f().translate(new Vector3f(x*2, y*2, 0));
         Matrix4f target = new Matrix4f();

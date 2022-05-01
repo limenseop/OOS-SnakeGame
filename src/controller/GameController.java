@@ -9,6 +9,7 @@ package src.controller;
 import org.joml.Vector3f;
 import org.lwjgl.glfw.*;
 import src.board.Board;
+import src.board.TileRenderer;
 import src.domain.GameBoard;
 import src.domain.Direction;
 import src.domain.Ranking;
@@ -26,8 +27,6 @@ import java.awt.geom.Point2D;
 import java.io.IOException;
 import java.util.List;
 
-import static java.lang.Thread.sleep;
-
 public class GameController {
 
     private Window mainwindow;
@@ -38,13 +37,10 @@ public class GameController {
     private MouseHandler mouseListener;
     private boolean on_Running = true;
     private String input= "";
-    private Recordingname recordingname;
-
+    private TileRenderer tilerender;
     private FontRenderer fontRenderer;
     private Font font;
     private FontTexture fontTexture;
-
-
 
     private GameState state = GameState.GAME_ACTIVE;
     private GameBoard gameboard;
@@ -55,7 +51,7 @@ public class GameController {
         this.cam = cam;
         this.gameboard = gameboard;
         this.mainboard = board;
-        recordingname = new Recordingname();
+        tilerender = new TileRenderer();
     }
 
 
@@ -155,7 +151,7 @@ public class GameController {
                         gameboard.check_Game_Terminated();
                         renderer.setBoard(gameboard);
                         mainboard.correctCameara(cam, mainwindow);
-                        mainboard.render(shader, cam);
+                        mainboard.render(tilerender, shader, cam, mainwindow);
                         renderer.render(shader,cam,mainboard);
                         scoreRender();
                         mainwindow.swapBuffer();
@@ -174,7 +170,7 @@ public class GameController {
                 case GAME_TYPING -> {
                     mainwindow.update();
                     mainboard.correctCameara(cam, mainwindow);
-                    mainboard.render(shader, cam);
+                    mainboard.render(tilerender, shader, cam, mainwindow);
                     renderer.inputRendering(shader,mainboard);
                     renderNickname();
                     mainwindow.swapBuffer();
@@ -237,7 +233,7 @@ public class GameController {
                     try {
                         gameboard.loadGame();
                         mainboard.correctCameara(cam, mainwindow);
-                        mainboard.render(shader, cam);
+                        mainboard.render(tilerender, shader, cam, mainwindow);
                     }catch(Exception e){
                         System.out.println("e = " + e);
                     }

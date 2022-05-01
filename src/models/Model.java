@@ -74,4 +74,9 @@ abstract class Model {
         buffer.flip();
         return buffer;
     }
+    protected void finalize() {
+        glDeleteBuffers(v_id);
+        glDeleteBuffers(t_id);
+        glDeleteBuffers(i_id);
+    }
 }
