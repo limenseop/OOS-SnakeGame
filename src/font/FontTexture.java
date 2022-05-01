@@ -17,20 +17,15 @@ import org.lwjgl.BufferUtils;
 
 
 public class FontTexture {
-	// font - ũ��, �۲� �� ����.
 	private Font font;
 
-	// �ʿ��� ��� ���ڰ� �׷��� �ؽ���.
 	private Texture texture;
 
-	// �⺻ -> ���� + ���ĺ��̰� ���⿡ �߰������� ���ϰ� ���� string��.
 	private String[] additionalStrings;
 
-	// ũ��.
 	private int width;
 	private int height;
 
-	// character �� char info
 	Map<Character, CharInfo> charMap;
 
 	public FontTexture(Font font, String... additionals) {
@@ -41,11 +36,9 @@ public class FontTexture {
 		buildTexture();
 	}
 
-	// ��� ���� ����.
 	private String getAllLetters() {
 		StringBuilder result = new StringBuilder();
-	
-		// 1. additional letters. -> �ߺ� �����ϹǷ� Ž�� �ʿ� -> �����ϱ�.
+
 		for (String str : this.additionalStrings) {
 			for (int i = 0; i < str.length(); i++) {
 				String c = str.substring(i, i + 1);
@@ -54,8 +47,7 @@ public class FontTexture {
 				}
 			}
 		}
-	
-		// 2. basic letters -> ascii 32 ~ 126 -> ���ĺ�, ����, ���� ��ȣ.
+
 		for (int i = 32; i < 126; i++) {
 			result.append((char) i);
 		}
@@ -63,23 +55,17 @@ public class FontTexture {
 		return result.toString();
 	}
 
-	// Font�� charset ������ ���� ��� charset�� ���Ե� �ϳ��� �� texture �����.
 	private void buildTexture() {
 		BufferedImage img = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g2D = img.createGraphics();
 		g2D.setFont(this.font);
 		FontMetrics fontMetric = g2D.getFontMetrics();
 
-		// ��� ������ char ����.
 		String allChars = getAllLetters();
 
-		// �ʱ�ȭ.
 		this.width = 0;
 		this.height = 0;
 
-		// ���ڴ� ũ�� ���� ���� + ��ü �ؽ��� ũ�� ����.
-		// ���� -> ��� ���� �ʺ� ��
-		// ���� -> ���� �ִ밪
 		for (char c : allChars.toCharArray()) {
 			CharInfo charInfo = new CharInfo(width, fontMetric.charWidth(c));
 			charMap.put(c, charInfo);
@@ -88,7 +74,6 @@ public class FontTexture {
 		}
 		g2D.dispose();
 
-		// ������ ������ ��ü ũ�� �����κ��� ���ο� BufferedImage �����.
 		img = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
 		g2D = img.createGraphics();
 		g2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
@@ -96,11 +81,8 @@ public class FontTexture {
 		fontMetric = g2D.getFontMetrics();
 		g2D.setColor(Color.WHITE);
 
-		// ��� ���ڸ� ���η� ��� �׸�.
 		g2D.drawString(allChars, 0, fontMetric.getAscent());
 		g2D.dispose();
-
-		// texture �̹��� ����غ���.
 
 		try {
 			ImageIO.write(img, "PNG", new java.io.File("text.png"));
@@ -108,11 +90,9 @@ public class FontTexture {
 			e.printStackTrace();
 		}
 
-		// �̹����� int �迭�� �ű��.
 		int[] pixels = new int[width * height];
 		img.getRGB(0, 0, width, height, pixels, 0, width);
 
-		// image int �迭�� bytebuffer�� �ű��.
 		ByteBuffer buffer = BufferUtils.createByteBuffer(width * height * 4);
 		for (int i = 0; i < height; i++) {
 			for (int j = 0; j < width; j++) {

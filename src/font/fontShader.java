@@ -16,7 +16,6 @@ public class fontShader {
 	private int vertexShaderID;
 	private int fragmentShaderID;
 
-	// shader program �󿡼� position �� color�� �ش��ϴ� attrib index
 	public int positionAttribIndex;
 	public int colorAttribIndex;
 	
@@ -25,24 +24,18 @@ public class fontShader {
 	}
 
 	public fontShader(String vertexShaderFile, String fragmentShaderFile) {
-		// 1. create two type of shader from txt file.
 		vertexShaderID = loadShaderFromFile(vertexShaderFile, GL20.GL_VERTEX_SHADER);
 		fragmentShaderID = loadShaderFromFile(fragmentShaderFile, GL20.GL_FRAGMENT_SHADER);
 
-		// 2. create program and attach shader to program.
 		programID = GL20.glCreateProgram();
 
 		GL20.glAttachShader(programID, vertexShaderID);
 		GL20.glAttachShader(programID, fragmentShaderID);
-		
-		// bind vertex attribute to specific index.
-		// GL20.glBindAttribLocation(programID, 0, "vertexData");
-		// GL20.glBindAttribLocation(programID, 1, "colorData");
+
 
 		GL20.glLinkProgram(programID);
 		GL20.glValidateProgram(programID);
 
-		// 3. delete shader -> no more need.
 		GL20.glDeleteShader(vertexShaderID);
 		GL20.glDeleteShader(fragmentShaderID);
 
@@ -50,8 +43,6 @@ public class fontShader {
 
 	public static int loadShaderFromFile(String fileName, int type) {
 		StringBuilder shaderSource = new StringBuilder();
-
-		// read each line and store source in string.
 		try {
 			BufferedReader reader = new BufferedReader(new FileReader(fileName));
 			String line;
@@ -65,13 +56,10 @@ public class fontShader {
 			System.exit(-1);
 		}
 
-		// create particular type of shader.
 		int shaderID = GL20.glCreateShader(type);
 
-		// attach source
 		GL20.glShaderSource(shaderID, shaderSource);
 
-		// check compile
 		GL20.glCompileShader(shaderID);
 		if (GL20.glGetShaderi(shaderID, GL20.GL_COMPILE_STATUS) == GL11.GL_FALSE) {
 			System.out.println(GL20.glGetShaderInfoLog(shaderID, 500));
@@ -134,8 +122,7 @@ public class fontShader {
 		int loc = GL20.glGetUniformLocation(programID, name);
 		GL20.glUniform4f(loc, vec.x, vec.y, vec.z, vec.w);
 	}
-	
-	// Matrix�� �Ѱ��ֱ� ���� �迭.
+
 	private float[] matrix4fArr = new float[16];
 	
 	public void setMatrix4f(String name, Matrix4f matrix) {

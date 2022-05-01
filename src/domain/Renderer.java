@@ -19,6 +19,8 @@ public class Renderer {
     private Texture mainmenuTex;
     private Texture pauseMenuTex;
     private Texture RankingTex;
+
+
     private Basicmodel model;
     private Snakemodel snakemodel;
     private List<snakeBody> snake;
@@ -27,8 +29,6 @@ public class Renderer {
     private Transform zeroTransform;
     private Menumodel meunmodel;
 
-    //private TrueTypeFont font;
-    private Font awtFont;
 
     public Renderer() {
         SnakeBodyTex = new Texture("SnakeGame_SnakeBody.png");
@@ -101,6 +101,14 @@ public class Renderer {
         shader.bind();
         shader.setUniform("sampler", 0);
         shader.setUniform("projection", new Matrix4f().setOrtho2D(-mainboard.getWidth() / 2, mainboard.getWidth() / 2, -mainboard.getHeight() / 2, mainboard.getHeight() / 2));
+        RankingTex.bind(0);
+        meunmodel.render();
+    }
+
+    public void inputRendering(Shader shader, Board mainboard){
+        shader.bind();
+        shader.setUniform("sampler", 0);
+        shader.setUniform("projection", new Matrix4f().setOrtho2D(-mainboard.getWidth() / 2, mainboard.getWidth() / 2, -mainboard.getHeight() / 1, mainboard.getHeight() / 1));
         RankingTex.bind(0);
         meunmodel.render();
     }

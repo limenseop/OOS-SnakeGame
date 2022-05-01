@@ -98,7 +98,7 @@ public class LWJGL_Controller2 {
 
                         //메뉴로 이동
                         if (key == GLFW.GLFW_KEY_ESCAPE && action == GLFW.GLFW_PRESS) {
-                            state = GameState.GAME_TYPING;
+                            state = GameState.GAME_MENU;
                         }
 
                         if (key == GLFW.GLFW_KEY_P && action == GLFW.GLFW_PRESS) {
@@ -112,9 +112,14 @@ public class LWJGL_Controller2 {
                         }
                         else if(action == GLFW.GLFW_PRESS && key == GLFW.GLFW_KEY_ENTER){
                             gameboard.setNickname(input);
-                            System.out.println("ho!!!");
                             input = "";
                             state = GameState.GAME_ACTIVE;
+                        }
+                        else if(action == GLFW.GLFW_PRESS && (key == GLFW.GLFW_KEY_DELETE || key==GLFW.GLFW_KEY_BACKSPACE)){
+                            int length = input.length();
+                            System.out.println("length = " + length);
+                            if(length == 0) return;
+                            input = input.substring(0,length-1);
                         }
                     }
                     case GAME_RANKING -> {
@@ -172,9 +177,8 @@ public class LWJGL_Controller2 {
                     mainwindow.update();
                     mainboard.correctCameara(cam, mainwindow);
                     mainboard.render(shader, cam);
-                    //renderer.render(shader,cam,mainboard);
-                    renderer.rankingRendering(shader,mainboard);
-                    renderRankings();
+                    renderer.inputRendering(shader,mainboard);
+                    renderNickname();
                     mainwindow.swapBuffer();
                     mainwindow.timeHandle();
                     break;
@@ -182,8 +186,6 @@ public class LWJGL_Controller2 {
                 case GAME_RANKING -> {
                     mainwindow.update();
                     mainboard.correctCameara(cam, mainwindow);
-                    mainboard.render(shader, cam);
-                    //renderer.render(shader,cam,mainboard);
                     renderer.rankingRendering(shader,mainboard);
                     renderRankings();
                     mainwindow.swapBuffer();
@@ -196,6 +198,12 @@ public class LWJGL_Controller2 {
         gameboard.re_Play();
         renderer.setZeroFocus(cam,mainboard);
     }
+    }
+
+    private void renderNickname() {
+
+        String nick_show = "Your nickname : " + input;
+        fontRenderer.renderString(fontTexture,nick_show,100,500,new Vector3f(11,11,0));
     }
 
     private void mouseOptionHandle() {
@@ -213,7 +221,7 @@ public class LWJGL_Controller2 {
             case GAME_INIT -> {
                 if(cursorX>=253 && cursorX<=396 && cursorY>=224 && cursorY<=270){
                     gameboard.re_Play();
-                    state = GameState.GAME_ACTIVE;
+                    state = GameState.GAME_TYPING;
                 }
                 else if(cursorX >= 253 && cursorX<=396 && cursorY>=311 && cursorY<=360){
                     try {
@@ -276,7 +284,6 @@ public class LWJGL_Controller2 {
         String id = "";
         int score = 0;
         String text;
-        System.out.println("ranks.size() = " + ranks.size());
         if(ranks.size()>=5){
             for(int i = 0;i<5;i++){
                 id = ranks.get(0).getId();
