@@ -153,6 +153,7 @@ public class GameController {
                         mainboard.correctCameara(cam, mainwindow);
                         mainboard.render(tilerender, shader, cam, mainwindow);
                         renderer.render(shader,cam,mainboard);
+                        scoreRender();
                         mainwindow.swapBuffer();
                     }
                     break;
@@ -191,6 +192,15 @@ public class GameController {
         gameboard.re_Play();
         renderer.setZeroFocus(cam,mainboard);
     }
+    }
+
+    private void scoreRender() {
+        int score = gameboard.getScore();
+        String guiString = "score : " + score;
+        fontRenderer.renderString(fontTexture,guiString,700,10,new Vector3f(11,11,0));
+        if(score >= gameboard.getRankings().get(0).getScore()){
+            fontRenderer.renderString(fontTexture,"new record!",700,70,new Vector3f(11,11,0));
+        }
     }
 
     private void renderNickname() {

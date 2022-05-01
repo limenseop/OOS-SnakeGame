@@ -7,7 +7,7 @@ Guidelines to install and run our game
 1. external Libraries
 - LWJGL : 우리 SnakeGame의 메인 GUI를 담당하는 library
   https://www.lwjgl.org/download
-- 다운로드 받은 zip중에서 opengl, glfw, macros jar을 dependency설정
+- 다운로드 받은 zip중에서 opengl, glfw, macros, stb jar을 dependency설정
 - Joml 1.8.2 : Matrix3D, Matrix4D -> 각각의 component를 rendering하기 위해 필요 -> https://github.com/JOML-CI/JOML/releases
   ● 1.8.2 버전 확인 필요!
 
