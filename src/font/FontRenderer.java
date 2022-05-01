@@ -1,3 +1,9 @@
+/*
+ * Copyright LWJGL. All rights reserved.
+ * License terms: https://www.lwjgl.org/license
+ */
+
+
 package src.font;
 
 import org.joml.Vector3f;
@@ -33,7 +39,7 @@ public class FontRenderer {
 		VBO = GL15.glGenBuffers();
 		GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, VBO);
 		
-		// put empty data (dynamic draw�� �׸� ���̱� ����!)
+		// put empty data
 		float[] vertices = new float[6 * 4];
 		GL15.glBufferData(GL15.GL_ARRAY_BUFFER, vertices, GL15.GL_DYNAMIC_DRAW);
 		
@@ -50,14 +56,13 @@ public class FontRenderer {
 	public void renderString(FontTexture fontTexture, String text, float x, float y, Vector3f color){
 		shader.start();
 		
-		// ���� ���.
+
 		shader.setVector3f("textColor", color);
 
-		// �׸��� ������ ��ġ.
 		float drawX = x;
 		float drawY = y;
 		
-		// ��Ʈ �ؽ��� ���ε�.
+
 		fontTexture.getTexture().bind();
 		
 		// VAO bind.
@@ -67,7 +72,6 @@ public class FontRenderer {
 		
 		for(int i=0; i< text.length(); i++){
 			char ch = text.charAt(i);
-			// �� �ٲ� -> x�� �������� �ʱ�ȭ, y�� ���̸�ŭ ���ϱ�.
 			if(ch == '\n'){
 				drawY += fontTexture.getHeight();
 				drawX = x;
@@ -82,8 +86,7 @@ public class FontRenderer {
 			float w = cInfo.getWidth();
 			float h = fontTexture.getHeight();
 			
-			// �ؽ��� �󿡼� ���� �� �� ��ġ.
-			// �ؽ��ĸ� ������ 1�����̹Ƿ�  y���� ���� ���ص� ��.
+
 			float tsx = cInfo.getStartX() / (float)fontTexture.getWidth();
 			float tfx = (cInfo.getStartX() + cInfo.getWidth()) / (float)fontTexture.getWidth();
 			

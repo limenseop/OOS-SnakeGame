@@ -1,3 +1,9 @@
+/*
+ * Copyright LWJGL. All rights reserved.
+ * License terms: https://www.lwjgl.org/license
+ */
+
+
 package src.controller;
 
 import org.joml.Vector3f;
@@ -22,16 +28,7 @@ import java.util.List;
 
 import static java.lang.Thread.sleep;
 
-public class LWJGL_Controller2 {
-
-    public static final int MAINWINDOWSIZE_WIDTH = 650;
-    public static final int MAINWINDOWSIZE_HEIGHT = 650;
-    public static final int MAXIMUM_FPS = 60;
-    public static final String GAME_TITLE = "Snake Game Ver1.0";
-    public static final int BOARD_WIDTH = 42;
-    public static final int BOARD_HEIGHT = 42;
-    public static final int BOARD_SCALE = 16;
-    public static final float SNAKE_SPEED = 0.3f;
+public class GameController {
 
     private Window mainwindow;
     private Shader shader;
@@ -52,7 +49,7 @@ public class LWJGL_Controller2 {
     private GameState state = GameState.GAME_ACTIVE;
     private GameBoard gameboard;
 
-    public LWJGL_Controller2(GameBoard gameboard,Window window, Shader shader,Camera cam,Board board){
+    public GameController(GameBoard gameboard, Window window, Shader shader, Camera cam, Board board){
         this.mainwindow = window;
         this.shader = shader;
         this.cam = cam;
