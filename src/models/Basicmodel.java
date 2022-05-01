@@ -1,3 +1,9 @@
+/*
+ * Copyright LWJGL. All rights reserved.
+ * License terms: https://www.lwjgl.org/license
+ */
+
+
 package src.models;
 
 public class Basicmodel extends Model {
