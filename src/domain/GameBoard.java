@@ -11,19 +11,28 @@ import java.util.List;
 
 public class GameBoard implements Serializable {
 
+    private final int MIN_X = 0;
+    private final int MAX_X = 80;
+    private final int MIN_Y = -82;
+    private final int MAX_Y = -2;
+
     private String fileName = "user.acc";
     private String RankingFile = "Rank.acc";
+    private List<Snake> snakes;
     private Snake snake;
+    private Snake snake2;
 
     private List<Point2D> fruitPosition;
     private int score = 0;
     private boolean running = true;
     private boolean paused = false;
+    private int player_num = 1;
     private transient List<Ranking> rankings;
     private String nickname;
 
-    public GameBoard(Snake snake) {
-        this.snake = snake;
+    public GameBoard() {
+        snakes = new ArrayList<>();
+        snakes.add(new Snake(0));
         fruitPosition = new ArrayList<>();
         try {
             rankings = load_Ranking();
@@ -33,9 +42,17 @@ public class GameBoard implements Serializable {
         createFruit();
     }
 
+    public void setDual_mode(){
+        snakes.remove(0);
+        player_num = 2;
+        snakes.add(new Snake(1));
+        snake2 = new Snake(2);
+        snakes.add(snake2);
+    }
+
     public void loadGame() throws Exception{
         GameBoard saveData = loadFromFile();
-        this.snake = saveData.getSnake();
+        this.snakes = saveData.getSnake();
         this.score = saveData.getScore();
         this.paused = saveData.isPaused();
         this.running = saveData.isRunning();
@@ -47,41 +64,50 @@ public class GameBoard implements Serializable {
 
         float fruit_X = (float) ((Math.random() * 78) + 2);
         float fruit_Y = (float) ((Math.random() * -78) - 2);
+        
 
         if (fruitPosition.isEmpty()) {
 
-            while (snake.check_If_Overlap(fruit_X, fruit_Y)) {
+            
+            for (Snake sss : snakes) {
 
-                fruit_X = (float) ((Math.random() * 78) + 2);
-                fruit_Y = (float) ((Math.random() * -78) - 2);
+                while (sss.check_If_Overlap(fruit_X, fruit_Y)) {
 
+                    fruit_X = (float) ((Math.random() * 78) + 2);
+                    fruit_Y = (float) ((Math.random() * -78) - 2);
+
+                }
+                fruitPosition.add(new Point2D.Float(fruit_X, fruit_Y));
             }
-            fruitPosition.add(new Point2D.Float(fruit_X,fruit_Y));
         }
     }
 
 
     public synchronized boolean move_Snake() {
-        snake.move();
+        for (Snake snake : snakes) {
+            snake.move();
+        }
         return true;
 
     }
 
-    public boolean change_Direction_Snake(Direction direction) {
+    public boolean change_Direction_Snake(Direction direction,int idx) {
 
-        if (snake.change_Direction(direction)) return true;
+        if (snakes.get(idx).change_Direction(direction)) return true;
         else return false;
 
     }
 
     public boolean check_Game_Terminated() {
 
-        int headX = (int)snake.getHead().getPositionX();
-        int headY = (int)snake.getHead().getPositionY();
+        for (Snake snake : snakes) {
+            int headX = (int) snake.getHead().getPositionX();
+            int headY = (int) snake.getHead().getPositionY();
 
-        if (out_Of_Bounces(headX, headY) || snake.check_If_collapse()) {
-            running = false;
-            recordRanking();
+            if (out_Of_Bounces(headX, headY) || snake.check_If_collapse()) {
+                running = false;
+                if(this.player_num == 1)recordRanking();
+            }
         }
         return running;
     }
@@ -98,23 +124,27 @@ public class GameBoard implements Serializable {
         running = true;
         score = 0;
         fruitPosition.clear();
-        snake.re_Init();
-        createFruit();
+        //snake.re_Init();
+
+        //TODO : dual모드 구현 완료시 re_init해제하기
+       createFruit();
     }
 
     public boolean check_Fruit_Overlap() {
 
-        Point2D fruit = fruitPosition.get(0);
-        float headX = snake.getHead().getPositionX();
-        float headY = snake.getHead().getPositionY();
-        Point2D head = new Point2D.Float(headX,headY);
-        if(head.distance(fruit)<1.3){
-            fruitPosition.remove(0);
-            score = score + 100;
-            for(int i = 0;i<8;i++)
-            snake.grow();
-            createFruit();
-            return true;
+        for (Snake snake : snakes) {
+            Point2D fruit = fruitPosition.get(0);
+            float headX = snake.getHead().getPositionX();
+            float headY = snake.getHead().getPositionY();
+            Point2D head = new Point2D.Float(headX, headY);
+            if (head.distance(fruit) < 1.3) {
+                fruitPosition.remove(0);
+                score = score + 100;
+                for (int i = 0; i < 8; i++)
+                    snake.grow();
+                createFruit();
+                return true;
+            }
         }
         return false;
     }
@@ -135,8 +165,8 @@ public class GameBoard implements Serializable {
         return fruitPosition;
     }
 
-    public Snake getSnake() {
-        return snake;
+    public List<Snake> getSnake() {
+        return snakes;
     }
 
     public void gameTerminate(){
@@ -178,7 +208,7 @@ public class GameBoard implements Serializable {
     }
 
     private boolean out_Of_Bounces(int x, int y) {
-        if (x < 0 || x >=82 || y < -80 || y >= -2) return true;
+        if (x < MIN_X || x >=MAX_X * player_num || y < MIN_Y || y >= MAX_Y) return true;
         return false;
     }
 

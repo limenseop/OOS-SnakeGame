@@ -77,16 +77,16 @@ public class GameController {
                     case GAME_ACTIVE -> {
                         //snake 방향변경
                         if (key == 262 && action == GLFW.GLFW_PRESS) {
-                            gameboard.change_Direction_Snake(Direction.EAST);
+                            gameboard.change_Direction_Snake(Direction.EAST,0);
                         }
                         if (key == 263 && action == GLFW.GLFW_PRESS) {
-                            gameboard.change_Direction_Snake(Direction.WEST);
+                            gameboard.change_Direction_Snake(Direction.WEST,0);
                         }
                         if (key == 265 && action == GLFW.GLFW_PRESS) {
-                            gameboard.change_Direction_Snake(Direction.NORTH);
+                            gameboard.change_Direction_Snake(Direction.NORTH,0);
                         }
                         if (key == 264 && action == GLFW.GLFW_PRESS) {
-                            gameboard.change_Direction_Snake(Direction.SOUTH);
+                            gameboard.change_Direction_Snake(Direction.SOUTH,0);
                         }
 
                         //메뉴로 이동
@@ -98,6 +98,20 @@ public class GameController {
                             state = GameState.GAME_MENU;
                         }
                         break;
+                    }
+                    case GAME_DUAL -> {
+                        if (key == 262 && action == GLFW.GLFW_PRESS) {
+                            gameboard.change_Direction_Snake(Direction.EAST,0);
+                        }
+                        if (key == 263 && action == GLFW.GLFW_PRESS) {
+                            gameboard.change_Direction_Snake(Direction.WEST,0);
+                        }
+                        if (key == 265 && action == GLFW.GLFW_PRESS) {
+                            gameboard.change_Direction_Snake(Direction.NORTH,0);
+                        }
+                        if (key == 264 && action == GLFW.GLFW_PRESS) {
+                            gameboard.change_Direction_Snake(Direction.SOUTH,0);
+                        }
                     }
                    case GAME_TYPING -> {
                         if(action == GLFW.GLFW_PRESS  && isValid(key)){

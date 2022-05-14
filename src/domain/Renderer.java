@@ -15,6 +15,7 @@ import src.models.*;
 
 import java.awt.*;
 import java.awt.geom.Point2D;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Renderer {
@@ -30,11 +31,13 @@ public class Renderer {
 
     private Basicmodel model;
     private Snakemodel snakemodel;
-    private List<snakeBody> snake;
-    private snakeBody head;
+    private List<List<snakeBody>> snakes;
+    private List<snakeBody> head;
     private Transform fruitPosition;
     private Transform zeroTransform;
     private Menumodel meunmodel;
+
+    private boolean dual;
 
 
     public Renderer() {
@@ -56,30 +59,42 @@ public class Renderer {
         zeroTransform = new Transform();
         zeroTransform.scale = new Vector3f(16,16,1);
         zeroTransform.pos = new Vector3f(0,0,0);
+
+        head = new ArrayList<>();
+        snakes = new ArrayList<>();
     }
 
     public void setBoard(GameBoard board){
-        this.snake = board.getSnake().getBody();
-        head = board.getSnake().getHead();
+        List<Snake> list = board.getSnake();
+        int count = 0;
+        for (Snake snake : list) {
+            snakes.add(snake.getBody());
+            head.add(snake.getHead());
+            count = count + 1;
+        }
+        if(count == 2) dual = true;
+        else dual = false;
         fruitPosition.pos.set((float) board.getFruitPosition().get(0).getX(), (float) board.getFruitPosition().get(0).getY(),0);
     }
 
     public void render(Shader shader, Camera camera,Board board) {
         setFocus(camera,board);
-        transform.pos.set(snake.get(0).getPositionX(),snake.get(0).getPositionY(),0);
-        shader.bind();
-        shader.setUniform("sampler", 0);
-        shader.setUniform("projection", transform.getProjection(camera.getProjection()));
-        SnakeHeadTex.bind(0);
-        snakemodel.spin(snake.get(0).getDirection());
-        snakemodel.render();
-        for (int i = 3; i < snake.size(); i++) {
-            transform.pos.set(snake.get(i).getPositionX(), snake.get(i).getPositionY(), 0);
+        for (List<snakeBody> snake : snakes) {
+            transform.pos.set(snake.get(0).getPositionX(),snake.get(0).getPositionY(),0);
             shader.bind();
             shader.setUniform("sampler", 0);
             shader.setUniform("projection", transform.getProjection(camera.getProjection()));
-            SnakeBodyTex.bind(0);
-            model.render();
+            SnakeHeadTex.bind(0);
+            snakemodel.spin(snake.get(0).getDirection());
+            snakemodel.render();
+            for (int i = 3; i < snake.size(); i++) {
+                transform.pos.set(snake.get(i).getPositionX(), snake.get(i).getPositionY(), 0);
+                shader.bind();
+                shader.setUniform("sampler", 0);
+                shader.setUniform("projection", transform.getProjection(camera.getProjection()));
+                SnakeBodyTex.bind(0);
+                model.render();
+            }
         }
         shader.bind();
         shader.setUniform("sampler", 0);
@@ -124,7 +139,7 @@ public class Renderer {
     private void setFocus(Camera camera, Board board){
         Transform focus = new Transform();
         focus.scale = new Vector3f(16,16,1);
-        focus.pos = new Vector3f((float) head.getPositionX(), (float) head.getPositionY(),0);
+        focus.pos = new Vector3f((float) head.get(0).getPositionX(), (float) head.get(0).getPositionY(),0);
         camera.getPosition().lerp(focus.pos.mul(-board.getScale(), new Vector3f()), 0.1f);
     }
 
