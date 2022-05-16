@@ -11,6 +11,8 @@ import org.joml.Matrix4f;
 import org.joml.Vector3f;
 import src.board.Board;
 import src.entity.Transform;
+import src.font.FontRenderer;
+import src.font.FontTexture;
 import src.models.*;
 
 import java.awt.*;
@@ -21,6 +23,9 @@ import java.util.List;
 public class Renderer {
 
     Transform transform;
+
+    private GameBoard gameBoard;
+
     private Texture SnakeBodyTex;
     private Texture SnakeHeadTex;
     private Texture appleTex;
@@ -32,13 +37,16 @@ public class Renderer {
     private Basicmodel model;
     private Snakemodel snakemodel;
     private List<List<snakeBody>> snakes;
+
     private List<snakeBody> head;
     private List<Point2D> fruit;
     private Transform fruitPosition;
     private Transform zeroTransform;
     private Menumodel meunmodel;
 
-    private boolean dual;
+    private FontRenderer fontRenderer;
+    private Font font;
+    private FontTexture fontTexture;
 
 
     public Renderer() {
@@ -60,13 +68,18 @@ public class Renderer {
         zeroTransform = new Transform();
         zeroTransform.scale = new Vector3f(16,16,1);
         zeroTransform.pos = new Vector3f(0,0,0);
+        fontRenderer = new FontRenderer();
+        font = new Font("Time Roman", Font.PLAIN, 40);
+        fontTexture = new FontTexture(font, "US-ASCII");
 
         head = new ArrayList<>();
         snakes = new ArrayList<>();
     }
 
     public void setBoard(GameBoard board){
+        gameBoard = board;
         snakes.clear();
+        head.clear();
         List<Snake> list = board.getSnake();
         int count = 0;
         for (Snake snake : list) {
@@ -75,8 +88,6 @@ public class Renderer {
             count = count + 1;
         }
         fruit = board.getFruitPosition();
-        if(count == 2) dual = true;
-        else dual = false;
     }
 
     public void render(Shader shader, Camera camera,Board board) {
@@ -148,5 +159,53 @@ public class Renderer {
 
     public void setZeroFocus(Camera camera, Board board){
         camera.getPosition().lerp(zeroTransform.pos.mul(-board.getScale(), new Vector3f()), 0.1f);
+    }
+
+    public void scoreRender() {
+        List<Integer> scores = gameBoard.getScores();
+        int idx = 0;
+        for (Integer score : scores) {
+            String guiString = "score : " + score;
+            fontRenderer.renderString(fontTexture,guiString,50 + 690*idx,10,new Vector3f(11,11,0));
+            if(gameBoard.getRankings().isEmpty()){
+                return;
+            }
+            else if(score > gameBoard.getRankings().get(0).getScore() && gameBoard.getPlayer_num() == 1){
+                fontRenderer.renderString(fontTexture,"new record!",50,70,new Vector3f(11,11,0));
+            }
+            idx = idx + 1;
+        }
+    }
+
+    public void nicknameRender(String input) {
+        String nick_show = "Your nickname : " + input;
+        fontRenderer.renderString(fontTexture,nick_show,100,500,new Vector3f(11,11,0));
+    }
+
+    public void rankingRender(){
+        List<Ranking> ranks = gameBoard.getRankings();
+        String id = "";
+        int score = 0;
+        String text;
+        if(ranks.size()>=5){
+            for(int i = 0;i<5;i++){
+                id = ranks.get(0).getId();
+                score = ranks.get(0).getScore();
+                text = "rank"+(i+1)+"   nickname = " + id + "   Score : " + score;
+                fontRenderer.renderString(fontTexture,text,100,300 + 100 * i,new Vector3f(11,11,0));
+            }
+        }
+        else{
+            int count = 0;
+            for (Ranking rank : ranks) {
+                id = rank.getId();
+                score = rank.getScore();
+                text = "rank"+(count+1)+"   nickname = " + id + "           Score : " + score;
+                fontRenderer.renderString(fontTexture,text,100,300 + 100 * count,new Vector3f(11,11,0));
+                count = count + 1;
+            }
+        }
+        String pressESC = "Press ESC to back!";
+        fontRenderer.renderString(fontTexture,pressESC,335,900,new Vector3f(11,11,0));
     }
 }

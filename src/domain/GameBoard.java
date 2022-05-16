@@ -21,6 +21,7 @@ public class GameBoard implements Serializable {
     private List<Snake> snakes;
 
     private List<Point2D> fruitPosition;
+    private List<Integer> scores;
     private int score = 0;
     private boolean running = true;
     private boolean paused = false;
@@ -32,15 +33,20 @@ public class GameBoard implements Serializable {
         snakes = new ArrayList<>();
         snakes.add(new Snake(0));
         fruitPosition = new ArrayList<>();
+        scores = new ArrayList<>();
         try {
             rankings = load_Ranking();
         }catch (Exception e){
+            System.out.println("failed");
             rankings = new ArrayList<>();
         }
         createFruit();
     }
 
     public void set_Dual_mode(){
+        scores.clear();
+        scores.add(0);
+        scores.add(0);
         System.out.println("paused = " + paused);
         snakes.clear();
         player_num = 2;
@@ -52,6 +58,7 @@ public class GameBoard implements Serializable {
         GameBoard saveData = loadFromFile();
         this.snakes = saveData.getSnake();
         this.score = saveData.getScore();
+        this.scores = saveData.getScores();
         this.paused = saveData.isPaused();
         this.running = saveData.isRunning();
         fruitPosition.remove(0);
@@ -107,8 +114,6 @@ public class GameBoard implements Serializable {
             int headY = (int) snake.getHead().getPositionY();
 
             if (out_Of_Bounces(headX, headY) || snake.check_If_collapse() || check_Snake_Crossed()) {
-                //TODO 뱀끼리 서로 충돌하여 끝나는 조건 추가하기
-
                 running = false;
                 if(this.player_num == 1)recordRanking();
             }
@@ -127,9 +132,11 @@ public class GameBoard implements Serializable {
     public void re_Play(int num){
         running = true;
         score = 0;
+        scores.clear();
         fruitPosition.clear();
         snakes.clear();
         if(num == 1) {
+            scores.add(0);
             snakes.add(new Snake(0));
             player_num = 1;
         }
@@ -142,6 +149,7 @@ public class GameBoard implements Serializable {
 
     public boolean check_Fruit_Overlap() {
 
+        int count = 0;
         for (Snake snake : snakes) {
             Point2D fruit = fruitPosition.get(0);
             float headX = snake.getHead().getPositionX();
@@ -150,11 +158,13 @@ public class GameBoard implements Serializable {
             if (head.distance(fruit) < 1.3) {
                 fruitPosition.remove(0);
                 score = score + 100;
+                scores.set(count,scores.get(count) + 100);
                 for (int i = 0; i < 8; i++)
                     snake.grow();
                 createFruit();
                 return true;
             }
+            count = count + 1;
         }
         return false;
     }
@@ -188,6 +198,10 @@ public class GameBoard implements Serializable {
         return score;
     }
 
+    public List<Integer> getScores(){
+        return scores;
+    }
+
     public boolean isRunning() {
         return running;
     }
@@ -196,13 +210,13 @@ public class GameBoard implements Serializable {
         return paused;
     }
 
-    public List<Ranking> getRankings() { return rankings; }
-
-    public List<Ranking> showRanking(){
-        return rankings;
+    public int getPlayer_num() {
+        return player_num;
     }
 
-
+    public List<Ranking> getRankings() {
+        return rankings;
+    }
 
     private GameBoard loadFromFile() throws Exception{
         FileInputStream fis = new FileInputStream(fileName);
@@ -212,6 +226,7 @@ public class GameBoard implements Serializable {
     }
 
     private List<Ranking> load_Ranking() throws IOException, ClassNotFoundException {
+        System.out.println("i tried");
         FileInputStream fis = new FileInputStream(RankingFile);
         ObjectInputStream ois = new ObjectInputStream(fis);
         List<Ranking> loaded_Ranking = (List<Ranking>) ois.readObject();
@@ -244,5 +259,4 @@ public class GameBoard implements Serializable {
             return result;
         }
     }
-
 }

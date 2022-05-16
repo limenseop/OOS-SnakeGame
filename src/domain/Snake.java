@@ -76,17 +76,6 @@ public class Snake implements Serializable {
                 }
             }
         head = body.get(0);
-      /*
-            body.add(new snakeBody(70, -42, Direction.SOUTH));
-            body.add(new snakeBody(70, -43, Direction.SOUTH));
-            body.add(new snakeBody(70, -44, Direction.SOUTH));
-            body.add(new snakeBody(70, -42, Direction.SOUTH));
-            body.add(new snakeBody(70, -41, Direction.SOUTH));
-            body.add(new snakeBody(70, -40, Direction.SOUTH));
-            body.add(new snakeBody(70, -39, Direction.SOUTH));
-            body.add(new snakeBody(70, -38, Direction.SOUTH));
-            body.add(new snakeBody(70, -37, Direction.SOUTH));
-        }*/
     }
 
     public boolean grow(){
@@ -179,6 +168,8 @@ public class Snake implements Serializable {
         }
         return false;
     }
+
+
 
     public void re_Init() {
         body.clear();

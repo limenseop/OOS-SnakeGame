@@ -38,9 +38,6 @@ public class GameController {
     private boolean on_Running = true;
     private String input= "";
     private TileRenderer tilerender;
-    private FontRenderer fontRenderer;
-    private Font font;
-    private FontTexture fontTexture;
 
     private GameState state = GameState.GAME_ACTIVE;
     private GameBoard gameboard;
@@ -62,11 +59,6 @@ public class GameController {
     }
 
     private void init(){
-
-        fontRenderer = new FontRenderer();
-        font = new Font("Time Roman", Font.PLAIN, 40);
-        fontTexture = new FontTexture(font, "US-ASCII");
-
         mouseListener = new MouseHandler(mainwindow.getWindow());
         state = GameState.GAME_INIT;
         renderer = new Renderer();
@@ -153,6 +145,7 @@ public class GameController {
             }
         };
         GLFW.glfwSetKeyCallback(mainwindow.getWindow(),keyCallback_ESC);
+        renderer.setBoard(gameboard);
         }
 
     private void terminate(){
@@ -182,7 +175,7 @@ public class GameController {
                         mainboard.correctCameara(cam, mainwindow);
                         mainboard.render(tilerender, shader, cam, mainwindow);
                         renderer.render(shader,cam,mainboard);
-                        scoreRender();
+                        renderer.scoreRender();
                         mainwindow.swapBuffer();
                     }
                     break;
@@ -201,7 +194,7 @@ public class GameController {
                     mainboard.correctCameara(cam, mainwindow);
                     mainboard.render(tilerender, shader, cam, mainwindow);
                     renderer.inputRendering(shader,mainboard);
-                    renderNickname();
+                    renderer.nicknameRender(input);
                     mainwindow.swapBuffer();
                     mainwindow.timeHandle();
                     break;
@@ -210,7 +203,7 @@ public class GameController {
                     mainwindow.update();
                     mainboard.correctCameara(cam, mainwindow);
                     renderer.rankingRendering(shader,mainboard);
-                    renderRankings();
+                    renderer.rankingRender();
                     mainwindow.swapBuffer();
                     mainwindow.timeHandle();
                     break;
@@ -219,27 +212,9 @@ public class GameController {
         }
         state = GameState.GAME_INIT;
         gameboard.re_Play(1);
-        renderer.setBoard(gameboard);
         renderer.setZeroFocus(cam,mainboard);
-    }
-    }
-
-    private void scoreRender() {
-        int score = gameboard.getScore();
-        String guiString = "score : " + score;
-        fontRenderer.renderString(fontTexture,guiString,700,10,new Vector3f(11,11,0));
-        if(gameboard.getRankings().isEmpty()){
-            return;
+        renderer.setBoard(gameboard);
         }
-        else if(score > gameboard.getRankings().get(0).getScore()){
-            fontRenderer.renderString(fontTexture,"new record!",700,70,new Vector3f(11,11,0));
-        }
-    }
-
-    private void renderNickname() {
-
-        String nick_show = "Your nickname : " + input;
-        fontRenderer.renderString(fontTexture,nick_show,100,500,new Vector3f(11,11,0));
     }
 
     private void mouseOptionHandle() {
@@ -258,7 +233,6 @@ public class GameController {
                 if(cursorX>=253 && cursorX<=396 && cursorY>=224 && cursorY<=270){
                     gameboard.re_Play(2);
                     state = GameState.GAME_TYPING;
-                    //gameboard.set_Dual_mode();
                     renderer.setBoard(gameboard);
                 }
                 else if(cursorX >= 253 && cursorX<=396 && cursorY>=311 && cursorY<=360){
@@ -268,6 +242,7 @@ public class GameController {
                         mainboard.render(tilerender, shader, cam, mainwindow);
                     }catch(Exception e){
                         System.out.println("e = " + e);
+                        gameboard.re_Play(1);
                     }
                     state = GameState.GAME_ACTIVE;
                 }
@@ -323,32 +298,4 @@ public class GameController {
         ||(ascii>=97 && ascii<=122)) return true;
         return false;
     }
-
-    private void renderRankings(){
-        List<Ranking> ranks = gameboard.getRankings();
-        String id = "";
-        int score = 0;
-        String text;
-        if(ranks.size()>=5){
-            for(int i = 0;i<5;i++){
-                id = ranks.get(0).getId();
-                score = ranks.get(0).getScore();
-                text = "rank"+(i+1)+"   nickname = " + id + "   Score : " + score;
-                fontRenderer.renderString(fontTexture,text,100,300 + 100 * i,new Vector3f(11,11,0));
-            }
-        }
-        else{
-            int count = 0;
-            for (Ranking rank : ranks) {
-                id = rank.getId();
-                score = rank.getScore();
-                text = "rank"+(count+1)+"   nickname = " + id + "           Score : " + score;
-                fontRenderer.renderString(fontTexture,text,100,300 + 100 * count,new Vector3f(11,11,0));
-                count = count + 1;
-            }
-        }
-        String pressESC = "Press ESC to back!";
-        fontRenderer.renderString(fontTexture,pressESC,335,900,new Vector3f(11,11,0));
-    }
-
 }
