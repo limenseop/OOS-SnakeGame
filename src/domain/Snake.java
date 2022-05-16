@@ -71,20 +71,11 @@ public class Snake implements Serializable {
                     body.add(new snakeBody(70, -39, Direction.NORTH));
                     body.add(new snakeBody(70, -38, Direction.NORTH));
                     body.add(new snakeBody(70, -37, Direction.NORTH));
+                    direction = Direction.NORTH;
+                    break;
                 }
             }
         head = body.get(0);
-            body.add(new snakeBody(70, -42, Direction.SOUTH));
-            body.add(new snakeBody(70, -43, Direction.SOUTH));
-            body.add(new snakeBody(70, -44, Direction.SOUTH));
-            body.add(new snakeBody(70, -42, Direction.SOUTH));
-            body.add(new snakeBody(70, -41, Direction.SOUTH));
-            body.add(new snakeBody(70, -40, Direction.SOUTH));
-            body.add(new snakeBody(70, -39, Direction.SOUTH));
-            body.add(new snakeBody(70, -38, Direction.SOUTH));
-            body.add(new snakeBody(70, -37, Direction.SOUTH));
-            direction = Direction.SOUTH;
-            head = body.get(0);
       /*
             body.add(new snakeBody(70, -42, Direction.SOUTH));
             body.add(new snakeBody(70, -43, Direction.SOUTH));

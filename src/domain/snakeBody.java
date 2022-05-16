@@ -12,7 +12,6 @@ public class snakeBody implements Serializable {
         this.positionX = positionX;
         this.positionY = positionY;
         this.direction = direction;
-        System.out.println("direction = " + direction);
     }
 
     public float getPositionX() {
@@ -48,7 +47,6 @@ public class snakeBody implements Serializable {
             }
             case SOUTH:{
                 positionY = positionY - 0.4f;
-                System.out.println("hoho");
                 break;
             }
         }

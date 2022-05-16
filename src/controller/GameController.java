@@ -101,17 +101,30 @@ public class GameController {
                     }
                     case GAME_DUAL -> {
                         if (key == 262 && action == GLFW.GLFW_PRESS) {
-                            gameboard.change_Direction_Snake(Direction.EAST,0);
+                            gameboard.change_Direction_Snake(Direction.EAST,1);
                         }
                         if (key == 263 && action == GLFW.GLFW_PRESS) {
-                            gameboard.change_Direction_Snake(Direction.WEST,0);
+                            gameboard.change_Direction_Snake(Direction.WEST,1);
                         }
                         if (key == 265 && action == GLFW.GLFW_PRESS) {
-                            gameboard.change_Direction_Snake(Direction.NORTH,0);
+                            gameboard.change_Direction_Snake(Direction.NORTH,1);
                         }
                         if (key == 264 && action == GLFW.GLFW_PRESS) {
+                            gameboard.change_Direction_Snake(Direction.SOUTH,1);
+                        }
+                        if (key == GLFW.GLFW_KEY_S && action == GLFW.GLFW_PRESS ){
                             gameboard.change_Direction_Snake(Direction.SOUTH,0);
                         }
+                        if (key == GLFW.GLFW_KEY_W && action == GLFW.GLFW_PRESS ){
+                            gameboard.change_Direction_Snake(Direction.NORTH,0);
+                        }
+                        if (key == GLFW.GLFW_KEY_A && action == GLFW.GLFW_PRESS ){
+                            gameboard.change_Direction_Snake(Direction.WEST,0);
+                        }
+                        if (key == GLFW.GLFW_KEY_D && action == GLFW.GLFW_PRESS ){
+                            gameboard.change_Direction_Snake(Direction.EAST,0);
+                        }
+                        break;
                     }
                    case GAME_TYPING -> {
                         if(action == GLFW.GLFW_PRESS  && isValid(key)){
@@ -121,6 +134,7 @@ public class GameController {
                             gameboard.setNickname(input);
                             input = "";
                             state = GameState.GAME_ACTIVE;
+                            //TODO dualmode진입 제어
                         }
                         else if(action == GLFW.GLFW_PRESS && (key == GLFW.GLFW_KEY_DELETE || key==GLFW.GLFW_KEY_BACKSPACE)){
                             int length = input.length();
@@ -128,6 +142,7 @@ public class GameController {
                             if(length == 0) return;
                             input = input.substring(0,length-1);
                         }
+                        break;
                     }
                     case GAME_RANKING -> {
                         if (key == GLFW.GLFW_KEY_ESCAPE && action == GLFW.GLFW_PRESS) {
@@ -157,13 +172,13 @@ public class GameController {
                         mainwindow.swapBuffer();
                     }
                 }
+                case GAME_DUAL -> {}
                 case GAME_ACTIVE -> {
                     if (mainwindow.isUpdating()) {
                         mainwindow.update();
                         gameboard.move_Snake();
                         gameboard.check_Fruit_Overlap();
                         gameboard.check_Game_Terminated();
-                        renderer.setBoard(gameboard);
                         mainboard.correctCameara(cam, mainwindow);
                         mainboard.render(tilerender, shader, cam, mainwindow);
                         renderer.render(shader,cam,mainboard);
@@ -203,7 +218,8 @@ public class GameController {
             }
         }
         state = GameState.GAME_INIT;
-        gameboard.re_Play();
+        gameboard.re_Play(1);
+        renderer.setBoard(gameboard);
         renderer.setZeroFocus(cam,mainboard);
     }
     }
@@ -240,8 +256,10 @@ public class GameController {
         switch (state){
             case GAME_INIT -> {
                 if(cursorX>=253 && cursorX<=396 && cursorY>=224 && cursorY<=270){
-                    gameboard.re_Play();
+                    gameboard.re_Play(2);
                     state = GameState.GAME_TYPING;
+                    //gameboard.set_Dual_mode();
+                    renderer.setBoard(gameboard);
                 }
                 else if(cursorX >= 253 && cursorX<=396 && cursorY>=311 && cursorY<=360){
                     try {
@@ -265,6 +283,13 @@ public class GameController {
                     gameboard.gameTerminate();
                     on_Running = false;
                 }
+                else if(false){
+                    //TODO dualmode진입 조건 달기
+                    gameboard.set_Dual_mode();
+                    state = GameState.GAME_DUAL;
+                    renderer.setBoard(gameboard);
+                }
+                break;
             }
             case GAME_MENU -> {
                 if(cursorX>=206 && cursorX<=441 && cursorY >=272 && cursorY<=320){
@@ -272,7 +297,7 @@ public class GameController {
                     //resume
                 }
                 else if(cursorX>=195 && cursorX<=445 && cursorY>=356 && cursorY<=405){
-                    gameboard.re_Play();
+                    gameboard.re_Play(1);
                     state = GameState.GAME_ACTIVE;
                     //replay
                 }

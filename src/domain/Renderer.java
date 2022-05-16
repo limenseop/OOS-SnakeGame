@@ -33,6 +33,7 @@ public class Renderer {
     private Snakemodel snakemodel;
     private List<List<snakeBody>> snakes;
     private List<snakeBody> head;
+    private List<Point2D> fruit;
     private Transform fruitPosition;
     private Transform zeroTransform;
     private Menumodel meunmodel;
@@ -65,6 +66,7 @@ public class Renderer {
     }
 
     public void setBoard(GameBoard board){
+        snakes.clear();
         List<Snake> list = board.getSnake();
         int count = 0;
         for (Snake snake : list) {
@@ -72,12 +74,13 @@ public class Renderer {
             head.add(snake.getHead());
             count = count + 1;
         }
+        fruit = board.getFruitPosition();
         if(count == 2) dual = true;
         else dual = false;
-        fruitPosition.pos.set((float) board.getFruitPosition().get(0).getX(), (float) board.getFruitPosition().get(0).getY(),0);
     }
 
     public void render(Shader shader, Camera camera,Board board) {
+        fruitPosition.pos.set((float) fruit.get(0).getX(), (float) fruit.get(0).getY(),0);
         setFocus(camera,board);
         for (List<snakeBody> snake : snakes) {
             transform.pos.set(snake.get(0).getPositionX(),snake.get(0).getPositionY(),0);
