@@ -116,6 +116,14 @@ public class GameController {
                         if (key == GLFW.GLFW_KEY_D && action == GLFW.GLFW_PRESS ){
                             gameboard.change_Direction_Snake(Direction.EAST,0);
                         }
+
+                        if (key == GLFW.GLFW_KEY_ESCAPE && action == GLFW.GLFW_PRESS) {
+                            state = GameState.GAME_MENU;
+                        }
+
+                        if (key == GLFW.GLFW_KEY_P && action == GLFW.GLFW_PRESS) {
+                            state = GameState.GAME_MENU;
+                        }
                         break;
                     }
                    case GAME_TYPING -> {
@@ -126,7 +134,6 @@ public class GameController {
                             gameboard.setNickname(input);
                             input = "";
                             state = GameState.GAME_ACTIVE;
-                            //TODO dualmode진입 제어
                         }
                         else if(action == GLFW.GLFW_PRESS && (key == GLFW.GLFW_KEY_DELETE || key==GLFW.GLFW_KEY_BACKSPACE)){
                             int length = input.length();
@@ -165,7 +172,9 @@ public class GameController {
                         mainwindow.swapBuffer();
                     }
                 }
-                case GAME_DUAL -> {}
+                case GAME_DUAL -> {
+                    //TODO dual모드 추가 사항 작성 요 -> ACTIVE와 딱히 다른게 필요한가? 필요없으면 DUAL을 굳이 나눌필요가 있나?
+                }
                 case GAME_ACTIVE -> {
                     if (mainwindow.isUpdating()) {
                         mainwindow.update();
@@ -231,13 +240,14 @@ public class GameController {
         switch (state){
             case GAME_INIT -> {
                 if(cursorX>=253 && cursorX<=396 && cursorY>=224 && cursorY<=270){
-                    gameboard.re_Play(2);
+                    gameboard.re_Play(1);
                     state = GameState.GAME_TYPING;
                     renderer.setBoard(gameboard);
                 }
                 else if(cursorX >= 253 && cursorX<=396 && cursorY>=311 && cursorY<=360){
                     try {
                         gameboard.loadGame();
+                        renderer.setBoard(gameboard);
                         mainboard.correctCameara(cam, mainwindow);
                         mainboard.render(tilerender, shader, cam, mainwindow);
                     }catch(Exception e){
@@ -260,7 +270,7 @@ public class GameController {
                 }
                 else if(false){
                     //TODO dualmode진입 조건 달기
-                    gameboard.set_Dual_mode();
+                    gameboard.re_Play(2);
                     state = GameState.GAME_DUAL;
                     renderer.setBoard(gameboard);
                 }

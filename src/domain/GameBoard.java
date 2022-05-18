@@ -67,28 +67,27 @@ public class GameBoard implements Serializable {
 
     public void createFruit() {
 
+        double startTime = System.currentTimeMillis();
+
         float fruit_X = (float) ((Math.random() * 78) + 2);
         float fruit_Y = (float) ((Math.random() * -78) - 2);
         
 
-        for(int i = 0;i<player_num
-                ;i++) {
             if (fruitPosition.size()<player_num) {
-
-
                 for (Snake snake : snakes) {
 
-                    while (snake.check_If_Overlap(fruit_X, fruit_Y)) {
+                    while (snake.check_If_Overlap(fruit_X, fruit_Y)
+                    ||(player_num == 2  && fruitPosition.get(0).distance(new Point2D.Float(fruit_X,fruit_Y))<1.3)) {
 
                         fruit_X = (float) ((Math.random() * 78) + 2);
                         fruit_Y = (float) ((Math.random() * -78) - 2);
-
                     }
-                    fruitPosition.add(new Point2D.Float(fruit_X, fruit_Y));
                 }
+                fruitPosition.add(new Point2D.Float(fruit_X, fruit_Y));
             }
-        }
         System.out.println("fruitPosition = " + fruitPosition.size());
+
+        System.out.println("(System.currentTimeMillis() - startTime) = " + (System.currentTimeMillis() - startTime));
     }
 
 
@@ -149,23 +148,30 @@ public class GameBoard implements Serializable {
 
     public boolean check_Fruit_Overlap() {
 
+        double startTime = System.currentTimeMillis();
+
         int count = 0;
         for (Snake snake : snakes) {
-            Point2D fruit = fruitPosition.get(0);
-            float headX = snake.getHead().getPositionX();
-            float headY = snake.getHead().getPositionY();
-            Point2D head = new Point2D.Float(headX, headY);
-            if (head.distance(fruit) < 1.3) {
-                fruitPosition.remove(0);
-                score = score + 100;
-                scores.set(count,scores.get(count) + 100);
-                for (int i = 0; i < 8; i++)
-                    snake.grow();
-                createFruit();
-                return true;
+            //TODO : 2개 fruit에 대해 check_overlap
+            for(int s = 0;s< fruitPosition.size();s++) {
+                Point2D fruit = fruitPosition.get(s);
+                float headX = snake.getHead().getPositionX();
+                float headY = snake.getHead().getPositionY();
+                Point2D head = new Point2D.Float(headX, headY);
+                if (head.distance(fruit) < 1.3) {
+                    fruitPosition.remove(s);
+                    score = score + 100;
+                    scores.set(count, scores.get(count) + 100);
+                    for (int i = 0; i < 8; i++)
+                        snake.grow();
+                    createFruit();
+                    System.out.println("(System.currentTimeMillis() - startTime) = " + (System.currentTimeMillis() - startTime));
+                    return true;
+                }
+                count = count + 1;
             }
-            count = count + 1;
         }
+        System.out.println("(System.currentTimeMillis() - startTime) = " + (System.currentTimeMillis() - startTime));
         return false;
     }
 
