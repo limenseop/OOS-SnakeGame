@@ -2,8 +2,6 @@
  * Copyright LWJGL. All rights reserved.
  * License terms: https://www.lwjgl.org/license
  */
-
-
 package src.models;
 
 import org.joml.Matrix4f;
@@ -21,7 +19,6 @@ public class Camera {
     public void setPosition(Vector3f position) {
         this.position = position;
     }
-
     public void addPosition(Vector3f position) {
         this.position.add(position);
     }
