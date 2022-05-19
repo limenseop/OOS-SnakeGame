@@ -83,7 +83,6 @@ public class Window {
     public void timeHandle(){
         time = getTime();
     }
-
     public int getWidth() {
         return width;
     }
@@ -93,10 +92,5 @@ public class Window {
     public long getWindow() {
         return window;
     }
-    public int getcurrentFps() {
-        return (int)processedtime * fps_cap;
-    }
-    public double getProcessedtime() {
-        return processedtime;
-    }
+
 }
