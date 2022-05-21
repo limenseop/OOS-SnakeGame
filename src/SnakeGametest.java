@@ -8,6 +8,7 @@ import src.board.Board;
 import src.controller.GameController;
 import src.domain.GameBoard;
 import src.domain.Snake;
+import src.domain.Snake2;
 import src.models.Camera;
 import src.models.Shader;
 import src.windowhandle.Window;
@@ -29,8 +30,8 @@ public class SnakeGametest {
         Shader shader = new Shader("shader");
         Camera cam = new Camera(mainwindow.getWidth(), mainwindow.getHeight());
         Board mainboard = new Board(BOARD_WIDTH, BOARD_HEIGHT, BOARD_SCALE);
-        Snake snake2 = new Snake();
-        GameBoard gb = new GameBoard(snake2);
+        Snake snake1 = new Snake();
+        GameBoard gb = new GameBoard(snake1);
         GameController game = new GameController(gb,mainwindow,shader,cam,mainboard);
         game.run();
     }

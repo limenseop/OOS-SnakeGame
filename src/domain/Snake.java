@@ -31,16 +31,16 @@ public class Snake implements Serializable {
 
     public Snake(){
         body = new ArrayList<>();
-        body.add(new snakeBody(42,-42,Direction.NORTH));
-        body.add(new snakeBody(42,-43,Direction.NORTH));
-        body.add(new snakeBody(42,-44,Direction.NORTH));
-        body.add(new snakeBody(42,-42,Direction.NORTH));
-        body.add(new snakeBody(42,-41,Direction.NORTH));
-        body.add(new snakeBody(42,-40,Direction.NORTH));
-        body.add(new snakeBody(42,-39,Direction.NORTH));
-        body.add(new snakeBody(42,-38,Direction.NORTH));
-        body.add(new snakeBody(42,-37,Direction.NORTH));
-        direction = Direction.NORTH;
+        body.add(new snakeBody(9,-3,Direction.EAST));
+        body.add(new snakeBody(10,-3,Direction.EAST));
+        body.add(new snakeBody(11,-3,Direction.EAST));
+        body.add(new snakeBody(12,-3,Direction.EAST));
+        body.add(new snakeBody(13,-3,Direction.EAST));
+        body.add(new snakeBody(14,-3,Direction.EAST));
+        body.add(new snakeBody(9,-3,Direction.EAST));
+        body.add(new snakeBody(8,-3,Direction.EAST));
+        body.add(new snakeBody(7,-3,Direction.EAST));
+        direction = Direction.EAST;
         head = body.get(0);
     }
 
@@ -138,15 +138,15 @@ public class Snake implements Serializable {
     public void re_Init() {
         body.clear();
         System.out.println("Snake.setInit");
-        body.add(new snakeBody(42,-42,Direction.NORTH));
-        body.add(new snakeBody(42,-43,Direction.NORTH));
-        body.add(new snakeBody(42,-44,Direction.NORTH));
-        body.add(new snakeBody(42,-42,Direction.NORTH));
-        body.add(new snakeBody(42,-41,Direction.NORTH));
-        body.add(new snakeBody(42,-40,Direction.NORTH));
-        body.add(new snakeBody(42,-39,Direction.NORTH));
-        body.add(new snakeBody(42,-38,Direction.NORTH));
-        body.add(new snakeBody(42,-37,Direction.NORTH));
+        body.add(new snakeBody(9,-3,Direction.EAST));
+        body.add(new snakeBody(10,-3,Direction.EAST));
+        body.add(new snakeBody(11,-3,Direction.EAST));
+        body.add(new snakeBody(12,-3,Direction.EAST));
+        body.add(new snakeBody(13,-3,Direction.EAST));
+        body.add(new snakeBody(14,-3,Direction.EAST));
+        body.add(new snakeBody(9,-3,Direction.EAST));
+        body.add(new snakeBody(8,-3,Direction.EAST));
+        body.add(new snakeBody(7,-3,Direction.EAST));
         head = body.get(0);
         System.out.println("this.head = " + this.head);
     }
