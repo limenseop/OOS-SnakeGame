@@ -11,7 +11,7 @@ import src.models.Shader;
 
 public class Board {
     private byte[] tiles;
-    private final int view = 50;
+    private final int view = 100;
     private int width, height, scale;
     private Matrix4f mainboard;
 

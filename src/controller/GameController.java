@@ -53,7 +53,7 @@ public class GameController {
         this.mainboard = board;
         tilerender = new TileRenderer();
         dualboard = new Board(board.getWidth()*2, board.getHeight()*2, board.getScale());
-        dualcam = new DualCamera(mainwindow.getWidth(), mainwindow.getHeight(), dualboard.getWidth() * 2);
+        dualcam = new DualCamera(mainwindow.getWidth(), mainwindow.getHeight(), dualboard.getWidth()*2);
     }
 
 
@@ -139,6 +139,8 @@ public class GameController {
                             gameboard.setNickname(input);
                             input = "";
                             state = GameState.GAME_ACTIVE;
+                            //TODO dualmode 임시
+
                         }
                         else if(action == GLFW.GLFW_PRESS && (key == GLFW.GLFW_KEY_DELETE || key==GLFW.GLFW_KEY_BACKSPACE)){
                             int length = input.length();
@@ -179,6 +181,20 @@ public class GameController {
                 }
                 case GAME_DUAL -> {
                     //TODO dual모드 추가 사항 작성 요 -> ACTIVE와 딱히 다른게 필요한가? 필요없으면 DUAL을 굳이 나눌필요가 있나?
+
+                    if (mainwindow.isUpdating()) {
+                        mainwindow.update();
+                        gameboard.move_Snake();
+                        gameboard.check_Fruit_Overlap();
+                        gameboard.check_Game_Terminated();
+                        mainboard.correctCameara(dualcam);
+                        mainboard.render(tilerender, shader, dualcam);
+                        renderer.renderforDual(shader,dualcam,mainboard);
+                        renderer.scoreRender();
+                        mainwindow.swapBuffer();
+                    }
+                    break;
+
                 }
                 case GAME_ACTIVE -> {
                     if (mainwindow.isUpdating()) {
@@ -186,18 +202,9 @@ public class GameController {
                         gameboard.move_Snake();
                         gameboard.check_Fruit_Overlap();
                         gameboard.check_Game_Terminated();
-                        /*
-                        renderer.setBoard(gameboard);
-                        mainboard.correctCameara(cam);
-                        mainboard.render(tilerender, shader, cam);
-                        renderer.render(shader,cam,mainboard);
-                        renderer.scoreRender();
-                        mainwindow.swapBuffer();
-                        */
-                        renderer.setBoard(gameboard);
                         mainboard.correctCameara(dualcam);
                         mainboard.render(tilerender, shader, dualcam);
-                        renderer.renderforDual(shader,dualcam,mainboard);
+                        renderer.render(shader,dualcam,mainboard);
                         renderer.scoreRender();
                         mainwindow.swapBuffer();
                     }
@@ -263,7 +270,7 @@ public class GameController {
                         gameboard.loadGame();
                         renderer.setBoard(gameboard);
                         mainboard.correctCameara(cam);
-                        mainboard.render(tilerender, shader, cam, mainwindow);
+                        mainboard.render(tilerender, shader, cam);
                     }catch(Exception e){
                         System.out.println("e = " + e);
                         gameboard.re_Play(1);
@@ -282,7 +289,7 @@ public class GameController {
                     gameboard.gameTerminate();
                     on_Running = false;
                 }
-                else if(false){
+                else{
                     //TODO dualmode진입 조건 달기
                     gameboard.re_Play(2);
                     state = GameState.GAME_DUAL;

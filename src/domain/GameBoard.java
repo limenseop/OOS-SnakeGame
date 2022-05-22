@@ -73,11 +73,11 @@ public class GameBoard implements Serializable {
         float fruit_Y = (float) ((Math.random() * -78) - 2);
         
 
-            if (fruitPosition.size()<player_num) {
+            while (fruitPosition.size()<player_num) {
                 for (Snake snake : snakes) {
 
                     while (snake.check_If_Overlap(fruit_X, fruit_Y)
-                    ||(player_num == 2  && fruitPosition.get(0).distance(new Point2D.Float(fruit_X,fruit_Y))<1.3)) {
+                    ||(player_num == 2  && (!fruitPosition.isEmpty() && fruitPosition.get(0).distance(new Point2D.Float(fruit_X,fruit_Y))<1.3))) {
 
                         fruit_X = (float) ((Math.random() * 78) + 2);
                         fruit_Y = (float) ((Math.random() * -78) - 2);
@@ -85,9 +85,9 @@ public class GameBoard implements Serializable {
                 }
                 fruitPosition.add(new Point2D.Float(fruit_X, fruit_Y));
             }
-        System.out.println("fruitPosition = " + fruitPosition.size());
+        //System.out.println("fruitPosition = " + fruitPosition.size());
 
-        System.out.println("(System.currentTimeMillis() - startTime) = " + (System.currentTimeMillis() - startTime));
+        //System.out.println("(System.currentTimeMillis() - startTime) = " + (System.currentTimeMillis() - startTime));
     }
 
 
@@ -161,17 +161,18 @@ public class GameBoard implements Serializable {
                 if (head.distance(fruit) < 1.3) {
                     fruitPosition.remove(s);
                     score = score + 100;
+                    System.out.println("count = " + count);
                     scores.set(count, scores.get(count) + 100);
                     for (int i = 0; i < 8; i++)
                         snake.grow();
                     createFruit();
-                    System.out.println("(System.currentTimeMillis() - startTime) = " + (System.currentTimeMillis() - startTime));
+                    //System.out.println("(System.currentTimeMillis() - startTime) = " + (System.currentTimeMillis() - startTime));
                     return true;
                 }
-                count = count + 1;
             }
+            count = count + 1;
         }
-        System.out.println("(System.currentTimeMillis() - startTime) = " + (System.currentTimeMillis() - startTime));
+        //System.out.println("(System.currentTimeMillis() - startTime) = " + (System.currentTimeMillis() - startTime));
         return false;
     }
 
