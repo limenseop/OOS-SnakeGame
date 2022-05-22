@@ -1,8 +1,5 @@
 package src.domain;
 
-import src.models.Camera;
-import src.models.Shader;
-
 import java.awt.*;
 import java.awt.geom.Point2D;
 import java.io.Serializable;

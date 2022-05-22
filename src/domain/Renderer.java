@@ -156,6 +156,39 @@ public class Renderer {
         focus.pos = new Vector3f((float) head.get(0).getPositionX(), (float) head.get(0).getPositionY(),0);
         camera.getPosition().lerp(focus.pos.mul(-board.getScale(), new Vector3f()), 0.1f);
     }
+    private void setFocusforDual(DualCamera camera, Board board){
+        snakeBody head1 = new snakeBody(40, 40, Direction.NORTH);
+        Transform focus = new Transform();
+        focus.scale = new Vector3f(16,16,1);
+        focus.pos = new Vector3f(camera.getCenter(head, head1));
+        camera.getPosition().lerp(focus.pos.mul(-board.getScale(), new Vector3f()), 0.1f);
+        camera.setDualProjection(head, head1);
+    }
+
+    public void renderforDual(Shader shader, DualCamera camera,Board board) {
+        setFocusforDual(camera,board);
+        transform.pos.set(snake.get(0).getPositionX(),snake.get(0).getPositionY(),0);
+        shader.bind();
+        shader.setUniform("sampler", 0);
+        shader.setUniform("projection", transform.getProjection(camera.getProjection()));
+        SnakeHeadTex.bind(0);
+        snakemodel.spin(snake.get(0).getDirection());
+        snakemodel.render();
+        for (int i = 3; i < snake.size(); i++) {
+            transform.pos.set(snake.get(i).getPositionX(), snake.get(i).getPositionY(), 0);
+            shader.bind();
+            shader.setUniform("sampler", 0);
+            shader.setUniform("projection", transform.getProjection(camera.getProjection()));
+            SnakeBodyTex.bind(0);
+            model.render();
+        }
+        shader.bind();
+        shader.setUniform("sampler", 0);
+        shader.setUniform("projection", fruitPosition.getProjection(camera.getProjection()));
+        appleTex.bind(0);
+        model.render();
+    }
+
 
     public void setZeroFocus(Camera camera, Board board){
         camera.getPosition().lerp(zeroTransform.pos.mul(-board.getScale(), new Vector3f()), 0.1f);
