@@ -44,7 +44,7 @@ public class GameController {
     private FontTexture fontTexture;
     private GameState state = GameState.GAME_ACTIVE;
     private GameBoard gameboard;
-
+    private Board dualboard;
     private DualCamera dualcam;
 
     public GameController(GameBoard gameboard, Window window, Shader shader, Camera cam, Board board){
@@ -54,7 +54,8 @@ public class GameController {
         this.gameboard = gameboard;
         this.mainboard = board;
         tilerender = new TileRenderer();
-        dualcam = new DualCamera(mainwindow.getWidth(), mainwindow.getHeight(), mainboard.getWidth() * 2);
+        dualboard = new Board(board.getWidth()*2, board.getHeight()*2, board.getScale());
+        dualcam = new DualCamera(mainwindow.getWidth(), mainwindow.getHeight(), dualboard.getWidth() * 2);
     }
 
 
@@ -215,7 +216,6 @@ public class GameController {
     }
 
     private void renderNickname() {
-
         String nick_show = "Your nickname : " + input;
         fontRenderer.renderString(fontTexture,nick_show,100,500,new Vector3f(11,11,0));
     }

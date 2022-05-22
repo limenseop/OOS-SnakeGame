@@ -4,7 +4,6 @@ import org.joml.Vector3f;
 import src.domain.snakeBody;
 
 public class DualCamera extends Camera{
-    private float viewPersent;
     private float boardsize;
     public DualCamera(int width, int height, float boardsize) {
         super(width, height);
