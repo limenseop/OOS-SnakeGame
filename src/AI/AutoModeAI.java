@@ -75,107 +75,119 @@ public class AutoModeAI {
 					float fruit_Y = gameboard.getFruitPositionY();
 					List<Point2D> fruitPosition = gameboard.getFruitPosition();
 					float headX = Snake.getHead().getPositionX();
-			        float headY = Snake.getHead().getPositionY();
+					float headY = Snake.getHead().getPositionY();
 					Point2D Head = new Point2D.Float(headX, headY);
 					Direction direction = snakeBody.getDirection();
-					while (direction == Direction.WEST) {
+					if (direction == Direction.WEST) {
 						if (fruit_X == headX) {
 							if (fruit_Y > headY)
+								gameboard.change_Direction_Snake(Direction.NORTH);
+							if (fruit_Y < headY)
+								gameboard.change_Direction_Snake(Direction.SOUTH);
+						}
+						if (fruit_Y == headY) {
+							if (fruit_X < headX)
+								gameboard.change_Direction_Snake(Direction.NORTH);
+						}
+						if (fruit_X > headX) {
+							if (fruit_Y > headY)
+								gameboard.change_Direction_Snake(Direction.NORTH);
+							if (fruit_Y < headY)
+								gameboard.change_Direction_Snake(Direction.SOUTH);
+						}
+						if (headX < 4) {
+							if(headY > -42)
+								gameboard.change_Direction_Snake(Direction.SOUTH);
+							if (headY < -42)
+								gameboard.change_Direction_Snake(Direction.NORTH);
+						}
+
+					}
+					if (direction == Direction.EAST) {
+						if (fruit_X == headX) {
+							if (fruit_Y > headY)
+								gameboard.change_Direction_Snake(Direction.NORTH);
+							if (fruit_Y < headY)
+								gameboard.change_Direction_Snake(Direction.SOUTH);
+						}
+						if (fruit_Y == headY) {
+							if (fruit_X > headX)
+								gameboard.change_Direction_Snake(Direction.SOUTH);
+
+						}
+
+						if (fruit_X < headX) {
+							if (fruit_Y > headY)
+								gameboard.change_Direction_Snake(Direction.NORTH);
+							if (fruit_Y < headY)
+								gameboard.change_Direction_Snake(Direction.SOUTH);
+						}
+						if (headX > 80) {
+							if(headY > -42)
+								gameboard.change_Direction_Snake(Direction.SOUTH);
+							if (headY < -42)
+								gameboard.change_Direction_Snake(Direction.NORTH);
+						}
+					}
+					if (direction == Direction.NORTH) {
+						if (fruit_X == headX) {
+
+							if (fruit_Y < headY)
 								gameboard.change_Direction_Snake(Direction.EAST);
+						}
+						if (fruit_Y == headY) {
+							if (fruit_X > headX)
+								gameboard.change_Direction_Snake(Direction.EAST);
+							if (fruit_X < headX)
+								gameboard.change_Direction_Snake(Direction.WEST);
+						}
+						if (fruit_X > headX) {
+
+							if (fruit_Y < headY)
+								gameboard.change_Direction_Snake(Direction.EAST);
+						}
+						if (fruit_X < headX) {
+
 							if (fruit_Y < headY)
 								gameboard.change_Direction_Snake(Direction.WEST);
 						}
-						if  (fruit_Y == headY) {
-							if (fruit_X > headX)
-								continue;
-							if (fruit_X < headX)
+						if (headY < -4) {
+							if(headX > 42)
+								gameboard.change_Direction_Snake(Direction.WEST);
+							if (headX < 42)
 								gameboard.change_Direction_Snake(Direction.EAST);
+						}
+					}
+					if (direction == Direction.SOUTH) {
+						if (fruit_X == headX) {
+							if (fruit_Y > headY)
+								gameboard.change_Direction_Snake(Direction.WEST);
+
+						}
+						if (fruit_Y == headY) {
+							if (fruit_X > headX)
+								gameboard.change_Direction_Snake(Direction.EAST);
+							if (fruit_X < headX)
+								gameboard.change_Direction_Snake(Direction.WEST);
 						}
 						if (fruit_X > headX) {
 							if (fruit_Y > headY)
 								gameboard.change_Direction_Snake(Direction.EAST);
-							if (fruit_Y < headY)
-								gameboard.change_Direction_Snake(Direction.WEST);
-						}
-						if (fruit_X < headX) {
-							continue;
-						}
-					}
-					while (direction == Direction.EAST) {
-						if (fruit_X == headX) {
-							if (fruit_Y > headY)
-								gameboard.change_Direction_Snake(Direction.WEST);
-							if (fruit_Y < headY)
-								gameboard.change_Direction_Snake(Direction.EAST);
-						}
-						if  (fruit_Y == headY) {
-							if (fruit_X > headX)
-								gameboard.change_Direction_Snake(Direction.EAST);
-							if (fruit_X < headX)
-								continue;
-						}
-						if (fruit_X > headX) {
-							continue;
+
 						}
 						if (fruit_X < headX) {
 							if (fruit_Y > headY)
 								gameboard.change_Direction_Snake(Direction.WEST);
-							if (fruit_Y < headY)
+
+						}
+						if (headY > -80) {
+							if(headX > 42)
+								gameboard.change_Direction_Snake(Direction.WEST);
+							if (headX < 42)
 								gameboard.change_Direction_Snake(Direction.EAST);
 						}
 					}
-					while (direction == Direction.NORTH) {
-						if (fruit_X == headX) {
-							if (fruit_Y > headY)
-								continue;
-							if (fruit_Y < headY)
-								gameboard.change_Direction_Snake(Direction.EAST);
-						}
-						if  (fruit_Y == headY) {
-							if (fruit_X > headX)
-								gameboard.change_Direction_Snake(Direction.EAST);
-							if (fruit_X < headX)
-								gameboard.change_Direction_Snake(Direction.WEST);
-						}
-						if (fruit_X > headX) {
-							if (fruit_Y > headY)
-								continue;
-							if (fruit_Y < headY)
-								gameboard.change_Direction_Snake(Direction.EAST);
-						}
-						if (fruit_X < headX) {
-							if (fruit_Y > headY)
-								continue;
-							if (fruit_Y < headY)
-								gameboard.change_Direction_Snake(Direction.WEST);
-						}
-					}
-					while (direction == Direction.SOUTH) {
-						if (fruit_X == headX) {
-							if (fruit_Y > headY)
-								gameboard.change_Direction_Snake(Direction.EAST);
-							if (fruit_Y < headY)
-								continue;
-						}
-						if  (fruit_Y == headY) {
-							if (fruit_X > headX)
-								gameboard.change_Direction_Snake(Direction.WEST);
-							if (fruit_X < headX)
-								gameboard.change_Direction_Snake(Direction.EAST);
-						}
-						if (fruit_X > headX) {
-							if (fruit_Y > headY)
-								gameboard.change_Direction_Snake(Direction.WEST);
-							if (fruit_Y < headY)
-								continue;
-						}
-						if (fruit_X < headX) {
-							if (fruit_Y > headY)
-								gameboard.change_Direction_Snake(Direction.EAST);
-							if (fruit_Y < headY)
-								continue;
-						}
-					}
+
 				}
 				}
 			}

@@ -74,6 +74,8 @@ public class GameController {
 			public void invoke(long window, int key, int scancode, int action, int mods) {
 				switch (state) {
 				case GAME_ACTIVE -> {
+					
+					
 					if (key == 262 && action == GLFW.GLFW_PRESS) {
 						gameboard.change_Direction_Snake(Direction.EAST);
 					}
@@ -86,7 +88,6 @@ public class GameController {
 					if (key == 264 && action == GLFW.GLFW_PRESS) {
 						gameboard.change_Direction_Snake(Direction.SOUTH);
 					}
-
 					// 硫붾돱濡� �씠�룞
 					if (key == GLFW.GLFW_KEY_ESCAPE && action == GLFW.GLFW_PRESS) {
 						state = GameState.GAME_MENU;
