@@ -11,7 +11,7 @@ import java.util.List;
 
 public class Snake implements Serializable {
 
-    private snakeBody head;
+    private static snakeBody head;
 
     public Direction getDirection() {
         return direction;
@@ -21,7 +21,7 @@ public class Snake implements Serializable {
 
     private Direction direction;
 
-    public snakeBody getHead() {
+    public static snakeBody getHead() {
         return head;
     }
 

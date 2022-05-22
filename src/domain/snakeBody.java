@@ -6,7 +6,7 @@ public class snakeBody implements Serializable {
 
     private float positionX;
     private float positionY;
-    private Direction direction;
+    private static Direction direction;
 
     public snakeBody(float positionX, float positionY, Direction direction) {
         this.positionX = positionX;
@@ -22,7 +22,7 @@ public class snakeBody implements Serializable {
         return positionY;
     }
 
-    public Direction getDirection() {
+    public static Direction getDirection() {
         return direction;
     }
 

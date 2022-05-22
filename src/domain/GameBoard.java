@@ -21,6 +21,8 @@ public class GameBoard implements Serializable {
     private boolean paused = false;
     private transient List<Ranking> rankings;
     private String nickname;
+    private float FRUITX;
+    private float FRUITY;
 
     public GameBoard(Snake snake) {
         this.snake = snake;
@@ -47,6 +49,8 @@ public class GameBoard implements Serializable {
 
         float fruit_X = (float) ((Math.random() * 78) + 2);
         float fruit_Y = (float) ((Math.random() * -78) - 2);
+        FRUITX = fruit_X;
+        FRUITY = fruit_Y;
 
         if (fruitPosition.isEmpty()) {
 
@@ -60,7 +64,14 @@ public class GameBoard implements Serializable {
         }
     }
 
+    public float getFruitPositionX() {
+    	return FRUITX;
+    }
 
+    public float getFruitPositionY() {
+    	return FRUITY;
+    }
+    
     public synchronized boolean move_Snake() {
         snake.move();
         return true;
