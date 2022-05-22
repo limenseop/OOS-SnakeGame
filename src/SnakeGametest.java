@@ -9,6 +9,7 @@ import src.controller.GameController;
 import src.domain.GameBoard;
 import src.domain.Snake;
 import src.models.Camera;
+import src.models.DualCamera;
 import src.models.Shader;
 import src.windowhandle.Window;
 
@@ -27,7 +28,7 @@ public class SnakeGametest {
     public static void main(String[] args) {
         Window mainwindow = new Window(MAINWINDOWSIZE_WIDTH, MAINWINDOWSIZE_HEIGHT, MAXIMUM_FPS, GAME_TITLE);
         Shader shader = new Shader("shader");
-        Camera cam = new Camera(mainwindow.getWidth(), mainwindow.getHeight());
+        Camera cam = new Camera(MAINWINDOWSIZE_WIDTH, MAINWINDOWSIZE_HEIGHT);
         Board mainboard = new Board(BOARD_WIDTH, BOARD_HEIGHT, BOARD_SCALE);
         Snake snake2 = new Snake();
         GameBoard gb = new GameBoard(snake2);

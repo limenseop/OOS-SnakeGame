@@ -8,11 +8,10 @@ import org.joml.Matrix4f;
 import org.joml.Vector3f;
 import src.models.Camera;
 import src.models.Shader;
-import src.windowhandle.Window;
 
 public class Board {
     private byte[] tiles;
-    private final int view = 22;
+    private final int view = 50;
     private int width, height, scale;
     private Matrix4f mainboard;
 
@@ -27,9 +26,9 @@ public class Board {
         createBoard();
     }
 
-    public void render(TileRenderer render,Shader shader, Camera camera, Window window) {
-        int posX = ((int)camera.getPosition().x + (window.getWidth()/2)) / (scale * 2);
-        int posY = ((int)camera.getPosition().y - (window.getHeight()/2)) / (scale * 2);
+    public void render(TileRenderer render,Shader shader, Camera camera) {
+        int posX = ((int)camera.getPosition().x + (camera.getWidth()/2)) / (scale * 2);
+        int posY = ((int)camera.getPosition().y - (camera.getHeight()/2)) / (scale * 2);
         for (int i = 0; i < view; i++) {
             for (int j = 0 ; j < view; j++) {
                 Tile t = getTile(i-posX, j+posY);
@@ -47,19 +46,19 @@ public class Board {
             }
         }
     }
-    public void correctCameara(Camera camera, Window window) {
+    public void correctCameara(Camera camera) {
         Vector3f pos = camera.getPosition();
         int w = -width * scale * 2;
         int h = height * scale * 2;
 
-        if (pos.x > -(window.getWidth()/2) + scale)
-            pos.x = -(window.getWidth()/2) + scale;
-        if (pos.x < w + (window.getWidth()/2) + scale)
-            pos.x = w + (window.getWidth()/2) + scale;
-        if (pos.y < (window.getHeight()/2) - scale)
-            pos.y = (window.getHeight()/2) - scale;
-        if (pos.y > h - (window.getHeight()/2) - scale)
-            pos.y = h - (window.getHeight()/2) - scale;
+        if (pos.x > -(camera.getWidth()/2) + scale)
+            pos.x = -(camera.getWidth()/2) + scale;
+        if (pos.x < w + (camera.getWidth()/2) + scale)
+            pos.x = w + (camera.getWidth()/2) + scale;
+        if (pos.y < (camera.getHeight()/2) - scale)
+            pos.y = (camera.getHeight()/2) - scale;
+        if (pos.y > h - (camera.getHeight()/2) - scale)
+            pos.y = h - (camera.getHeight()/2) - scale;
     }
     private void setTile(Tile tile, int x, int y) {
         tiles[x + y * width] = tile.getId();

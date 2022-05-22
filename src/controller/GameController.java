@@ -17,6 +17,7 @@ import src.domain.Renderer;
 import src.font.FontRenderer;
 import src.font.FontTexture;
 import src.models.Camera;
+import src.models.DualCamera;
 import src.models.Shader;
 import src.windowhandle.MouseHandler;
 import src.windowhandle.Window;
@@ -41,9 +42,10 @@ public class GameController {
     private FontRenderer fontRenderer;
     private Font font;
     private FontTexture fontTexture;
-
     private GameState state = GameState.GAME_ACTIVE;
     private GameBoard gameboard;
+    private Board dualboard;
+    private DualCamera dualcam;
 
     public GameController(GameBoard gameboard, Window window, Shader shader, Camera cam, Board board){
         this.mainwindow = window;
@@ -52,6 +54,8 @@ public class GameController {
         this.gameboard = gameboard;
         this.mainboard = board;
         tilerender = new TileRenderer();
+        dualboard = new Board(board.getWidth()*2, board.getHeight()*2, board.getScale());
+        dualcam = new DualCamera(mainwindow.getWidth(), mainwindow.getHeight(), dualboard.getWidth() * 2);
     }
 
 
@@ -149,10 +153,18 @@ public class GameController {
                         gameboard.move_Snake();
                         gameboard.check_Fruit_Overlap();
                         gameboard.check_Game_Terminated();
+                        /*
                         renderer.setBoard(gameboard);
-                        mainboard.correctCameara(cam, mainwindow);
-                        mainboard.render(tilerender, shader, cam, mainwindow);
+                        mainboard.correctCameara(cam);
+                        mainboard.render(tilerender, shader, cam);
                         renderer.render(shader,cam,mainboard);
+                        scoreRender();
+                        mainwindow.swapBuffer();
+                        */
+                        renderer.setBoard(gameboard);
+                        mainboard.correctCameara(dualcam);
+                        mainboard.render(tilerender, shader, dualcam);
+                        renderer.renderforDual(shader,dualcam,mainboard);
                         scoreRender();
                         mainwindow.swapBuffer();
                     }
@@ -161,7 +173,7 @@ public class GameController {
                 case GAME_MENU -> {
                     mouseOptionHandle();
                     mainwindow.update();
-                    mainboard.correctCameara(cam, mainwindow);
+                    mainboard.correctCameara(cam);
                     renderer.pausemenurender(shader,mainboard);
                     mainwindow.swapBuffer();
                     mainwindow.timeHandle();
@@ -169,8 +181,8 @@ public class GameController {
                 }
                 case GAME_TYPING -> {
                     mainwindow.update();
-                    mainboard.correctCameara(cam, mainwindow);
-                    mainboard.render(tilerender, shader, cam, mainwindow);
+                    mainboard.correctCameara(cam);
+                    mainboard.render(tilerender, shader, cam);
                     renderer.inputRendering(shader,mainboard);
                     renderNickname();
                     mainwindow.swapBuffer();
@@ -179,7 +191,7 @@ public class GameController {
                 }
                 case GAME_RANKING -> {
                     mainwindow.update();
-                    mainboard.correctCameara(cam, mainwindow);
+                    mainboard.correctCameara(cam);
                     renderer.rankingRendering(shader,mainboard);
                     renderRankings();
                     mainwindow.swapBuffer();
@@ -207,7 +219,6 @@ public class GameController {
     }
 
     private void renderNickname() {
-
         String nick_show = "Your nickname : " + input;
         fontRenderer.renderString(fontTexture,nick_show,100,500,new Vector3f(11,11,0));
     }
@@ -232,8 +243,8 @@ public class GameController {
                 else if(cursorX >= 253 && cursorX<=396 && cursorY>=311 && cursorY<=360){
                     try {
                         gameboard.loadGame();
-                        mainboard.correctCameara(cam, mainwindow);
-                        mainboard.render(tilerender, shader, cam, mainwindow);
+                        mainboard.correctCameara(cam);
+                        mainboard.render(tilerender, shader, cam);
                     }catch(Exception e){
                         System.out.println("e = " + e);
                     }
