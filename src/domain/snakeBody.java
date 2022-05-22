@@ -32,6 +32,7 @@ public class snakeBody implements Serializable {
 
     public void move(){
         switch (direction){
+
             case EAST:{
                 positionX = positionX + 0.4f;
                 break;
