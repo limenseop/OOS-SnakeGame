@@ -243,7 +243,6 @@ public class GameController {
         state = GameState.GAME_INIT;
         gameboard.re_Play(1);
         renderer.setZeroFocus(cam,mainboard);
-        Dual_mode(dev)
         renderer.setBoard(gameboard);
 
         }
