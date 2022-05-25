@@ -39,9 +39,7 @@ public class GameController {
     private boolean on_Running = true;
     private String input= "";
     private TileRenderer tilerender;
-    private FontRenderer fontRenderer;
-    private Font font;
-    private FontTexture fontTexture;
+
     private GameState state = GameState.GAME_ACTIVE;
     private GameBoard gameboard;
     private Board dualboard;
@@ -66,11 +64,6 @@ public class GameController {
     }
 
     private void init(){
-
-        fontRenderer = new FontRenderer();
-        font = new Font("Time Roman", Font.PLAIN, 40);
-        fontTexture = new FontTexture(font, "US-ASCII");
-
         mouseListener = new MouseHandler(mainwindow.getWindow());
         state = GameState.GAME_INIT;
         renderer = new Renderer();
@@ -81,19 +74,54 @@ public class GameController {
                     case GAME_ACTIVE -> {
                         //snake 방향변경
                         if (key == 262 && action == GLFW.GLFW_PRESS) {
-                            gameboard.change_Direction_Snake(Direction.EAST);
+                            gameboard.change_Direction_Snake(Direction.EAST,0);
                         }
                         if (key == 263 && action == GLFW.GLFW_PRESS) {
-                            gameboard.change_Direction_Snake(Direction.WEST);
+                            gameboard.change_Direction_Snake(Direction.WEST,0);
                         }
                         if (key == 265 && action == GLFW.GLFW_PRESS) {
-                            gameboard.change_Direction_Snake(Direction.NORTH);
+                            gameboard.change_Direction_Snake(Direction.NORTH,0);
                         }
                         if (key == 264 && action == GLFW.GLFW_PRESS) {
-                            gameboard.change_Direction_Snake(Direction.SOUTH);
+                            gameboard.change_Direction_Snake(Direction.SOUTH,0);
                         }
 
                         //메뉴로 이동
+                        if (key == GLFW.GLFW_KEY_ESCAPE && action == GLFW.GLFW_PRESS) {
+                            state = GameState.GAME_MENU;
+                        }
+
+                        if (key == GLFW.GLFW_KEY_P && action == GLFW.GLFW_PRESS) {
+                            state = GameState.GAME_MENU;
+                        }
+                        break;
+                    }
+                    case GAME_DUAL -> {
+                        if (key == 262 && action == GLFW.GLFW_PRESS) {
+                            gameboard.change_Direction_Snake(Direction.EAST,1);
+                        }
+                        if (key == 263 && action == GLFW.GLFW_PRESS) {
+                            gameboard.change_Direction_Snake(Direction.WEST,1);
+                        }
+                        if (key == 265 && action == GLFW.GLFW_PRESS) {
+                            gameboard.change_Direction_Snake(Direction.NORTH,1);
+                        }
+                        if (key == 264 && action == GLFW.GLFW_PRESS) {
+                            gameboard.change_Direction_Snake(Direction.SOUTH,1);
+                        }
+                        if (key == GLFW.GLFW_KEY_S && action == GLFW.GLFW_PRESS ){
+                            gameboard.change_Direction_Snake(Direction.SOUTH,0);
+                        }
+                        if (key == GLFW.GLFW_KEY_W && action == GLFW.GLFW_PRESS ){
+                            gameboard.change_Direction_Snake(Direction.NORTH,0);
+                        }
+                        if (key == GLFW.GLFW_KEY_A && action == GLFW.GLFW_PRESS ){
+                            gameboard.change_Direction_Snake(Direction.WEST,0);
+                        }
+                        if (key == GLFW.GLFW_KEY_D && action == GLFW.GLFW_PRESS ){
+                            gameboard.change_Direction_Snake(Direction.EAST,0);
+                        }
+
                         if (key == GLFW.GLFW_KEY_ESCAPE && action == GLFW.GLFW_PRESS) {
                             state = GameState.GAME_MENU;
                         }
@@ -118,6 +146,7 @@ public class GameController {
                             if(length == 0) return;
                             input = input.substring(0,length-1);
                         }
+                        break;
                     }
                     case GAME_RANKING -> {
                         if (key == GLFW.GLFW_KEY_ESCAPE && action == GLFW.GLFW_PRESS) {
@@ -128,6 +157,7 @@ public class GameController {
             }
         };
         GLFW.glfwSetKeyCallback(mainwindow.getWindow(),keyCallback_ESC);
+        renderer.setBoard(gameboard);
         }
 
     private void terminate(){
@@ -147,6 +177,9 @@ public class GameController {
                         mainwindow.swapBuffer();
                     }
                 }
+                case GAME_DUAL -> {
+                    //TODO dual모드 추가 사항 작성 요 -> ACTIVE와 딱히 다른게 필요한가? 필요없으면 DUAL을 굳이 나눌필요가 있나?
+                }
                 case GAME_ACTIVE -> {
                     if (mainwindow.isUpdating()) {
                         mainwindow.update();
@@ -158,14 +191,14 @@ public class GameController {
                         mainboard.correctCameara(cam);
                         mainboard.render(tilerender, shader, cam);
                         renderer.render(shader,cam,mainboard);
-                        scoreRender();
+                        renderer.scoreRender();
                         mainwindow.swapBuffer();
                         */
                         renderer.setBoard(gameboard);
                         mainboard.correctCameara(dualcam);
                         mainboard.render(tilerender, shader, dualcam);
                         renderer.renderforDual(shader,dualcam,mainboard);
-                        scoreRender();
+                        renderer.scoreRender();
                         mainwindow.swapBuffer();
                     }
                     break;
@@ -184,7 +217,7 @@ public class GameController {
                     mainboard.correctCameara(cam);
                     mainboard.render(tilerender, shader, cam);
                     renderer.inputRendering(shader,mainboard);
-                    renderNickname();
+                    renderer.nicknameRender(input);
                     mainwindow.swapBuffer();
                     mainwindow.timeHandle();
                     break;
@@ -193,7 +226,7 @@ public class GameController {
                     mainwindow.update();
                     mainboard.correctCameara(cam);
                     renderer.rankingRendering(shader,mainboard);
-                    renderRankings();
+                    renderer.rankingRender();
                     mainwindow.swapBuffer();
                     mainwindow.timeHandle();
                     break;
@@ -201,26 +234,12 @@ public class GameController {
             }
         }
         state = GameState.GAME_INIT;
-        gameboard.re_Play();
+        gameboard.re_Play(1);
         renderer.setZeroFocus(cam,mainboard);
-    }
-    }
+        Dual_mode(dev)
+        renderer.setBoard(gameboard);
 
-    private void scoreRender() {
-        int score = gameboard.getScore();
-        String guiString = "score : " + score;
-        fontRenderer.renderString(fontTexture,guiString,700,10,new Vector3f(11,11,0));
-        if(gameboard.getRankings().isEmpty()){
-            return;
         }
-        else if(score > gameboard.getRankings().get(0).getScore()){
-            fontRenderer.renderString(fontTexture,"new record!",700,70,new Vector3f(11,11,0));
-        }
-    }
-
-    private void renderNickname() {
-        String nick_show = "Your nickname : " + input;
-        fontRenderer.renderString(fontTexture,nick_show,100,500,new Vector3f(11,11,0));
     }
 
     private void mouseOptionHandle() {
@@ -237,16 +256,19 @@ public class GameController {
         switch (state){
             case GAME_INIT -> {
                 if(cursorX>=253 && cursorX<=396 && cursorY>=224 && cursorY<=270){
-                    gameboard.re_Play();
+                    gameboard.re_Play(1);
                     state = GameState.GAME_TYPING;
+                    renderer.setBoard(gameboard);
                 }
                 else if(cursorX >= 253 && cursorX<=396 && cursorY>=311 && cursorY<=360){
                     try {
                         gameboard.loadGame();
+                        renderer.setBoard(gameboard);
                         mainboard.correctCameara(cam);
-                        mainboard.render(tilerender, shader, cam);
+                        mainboard.render(tilerender, shader, cam, mainwindow);
                     }catch(Exception e){
                         System.out.println("e = " + e);
+                        gameboard.re_Play(1);
                     }
                     state = GameState.GAME_ACTIVE;
                 }
@@ -262,6 +284,13 @@ public class GameController {
                     gameboard.gameTerminate();
                     on_Running = false;
                 }
+                else if(false){
+                    //TODO dualmode진입 조건 달기
+                    gameboard.re_Play(2);
+                    state = GameState.GAME_DUAL;
+                    renderer.setBoard(gameboard);
+                }
+                break;
             }
             case GAME_MENU -> {
                 if(cursorX>=206 && cursorX<=441 && cursorY >=272 && cursorY<=320){
@@ -269,7 +298,7 @@ public class GameController {
                     //resume
                 }
                 else if(cursorX>=195 && cursorX<=445 && cursorY>=356 && cursorY<=405){
-                    gameboard.re_Play();
+                    gameboard.re_Play(1);
                     state = GameState.GAME_ACTIVE;
                     //replay
                 }
@@ -295,32 +324,4 @@ public class GameController {
         ||(ascii>=97 && ascii<=122)) return true;
         return false;
     }
-
-    private void renderRankings(){
-        List<Ranking> ranks = gameboard.getRankings();
-        String id = "";
-        int score = 0;
-        String text;
-        if(ranks.size()>=5){
-            for(int i = 0;i<5;i++){
-                id = ranks.get(0).getId();
-                score = ranks.get(0).getScore();
-                text = "rank"+(i+1)+"   nickname = " + id + "   Score : " + score;
-                fontRenderer.renderString(fontTexture,text,100,300 + 100 * i,new Vector3f(11,11,0));
-            }
-        }
-        else{
-            int count = 0;
-            for (Ranking rank : ranks) {
-                id = rank.getId();
-                score = rank.getScore();
-                text = "rank"+(count+1)+"   nickname = " + id + "           Score : " + score;
-                fontRenderer.renderString(fontTexture,text,100,300 + 100 * count,new Vector3f(11,11,0));
-                count = count + 1;
-            }
-        }
-        String pressESC = "Press ESC to back!";
-        fontRenderer.renderString(fontTexture,pressESC,335,900,new Vector3f(11,11,0));
-    }
-
 }

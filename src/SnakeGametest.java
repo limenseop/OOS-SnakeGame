@@ -30,8 +30,7 @@ public class SnakeGametest {
         Shader shader = new Shader("shader");
         Camera cam = new Camera(MAINWINDOWSIZE_WIDTH, MAINWINDOWSIZE_HEIGHT);
         Board mainboard = new Board(BOARD_WIDTH, BOARD_HEIGHT, BOARD_SCALE);
-        Snake snake2 = new Snake();
-        GameBoard gb = new GameBoard(snake2);
+        GameBoard gb = new GameBoard();
         GameController game = new GameController(gb,mainwindow,shader,cam,mainboard);
         game.run();
     }

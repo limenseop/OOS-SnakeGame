@@ -26,18 +26,52 @@ public class Snake implements Serializable {
         return body;
     }
 
-    public Snake(){
-        body = new ArrayList<>();
-        body.add(new snakeBody(42,-42,Direction.NORTH));
-        body.add(new snakeBody(42,-43,Direction.NORTH));
-        body.add(new snakeBody(42,-44,Direction.NORTH));
-        body.add(new snakeBody(42,-42,Direction.NORTH));
-        body.add(new snakeBody(42,-41,Direction.NORTH));
-        body.add(new snakeBody(42,-40,Direction.NORTH));
-        body.add(new snakeBody(42,-39,Direction.NORTH));
-        body.add(new snakeBody(42,-38,Direction.NORTH));
-        body.add(new snakeBody(42,-37,Direction.NORTH));
-        direction = Direction.NORTH;
+    public Snake(int option){
+            body = new ArrayList<>();
+            switch(option){
+                case 0 : {
+                    //기본모드
+                    body.add(new snakeBody(42,-42,Direction.NORTH));
+                    body.add(new snakeBody(42,-43,Direction.NORTH));
+                    body.add(new snakeBody(42,-44,Direction.NORTH));
+                    body.add(new snakeBody(42,-42,Direction.NORTH));
+                    body.add(new snakeBody(42,-41,Direction.NORTH));
+                    body.add(new snakeBody(42,-40,Direction.NORTH));
+                    body.add(new snakeBody(42,-39,Direction.NORTH));
+                    body.add(new snakeBody(42,-38,Direction.NORTH));
+                    body.add(new snakeBody(42,-37,Direction.NORTH));
+                    direction = Direction.NORTH;
+                    break;
+                }
+                case 1 :{
+                    // dual - player1
+                    body.add(new snakeBody(10, -42, Direction.SOUTH));
+                    body.add(new snakeBody(10, -43, Direction.SOUTH));
+                    body.add(new snakeBody(10, -44, Direction.SOUTH));
+                    body.add(new snakeBody(10, -42, Direction.SOUTH));
+                    body.add(new snakeBody(10, -41, Direction.SOUTH));
+                    body.add(new snakeBody(10, -40, Direction.SOUTH));
+                    body.add(new snakeBody(10, -39, Direction.SOUTH));
+                    body.add(new snakeBody(10, -38, Direction.SOUTH));
+                    body.add(new snakeBody(10, -37, Direction.SOUTH));
+                    direction = Direction.SOUTH;
+                    break;
+                }
+                case 2 : {
+                    // dual - player 2
+                    body.add(new snakeBody(70, -42, Direction.NORTH));
+                    body.add(new snakeBody(70, -43, Direction.NORTH));
+                    body.add(new snakeBody(70, -44, Direction.NORTH));
+                    body.add(new snakeBody(70, -42, Direction.NORTH));
+                    body.add(new snakeBody(70, -41, Direction.NORTH));
+                    body.add(new snakeBody(70, -40, Direction.NORTH));
+                    body.add(new snakeBody(70, -39, Direction.NORTH));
+                    body.add(new snakeBody(70, -38, Direction.NORTH));
+                    body.add(new snakeBody(70, -37, Direction.NORTH));
+                    direction = Direction.NORTH;
+                    break;
+                }
+            }
         head = body.get(0);
     }
 
@@ -92,7 +126,7 @@ public class Snake implements Serializable {
         float prev_savedY = 0;
         float savedX = 0;
         float savedY = 0;
-        Direction savedDirection = Direction.NORTH;
+        Direction savedDirection = direction;
         List<snakeBody> prev_body = body;
         for(int i = 0;i<body.toArray().length;i++){
             prev_savedX = body.get(i).getPositionX();
@@ -131,6 +165,8 @@ public class Snake implements Serializable {
         }
         return false;
     }
+
+
 
     public void re_Init() {
         body.clear();
