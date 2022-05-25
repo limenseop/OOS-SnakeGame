@@ -1,0 +1,12 @@
+SnakeGame_NewBackground (X, Y) (너비, 높이)
+SinglePlay - (132, 195) (390, 50)
+Dual Play - (167, 267) (320, 50)
+Auto Play - (167, 339) (320, 50)
+Load - (252, 411) (150, 50)
+Ranking - (192, 483) (270, 50)
+Exit - (262, 555) (130, 50)
+
+Pause_AutoDual
+Resume - (200, 250) (250, 50)
+Restart - (190,  340) (270, 50)
+Exit - (260, 430) (130, 50)
