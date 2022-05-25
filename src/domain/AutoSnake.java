@@ -2,6 +2,7 @@ package src.domain;
 
 import org.joml.Vector3f;
 
+import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
@@ -12,9 +13,9 @@ abstract public class AutoSnake extends Snake {
         super(2);
         minDistancefromHead = Double.MAX_VALUE;
     }
-    public Direction changeDirection(Snake otherSnake, float boardWidthSize, float boardHeightSize, float checkSize, double DistancetoCheck) {
+    public Direction changeDirection(Snake otherSnake, List<Point2D> apples, float boardWidthSize, float boardHeightSize, float checkSize, double DistancetoCheck) {
         //1순위 장애물 회피
-        Stream<snakeBody> checkObstacles = Stream.concat(otherSnake.getBody().stream(), getBody().stream().skip(1));
+        Stream<snakeBody> checkObstacles = Stream.concat(otherSnake.getBody().stream(), getBody().stream().skip(3));
         snakeBody closedBody = getClosedObstacle(getOtherSnakeInfo(checkObstacles.toList(), checkSize), DistancetoCheck);
         double distancefromBoundary = getDistancefromBoundary(boardWidthSize, boardHeightSize);
 
@@ -31,11 +32,36 @@ abstract public class AutoSnake extends Snake {
         }
 
         //2순위 사과로 이동
-        return getCurDirection();
+        return getDirectionbyApple(getClosedApple(apples));
     }
-
-    abstract Vector3f getClosedApple(Vector3f[] apples);
-    abstract Direction getDirectionbyApple(Vector3f closedapple);
+    private Point2D getClosedApple(List<Point2D> apples){
+        double mindistance = Double.MAX_VALUE;
+        Point2D closedapple = null;
+        Point2D head = new Point2D.Float(getHead().getPositionX(), getHead().getPositionY());
+        for (int i = 0; i < apples.size(); i++) {
+            double distancetoHead = head.distance(apples.get(i)); 
+            if (distancetoHead < mindistance) {
+                closedapple = apples.get(i);
+                mindistance = distancetoHead;
+            }
+        }
+        return closedapple;
+    }
+    private Direction getDirectionbyApple(Point2D closedapple) {
+        double xdis = closedapple.getX() - getHead().getPositionX();
+        double ydis = closedapple.getY() - getHead().getPositionY();
+        if (Math.abs(xdis) > Math.abs(ydis)) {
+            if (xdis > 0)
+                return Direction.WEST;
+            else
+                return Direction.EAST;
+        } else {
+            if (ydis > 0)
+                return Direction.NORTH;
+            else
+                return Direction.SOUTH;
+        }
+    }
     List<snakeBody> getOtherSnakeInfo(List<snakeBody> checkBodies, float checkSize) throws NullPointerException {
         List<snakeBody> fliteredBodies = new ArrayList<>();
         for (snakeBody body : checkBodies) {
@@ -134,6 +160,11 @@ abstract public class AutoSnake extends Snake {
             System.out.println("There are no snakes on X,Y axles");
             return null;
         }
+    }
+    private double getDistancefromHead(float x, float y) {
+        double xdis = Math.pow((getHead().getPositionX() - x), 2);
+        double ydis = Math.pow((getHead().getPositionY() - y), 2);
+        return Math.sqrt(xdis+ydis);
     }
     private double getDistancefromHead(snakeBody body) {
         double xdis = Math.pow((getHead().getPositionX() - body.getPositionX()), 2);
