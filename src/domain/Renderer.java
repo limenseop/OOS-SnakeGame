@@ -32,6 +32,7 @@ public class Renderer {
     private Texture mainmenuTex;
     private Texture pauseMenuTex;
     private Texture RankingTex;
+    private Texture autoMenuTex;
 
 
     private Basicmodel model;
@@ -53,9 +54,10 @@ public class Renderer {
         SnakeBodyTex = new Texture("SnakeGame_SnakeBody.png");
         SnakeHeadTex = new Texture("New Piskel.png");
         appleTex = new Texture("apple.png");
-        mainmenuTex = new Texture("Background.png");
+        mainmenuTex = new Texture("SnakeGame_NewBackground.png");
         pauseMenuTex = new Texture("Pause_Buttons.png");
         RankingTex = new Texture("RankingBackground.png");
+        autoMenuTex = new Texture("Pause_AutoDual.png");
         transform = new Transform();
         transform.scale = new Vector3f(16,16,1);
         transform.pos = new Vector3f(0,0,0);
@@ -130,7 +132,9 @@ public class Renderer {
         shader.bind();
         shader.setUniform("sampler", 0);
         shader.setUniform("projection", new Matrix4f().setOrtho2D(-mainboard.getWidth() / 2, mainboard.getWidth() / 2, -mainboard.getHeight() / 2, mainboard.getHeight() / 2));
+        if(!gameBoard.isAuto())
         pauseMenuTex.bind(0);
+        else autoMenuTex.bind(0);
         meunmodel.render();
     }
 

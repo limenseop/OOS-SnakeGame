@@ -131,6 +131,15 @@ public class GameController {
                         }
                         break;
                     }
+                    case GAME_AUTO -> {
+                        if (key == GLFW.GLFW_KEY_ESCAPE && action == GLFW.GLFW_PRESS) {
+                            state = GameState.GAME_MENU;
+                        }
+
+                        if (key == GLFW.GLFW_KEY_P && action == GLFW.GLFW_PRESS) {
+                            state = GameState.GAME_MENU;
+                        }
+                    }
                    case GAME_TYPING -> {
                         if(action == GLFW.GLFW_PRESS  && isValid(key)){
                             input = input + (char)key;
@@ -139,7 +148,6 @@ public class GameController {
                             gameboard.setNickname(input);
                             input = "";
                             state = GameState.GAME_ACTIVE;
-                            //TODO dualmode 임시
 
                         }
                         else if(action == GLFW.GLFW_PRESS && (key == GLFW.GLFW_KEY_DELETE || key==GLFW.GLFW_KEY_BACKSPACE)){
@@ -180,8 +188,6 @@ public class GameController {
                     }
                 }
                 case GAME_DUAL -> {
-                    //TODO dual모드 추가 사항 작성 요 -> ACTIVE와 딱히 다른게 필요한가? 필요없으면 DUAL을 굳이 나눌필요가 있나?
-
                     if (mainwindow.isUpdating()) {
                         mainwindow.update();
                         gameboard.move_Snake();
@@ -197,6 +203,20 @@ public class GameController {
 
                 }
                 case GAME_ACTIVE -> {
+                    if (mainwindow.isUpdating()) {
+                        mainwindow.update();
+                        gameboard.move_Snake();
+                        gameboard.check_Fruit_Overlap();
+                        gameboard.check_Game_Terminated();
+                        mainboard.correctCameara(cam);
+                        mainboard.render(tilerender, shader, cam);
+                        renderer.render(shader,cam,mainboard);
+                        renderer.scoreRender();
+                        mainwindow.swapBuffer();
+                    }
+                    break;
+                }
+                case GAME_AUTO -> {
                     if (mainwindow.isUpdating()) {
                         mainwindow.update();
                         gameboard.move_Snake();
@@ -262,27 +282,43 @@ public class GameController {
         System.out.println("cursor = " + cursor);
         switch (state){
             case GAME_INIT -> {
-                if(cursorX>=253 && cursorX<=396 && cursorY>=224 && cursorY<=270){
+                if(cursorX>=132 && cursorX<=522 && cursorY>=195 && cursorY<=245){
                     gameboard.re_Play(1);
                     state = GameState.GAME_TYPING;
                     renderer.setBoard(gameboard);
                 }
-                else if(cursorX >= 253 && cursorX<=396 && cursorY>=311 && cursorY<=360){
+                //dualmode
+                else if(cursorX>=167 && cursorX<=487 && cursorY>=267 && cursorY<=317){
+                    gameboard.re_Play(2);
+                    state = GameState.GAME_DUAL;
+                    renderer.setBoard(gameboard);
+                }
+
+                //automode
+                else if(cursorX>=167 && cursorX<=487 && cursorY>=339 && cursorY<=389) {
+                    gameboard.re_Play(1);
+                    gameboard.set_Auto_Mode();
+                    state = GameState.GAME_AUTO;
+                    renderer.setBoard(gameboard);
+                }
+
+                else if(cursorX >= 252 && cursorX<=402 && cursorY>=411 && cursorY<=461){
                     try {
                         gameboard.loadGame();
-                        renderer.setBoard(gameboard);
                         mainboard.correctCameara(cam);
                         mainboard.render(tilerender, shader, cam);
+                        renderer.setBoard(gameboard);
                     }catch(Exception e){
                         System.out.println("e = " + e);
                         gameboard.re_Play(1);
                     }
                     state = GameState.GAME_ACTIVE;
                 }
-                else if(cursorX>=191 && cursorX<=460 && cursorY>=398 && cursorY<=446){
+
+                else if(cursorX>=192 && cursorX<=462 && cursorY>=483 && cursorY<=553){
                     state = GameState.GAME_RANKING;
                 }
-                else if(cursorX>=262 && cursorX<=390 && cursorY>=490 && cursorY<=535){
+                else if(cursorX>=262 && cursorX<=392 && cursorY>=555 && cursorY<=605){
                     try {
                         gameboard.save_Ranking();
                     } catch (IOException e) {
@@ -290,12 +326,6 @@ public class GameController {
                     }
                     gameboard.gameTerminate();
                     on_Running = false;
-                }
-                else{
-                    //TODO dualmode진입 조건 달기
-                    gameboard.re_Play(2);
-                    state = GameState.GAME_DUAL;
-                    renderer.setBoard(gameboard);
                 }
                 break;
             }
@@ -306,18 +336,25 @@ public class GameController {
                 }
                 else if(cursorX>=195 && cursorX<=445 && cursorY>=356 && cursorY<=405){
                     gameboard.re_Play(1);
+                    renderer.setBoard(gameboard);
                     state = GameState.GAME_ACTIVE;
                     //replay
                 }
-                else if(cursorX>=252 && cursorX<=395 && cursorY>=443 && cursorY<=492){
-                    try {
-                        gameboard.save_This_Game();
-                    } catch (IOException e) {
-                        e.printStackTrace();
+                else if(cursorX>=252 && cursorX<=395 && cursorY>=443 && cursorY<=492) {
+                    if (gameboard.isAuto()) {
+                        state = GameState.GAME_INIT;
                     }
-                    //game save
+                    else {
+                        try {
+                            System.out.println("saved");
+                            gameboard.save_This_Game();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        //game save
+                    }
                 }
-                else if(cursorX>=263 && cursorX<=385 && cursorY>=530 && cursorY<=574){
+                else if(!gameboard.isAuto()&&cursorX>=263 && cursorX<=385 && cursorY>=530 && cursorY<=574){
                     state = GameState.GAME_INIT;
                 }
                 break;
