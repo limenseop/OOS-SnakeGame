@@ -200,11 +200,12 @@ public class GameController {
                     if (mainwindow.isUpdating()) {
                         mainwindow.update();
                         gameboard.move_Snake();
+                        gameboard.auto_Move_Determination();
                         gameboard.check_Fruit_Overlap();
                         gameboard.check_Game_Terminated();
-                        mainboard.correctCameara(dualcam);
-                        mainboard.render(tilerender, shader, dualcam);
-                        renderer.render(shader,dualcam,mainboard);
+                        mainboard.correctCameara(cam);
+                        mainboard.render(tilerender, shader, cam);
+                        renderer.render(shader,cam,mainboard);
                         renderer.scoreRender();
                         mainwindow.swapBuffer();
                     }

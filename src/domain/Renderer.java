@@ -152,6 +152,7 @@ public class Renderer {
 
 
     private void setFocus(Camera camera, Board board){
+        System.out.println("head.get(0).getPositionY() = " + head.get(0).getPositionY());
         Transform focus = new Transform();
         focus.scale = new Vector3f(16,16,1);
         focus.pos = new Vector3f((float) head.get(0).getPositionX(), (float) head.get(0).getPositionY(),0);

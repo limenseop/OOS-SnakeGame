@@ -67,11 +67,15 @@ public class GameBoard implements Serializable {
 
     public void createFruit() {
 
+        int boundary_x = 75;
+        int boundary_y = -75;
+
         double startTime = System.currentTimeMillis();
 
-        float fruit_X = (float) ((Math.random() * 78) + 2);
-        float fruit_Y = (float) ((Math.random() * -78) - 2);
-        
+        System.out.println("player_num = " + player_num);
+        float fruit_X = (float) ((Math.random() * boundary_x * player_num) + 2);
+        float fruit_Y = (float) ((Math.random() * boundary_y * player_num) - 2);
+        System.out.println(boundary_x);
 
             while (fruitPosition.size()<player_num) {
                 for (Snake snake : snakes) {
@@ -79,8 +83,8 @@ public class GameBoard implements Serializable {
                     while (snake.check_If_Overlap(fruit_X, fruit_Y)
                     ||(player_num == 2  && (!fruitPosition.isEmpty() && fruitPosition.get(0).distance(new Point2D.Float(fruit_X,fruit_Y))<1.3))) {
 
-                        fruit_X = (float) ((Math.random() * 78) + 2);
-                        fruit_Y = (float) ((Math.random() * -78) - 2);
+                        fruit_X = (float) ((Math.random() * boundary_x * player_num) + 2);
+                        fruit_Y = (float) ((Math.random() * boundary_y * player_num) - 2);
                     }
                 }
                 fruitPosition.add(new Point2D.Float(fruit_X, fruit_Y));
@@ -118,6 +122,42 @@ public class GameBoard implements Serializable {
             }
         }
         return running;
+    }
+
+    public void auto_Move_Determination(){
+        //solo모드로 가정 -> snake.0를 handle
+        Snake target = snakes.get(0);
+        Point2D snake_pos = new Point2D.Float(target.getHead().getPositionX(),target.getHead().getPositionY());
+        Point2D selected_fruit = fruitPosition.get(0);
+        boolean set_x;
+        set_x = (Math.abs(snake_pos.getX()-selected_fruit.getX())>1.0);
+        System.out.println("set_x = " + set_x);
+        System.out.println("snake_pos = " + (snake_pos.getX() - selected_fruit.getX()));
+
+        //1. 먼저 x축을 맞추기 위해 move
+        if(set_x){
+            System.out.println("x_setting");
+            if(snake_pos.getX()>selected_fruit.getX()){
+                target.change_Direction(Direction.WEST);
+            }else{
+                if(target.getDirection()!=Direction.EAST)
+                target.change_Direction(Direction.EAST);
+            }
+        }
+        else{
+            System.out.println("y_setting");
+            if(snake_pos.getY()> selected_fruit.getY()){
+                target.change_Direction(Direction.SOUTH);
+            }
+            else{
+                target.change_Direction(Direction.NORTH);
+            }
+        }
+
+        //additional determination : 만약 새 fruit이 생성됬는데 같은 x축일경우?
+        //-> 새 apple이 생성되었음을 인식할 수 있어야됨
+        //score의 diff로 판단하자!
+
     }
 
     public void setNickname(String nickname) {
