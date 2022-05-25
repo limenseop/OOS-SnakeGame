@@ -71,7 +71,7 @@ public class GameController {
             @Override
             public void invoke(long window, int key, int scancode, int action, int mods) {
                 switch (state) {
-                    case GAME_ACTIVE -> {
+                    case GAME_ACTIVE, GAME_AUTO -> {
                         //snake 방향변경
                         if (key == 262 && action == GLFW.GLFW_PRESS) {
                             gameboard.change_Direction_Snake(Direction.EAST,0);
@@ -178,7 +178,36 @@ public class GameController {
                     }
                 }
                 case GAME_DUAL -> {
-                    //TODO dual모드 추가 사항 작성 요 -> ACTIVE와 딱히 다른게 필요한가? 필요없으면 DUAL을 굳이 나눌필요가 있나?
+                    if (mainwindow.isUpdating()) {
+                        mainwindow.update();
+                        gameboard.move_Snake();
+                        gameboard.check_Fruit_Overlap();
+                        gameboard.check_Game_Terminated();
+
+                        renderer.setBoard(gameboard);
+                        mainboard.correctCameara(dualcam);
+                        mainboard.render(tilerender, shader, dualcam);
+                        renderer.renderforDual(shader,dualcam,mainboard);
+                        renderer.scoreRender();
+                        mainwindow.swapBuffer();
+                    }
+                    break;
+                }
+                case GAME_AUTO -> {
+                    mainwindow.update();
+                    gameboard.moveAutoSnake();
+                    gameboard.move_Snake();
+                    gameboard.check_Fruit_Overlap();
+                    gameboard.check_Game_Terminated();
+
+
+                    renderer.setBoard(gameboard);
+                    mainboard.correctCameara(dualcam);
+                    mainboard.render(tilerender, shader, dualcam);
+                    renderer.renderforDual(shader,dualcam,mainboard);
+                    renderer.scoreRender();
+                    mainwindow.swapBuffer();
+                    break;
                 }
                 case GAME_ACTIVE -> {
                     if (mainwindow.isUpdating()) {
@@ -186,18 +215,11 @@ public class GameController {
                         gameboard.move_Snake();
                         gameboard.check_Fruit_Overlap();
                         gameboard.check_Game_Terminated();
-                        /*
+
                         renderer.setBoard(gameboard);
                         mainboard.correctCameara(cam);
                         mainboard.render(tilerender, shader, cam);
                         renderer.render(shader,cam,mainboard);
-                        renderer.scoreRender();
-                        mainwindow.swapBuffer();
-                        */
-                        renderer.setBoard(gameboard);
-                        mainboard.correctCameara(dualcam);
-                        mainboard.render(tilerender, shader, dualcam);
-                        renderer.renderforDual(shader,dualcam,mainboard);
                         renderer.scoreRender();
                         mainwindow.swapBuffer();
                     }
@@ -236,9 +258,7 @@ public class GameController {
         state = GameState.GAME_INIT;
         gameboard.re_Play(1);
         renderer.setZeroFocus(cam,mainboard);
-        Dual_mode(dev)
         renderer.setBoard(gameboard);
-
         }
     }
 
@@ -265,7 +285,7 @@ public class GameController {
                         gameboard.loadGame();
                         renderer.setBoard(gameboard);
                         mainboard.correctCameara(cam);
-                        mainboard.render(tilerender, shader, cam, mainwindow);
+                        mainboard.render(tilerender, shader, cam);
                     }catch(Exception e){
                         System.out.println("e = " + e);
                         gameboard.re_Play(1);

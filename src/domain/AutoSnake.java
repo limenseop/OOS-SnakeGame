@@ -9,7 +9,7 @@ import java.util.stream.Stream;
 abstract public class AutoSnake extends Snake {
     private double minDistancefromHead;
     public AutoSnake() {
-        super();
+        super(2);
         minDistancefromHead = Double.MAX_VALUE;
     }
     public Direction changeDirection(Snake otherSnake, float boardWidthSize, float boardHeightSize, float checkSize, double DistancetoCheck) {

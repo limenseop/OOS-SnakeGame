@@ -7,9 +7,7 @@ package src;
 import src.board.Board;
 import src.controller.GameController;
 import src.domain.GameBoard;
-import src.domain.Snake;
 import src.models.Camera;
-import src.models.DualCamera;
 import src.models.Shader;
 import src.windowhandle.Window;
 

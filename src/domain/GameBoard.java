@@ -90,6 +90,9 @@ public class GameBoard implements Serializable {
         System.out.println("(System.currentTimeMillis() - startTime) = " + (System.currentTimeMillis() - startTime));
     }
 
+    public void moveAutoSnake() {
+
+    }
 
     public synchronized boolean move_Snake() {
         for (Snake snake : snakes) {

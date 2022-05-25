@@ -145,7 +145,6 @@ public class Snake implements Serializable {
 
 
     public boolean check_If_collapse(){
-        Point headPoint = new Point((int)head.getPositionX(),(int)head.getPositionY());
         for (snakeBody snakeBody : body) {
             if(snakeBody.equals(head)) continue;
             if(head.getPositionX() == snakeBody.getPositionX() && head.getPositionY() == snakeBody.getPositionY()){
@@ -165,9 +164,6 @@ public class Snake implements Serializable {
         }
         return false;
     }
-
-
-
     public void re_Init() {
         body.clear();
         System.out.println("Snake.setInit");
