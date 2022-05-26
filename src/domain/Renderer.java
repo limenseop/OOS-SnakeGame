@@ -32,6 +32,7 @@ public class Renderer {
     private Texture mainmenuTex;
     private Texture pauseMenuTex;
     private Texture RankingTex;
+    private Texture autoMenuTex;
 
 
     private Basicmodel model;
@@ -53,9 +54,10 @@ public class Renderer {
         SnakeBodyTex = new Texture("SnakeGame_SnakeBody.png");
         SnakeHeadTex = new Texture("New Piskel.png");
         appleTex = new Texture("apple.png");
-        mainmenuTex = new Texture("Background.png");
+        mainmenuTex = new Texture("SnakeGame_NewBackground.png");
         pauseMenuTex = new Texture("Pause_Buttons.png");
         RankingTex = new Texture("RankingBackground.png");
+        autoMenuTex = new Texture("Pause_AutoDual.png");
         transform = new Transform();
         transform.scale = new Vector3f(16,16,1);
         transform.pos = new Vector3f(0,0,0);
@@ -87,6 +89,7 @@ public class Renderer {
             head.add(snake.getHead());
             count = count + 1;
         }
+        System.out.println("head.get(0) = " + head.get(0));
         fruit = board.getFruitPosition();
     }
 
@@ -129,7 +132,9 @@ public class Renderer {
         shader.bind();
         shader.setUniform("sampler", 0);
         shader.setUniform("projection", new Matrix4f().setOrtho2D(-mainboard.getWidth() / 2, mainboard.getWidth() / 2, -mainboard.getHeight() / 2, mainboard.getHeight() / 2));
+        if(!gameBoard.isAuto())
         pauseMenuTex.bind(0);
+        else autoMenuTex.bind(0);
         meunmodel.render();
     }
 
@@ -149,18 +154,25 @@ public class Renderer {
         meunmodel.render();
     }
 
+
     private void setFocus(Camera camera, Board board){
+        System.out.println("head.get(0).getPositionY() = " + head.get(0).getPositionY());
         Transform focus = new Transform();
         focus.scale = new Vector3f(16,16,1);
         focus.pos = new Vector3f((float) head.get(0).getPositionX(), (float) head.get(0).getPositionY(),0);
         camera.getPosition().lerp(focus.pos.mul(-board.getScale(), new Vector3f()), 0.1f);
     }
+
     private void setFocusforDual(DualCamera camera, Board board){
+
+        //head - 1개
+        //List<Snakebody> head
+
         Transform focus = new Transform();
         focus.scale = new Vector3f(16,16,1);
         focus.pos = new Vector3f(camera.getCenter(head.get(0), head.get(1)));
         camera.getPosition().lerp(focus.pos.mul(-board.getScale(), new Vector3f()), 0.1f);
-        camera.setDualProjection(head.get(0), head.get(1));
+        camera.setDualProjection(head.get(1), head.get(1));
     }
 
     public void renderforDual(Shader shader, DualCamera camera,Board board) {
@@ -182,11 +194,17 @@ public class Renderer {
                 model.render();
             }
         }
-        shader.bind();
-        shader.setUniform("sampler", 0);
-        shader.setUniform("projection", fruitPosition.getProjection(camera.getProjection()));
-        appleTex.bind(0);
-        model.render();
+        int count = 0;
+        for (Point2D point2D : fruit) {
+            System.out.println("point2D = " + point2D);
+            fruitPosition.pos.set((float) fruit.get(count).getX(), (float) fruit.get(count).getY(),0);
+            shader.bind();
+            shader.setUniform("sampler", 0);
+            shader.setUniform("projection", fruitPosition.getProjection(camera.getProjection()));
+            appleTex.bind(0);
+            model.render();
+            count = count + 1;
+        }
     }
 
 

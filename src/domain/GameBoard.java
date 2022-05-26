@@ -25,6 +25,7 @@ public class GameBoard implements Serializable {
     private int score = 0;
     private boolean running = true;
     private boolean paused = false;
+    private boolean auto_dual = false;
     private int player_num = 1;
     private transient List<Ranking> rankings;
     private String nickname;
@@ -52,6 +53,11 @@ public class GameBoard implements Serializable {
         player_num = 2;
         snakes.add(new Snake(1));
         snakes.add(new Snake(2));
+        auto_dual = true;
+    }
+
+    public void set_Auto_Mode(){
+        auto_dual = true;
     }
 
     public void loadGame() throws Exception{
@@ -63,31 +69,37 @@ public class GameBoard implements Serializable {
         this.running = saveData.isRunning();
         fruitPosition.remove(0);
         fruitPosition.add(saveData.getFruitPosition().get(0));
+        auto_dual = false;
+        player_num = 1;
     }
 
     public void createFruit() {
 
+        int boundary_x = 75;
+        int boundary_y = -75;
+
         double startTime = System.currentTimeMillis();
 
-        float fruit_X = (float) ((Math.random() * 78) + 2);
-        float fruit_Y = (float) ((Math.random() * -78) - 2);
-        
+        System.out.println("player_num = " + player_num);
+        float fruit_X = (float) ((Math.random() * boundary_x * player_num) + 2);
+        float fruit_Y = (float) ((Math.random() * boundary_y * player_num) - 2);
+        System.out.println(boundary_x);
 
-            if (fruitPosition.size()<player_num) {
+            while (fruitPosition.size()<player_num) {
                 for (Snake snake : snakes) {
 
                     while (snake.check_If_Overlap(fruit_X, fruit_Y)
-                    ||(player_num == 2  && fruitPosition.get(0).distance(new Point2D.Float(fruit_X,fruit_Y))<1.3)) {
+                    ||(player_num == 2  && (!fruitPosition.isEmpty() && fruitPosition.get(0).distance(new Point2D.Float(fruit_X,fruit_Y))<1.3))) {
 
-                        fruit_X = (float) ((Math.random() * 78) + 2);
-                        fruit_Y = (float) ((Math.random() * -78) - 2);
+                        fruit_X = (float) ((Math.random() * boundary_x * player_num) + 2);
+                        fruit_Y = (float) ((Math.random() * boundary_y * player_num) - 2);
                     }
                 }
                 fruitPosition.add(new Point2D.Float(fruit_X, fruit_Y));
             }
-        System.out.println("fruitPosition = " + fruitPosition.size());
+        //System.out.println("fruitPosition = " + fruitPosition.size());
 
-        System.out.println("(System.currentTimeMillis() - startTime) = " + (System.currentTimeMillis() - startTime));
+        //System.out.println("(System.currentTimeMillis() - startTime) = " + (System.currentTimeMillis() - startTime));
     }
 
     public void moveAutoSnake() {
@@ -117,10 +129,46 @@ public class GameBoard implements Serializable {
 
             if (out_Of_Bounces(headX, headY) || snake.check_If_collapse() || check_Snake_Crossed()) {
                 running = false;
-                if(this.player_num == 1)recordRanking();
+                if(this.player_num == 1 && auto_dual == false)recordRanking();
             }
         }
         return running;
+    }
+
+    public void auto_Move_Determination(){
+        //solo모드로 가정 -> snake.0를 handle
+        Snake target = snakes.get(0);
+        Point2D snake_pos = new Point2D.Float(target.getHead().getPositionX(),target.getHead().getPositionY());
+        Point2D selected_fruit = fruitPosition.get(0);
+        boolean set_x;
+        set_x = (Math.abs(snake_pos.getX()-selected_fruit.getX())>1.0);
+        System.out.println("set_x = " + set_x);
+        System.out.println("snake_pos = " + (snake_pos.getX() - selected_fruit.getX()));
+
+        //1. 먼저 x축을 맞추기 위해 move
+        if(set_x){
+            System.out.println("x_setting");
+            if(snake_pos.getX()>selected_fruit.getX()){
+                target.change_Direction(Direction.WEST);
+            }else{
+                if(target.getDirection()!=Direction.EAST)
+                target.change_Direction(Direction.EAST);
+            }
+        }
+        else{
+            System.out.println("y_setting");
+            if(snake_pos.getY()> selected_fruit.getY()){
+                target.change_Direction(Direction.SOUTH);
+            }
+            else{
+                target.change_Direction(Direction.NORTH);
+            }
+        }
+
+        //additional determination : 만약 새 fruit이 생성됬는데 같은 x축일경우?
+        //-> 새 apple이 생성되었음을 인식할 수 있어야됨
+        //score의 diff로 판단하자!
+
     }
 
     public void setNickname(String nickname) {
@@ -141,10 +189,12 @@ public class GameBoard implements Serializable {
             scores.add(0);
             snakes.add(new Snake(0));
             player_num = 1;
+            auto_dual = false;
         }
         else if(num == 2){
             set_Dual_mode();
             player_num = 2;
+            auto_dual = true;
         }
        createFruit();
     }
@@ -164,17 +214,18 @@ public class GameBoard implements Serializable {
                 if (head.distance(fruit) < 1.3) {
                     fruitPosition.remove(s);
                     score = score + 100;
+                    System.out.println("count = " + count);
                     scores.set(count, scores.get(count) + 100);
                     for (int i = 0; i < 8; i++)
                         snake.grow();
                     createFruit();
-                    System.out.println("(System.currentTimeMillis() - startTime) = " + (System.currentTimeMillis() - startTime));
+                    //System.out.println("(System.currentTimeMillis() - startTime) = " + (System.currentTimeMillis() - startTime));
                     return true;
                 }
-                count = count + 1;
             }
+            count = count + 1;
         }
-        System.out.println("(System.currentTimeMillis() - startTime) = " + (System.currentTimeMillis() - startTime));
+        //System.out.println("(System.currentTimeMillis() - startTime) = " + (System.currentTimeMillis() - startTime));
         return false;
     }
 
@@ -226,6 +277,8 @@ public class GameBoard implements Serializable {
     public List<Ranking> getRankings() {
         return rankings;
     }
+
+    public boolean isAuto(){return auto_dual;}
 
     private GameBoard loadFromFile() throws Exception{
         FileInputStream fis = new FileInputStream(fileName);
