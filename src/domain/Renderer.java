@@ -172,7 +172,7 @@ public class Renderer {
         focus.scale = new Vector3f(16,16,1);
         focus.pos = new Vector3f(camera.getCenter(head.get(0), head.get(1)));
         camera.getPosition().lerp(focus.pos.mul(-board.getScale(), new Vector3f()), 0.1f);
-        camera.setDualProjection(head.get(1), head.get(1));
+        camera.setDualProjection(head.get(0), head.get(1));
     }
 
     public void renderforDual(Shader shader, DualCamera camera,Board board) {

@@ -10,7 +10,7 @@ public class DualCamera extends Camera{
         this.boardsize = boardsize;
     }
     public void setDualProjection(snakeBody fstSnakeHead, snakeBody secSnakeHead) {
-        double vsize = getDistance(fstSnakeHead, secSnakeHead)/boardsize + 3;
+        double vsize = getDistance(fstSnakeHead, secSnakeHead)/boardsize + 1.0;
         setViewsize(vsize);
     }
     private double getDistance(snakeBody fstSnake, snakeBody secSnake) {

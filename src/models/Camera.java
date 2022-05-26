@@ -14,6 +14,8 @@ public class Camera {
     private Vector3f position;
     private Matrix4f projection;
 
+    private final double MAX_CAM_VIEW = 2.3;
+
     public Camera(int width, int height) {
         this.width = width;
         this.height = height;
@@ -48,8 +50,10 @@ public class Camera {
     }
     protected void setViewsize(double size) {
         /*
-        size는 1 ~ 2
+        size는 1 ~ 4
          */
+        if (size > MAX_CAM_VIEW)
+            size = MAX_CAM_VIEW;
         dynamicewidth = (int)(width * size);
         dynamicheight = (int)(height * size);
         projection.setOrtho2D(-dynamicewidth/2, dynamicewidth/2, -dynamicheight/2, dynamicheight/2);
