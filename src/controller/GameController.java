@@ -132,6 +132,18 @@ public class GameController {
                         break;
                     }
                     case GAME_AUTO -> {
+                        if (key == 262 && action == GLFW.GLFW_PRESS) {
+                            gameboard.change_Direction_Snake(Direction.EAST,1);
+                        }
+                        if (key == 263 && action == GLFW.GLFW_PRESS) {
+                            gameboard.change_Direction_Snake(Direction.WEST,1);
+                        }
+                        if (key == 265 && action == GLFW.GLFW_PRESS) {
+                            gameboard.change_Direction_Snake(Direction.NORTH,1);
+                        }
+                        if (key == 264 && action == GLFW.GLFW_PRESS) {
+                            gameboard.change_Direction_Snake(Direction.SOUTH,1);
+                        }
                         if (key == GLFW.GLFW_KEY_ESCAPE && action == GLFW.GLFW_PRESS) {
                             state = GameState.GAME_MENU;
                         }
@@ -190,7 +202,6 @@ public class GameController {
                 case GAME_DUAL -> {
                     if (mainwindow.isUpdating()) {
                         mainwindow.update();
-                        //gameboard.moveAutoSnake();
                         gameboard.move_Snake();
                         gameboard.check_Fruit_Overlap();
                         gameboard.check_Game_Terminated();
@@ -221,12 +232,12 @@ public class GameController {
                     if (mainwindow.isUpdating()) {
                         mainwindow.update();
                         gameboard.move_Snake();
-                        gameboard.auto_Move_Determination();
+                        gameboard.moveAutoSnake();
                         gameboard.check_Fruit_Overlap();
                         gameboard.check_Game_Terminated();
-                        mainboard.correctCameara(cam);
-                        mainboard.render(tilerender, shader, cam);
-                        renderer.render(shader,cam,mainboard);
+                        dualboard.correctCameara(dualcam);
+                        dualboard.render(tilerender, shader, dualcam);
+                        renderer.renderforDual(shader,dualcam,mainboard);
                         renderer.scoreRender();
                         mainwindow.swapBuffer();
                     }
@@ -297,7 +308,7 @@ public class GameController {
 
                 //automode
                 else if(cursorX>=167 && cursorX<=487 && cursorY>=339 && cursorY<=389) {
-                    gameboard.re_Play(1);
+                    gameboard.re_Play(2);
                     gameboard.set_Auto_Mode();
                     state = GameState.GAME_AUTO;
                     renderer.setBoard(gameboard);

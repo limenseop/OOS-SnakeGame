@@ -50,7 +50,6 @@ public class GameBoard implements Serializable {
         scores.clear();
         scores.add(0);
         scores.add(0);
-        System.out.println("paused = " + paused);
         snakes.clear();
         player_num = 2;
         snakes.add(new Snake(1));
@@ -59,6 +58,7 @@ public class GameBoard implements Serializable {
     }
 
     public void set_Auto_Mode(){
+        set_Dual_mode();
         auto_dual = true;
     }
 
@@ -132,7 +132,7 @@ public class GameBoard implements Serializable {
 
             if (out_Of_Bounces(headX, headY) || snake.check_If_collapse() || check_Snake_Crossed()) {
                 running = false;
-                if(this.player_num == 1 && auto_dual == false)recordRanking();
+                if(auto_dual == false)recordRanking();
             }
         }
         return running;
@@ -208,7 +208,6 @@ public class GameBoard implements Serializable {
 
         int count = 0;
         for (Snake snake : snakes) {
-            //TODO : 2개 fruit에 대해 check_overlap
             for(int s = 0;s< fruitPosition.size();s++) {
                 Point2D fruit = fruitPosition.get(s);
                 float headX = snake.getHead().getPositionX();
