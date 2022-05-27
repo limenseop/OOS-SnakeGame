@@ -338,28 +338,33 @@ public class GameController {
             case GAME_MENU -> {
                 if(cursorX>=206 && cursorX<=441 && cursorY >=272 && cursorY<=320){
                     if(gameboard.isAutoDual()){
-                        if(gameboard.getPlayer_num()==2) state = GameState.GAME_DUAL;
-                        else state = GameState.GAME_AUTO;
+                        if(gameboard.isAutoDual()){
+                            if(gameboard.isAuto()) state = GameState.GAME_AUTO;
+                            else state = GameState.GAME_DUAL;
+                        }
                     }
                     else
                     state = GameState.GAME_ACTIVE;
                     //resume
                 }
                 else if(cursorX>=195 && cursorX<=445 && cursorY>=356 && cursorY<=405){
+                    boolean checker = false;
                     System.out.println("replay option");
-                    if(gameboard.isAutoDual()) {
-                        gameboard.re_Play(gameboard.getPlayer_num());
-                        System.out.println("auto dual");
-                        if (gameboard.getPlayer_num()==2) state = GameState.GAME_DUAL;
-                        else {
-                            System.out.println("replay auto");
+                    System.out.println("gameboard = " + gameboard.isAutoDual());
+                    if(gameboard.isAutoDual()){
+                        if(gameboard.isAuto()) checker = true;
+                        gameboard.re_Play(2);
+                        state = GameState.GAME_DUAL;
+                        if(checker){
                             gameboard.set_Auto_Mode();
                             state = GameState.GAME_AUTO;
                         }
                     }
-                    else state = GameState.GAME_ACTIVE;
+                    else{
+                        gameboard.re_Play(1);
+                        state = GameState.GAME_ACTIVE;
+                    }
                     renderer.setBoard(gameboard);
-                    //replay
                 }
                 else if(cursorX>=252 && cursorX<=395 && cursorY>=443 && cursorY<=492) {
                     if (gameboard.isAutoDual()) {

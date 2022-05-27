@@ -26,11 +26,12 @@ public class GameBoard implements Serializable {
     private boolean running = true;
     private boolean paused = false;
     private boolean auto_dual = false;
+    private boolean is_auto = false;
     private int player_num = 1;
     private transient List<Ranking> rankings;
     private String nickname;
 
-    private AutoMover autoMover;
+    private transient AutoMover autoMover;
     public GameBoard() {
         snakes = new ArrayList<>();
         autoMover = new AutoMover();
@@ -59,7 +60,7 @@ public class GameBoard implements Serializable {
 
     public void set_Auto_Mode(){
         set_Dual_mode();
-        auto_dual = true;
+        is_auto = true;
     }
 
     public void loadGame() throws Exception{
@@ -72,6 +73,8 @@ public class GameBoard implements Serializable {
         fruitPosition.remove(0);
         fruitPosition.add(saveData.getFruitPosition().get(0));
         auto_dual = false;
+        is_auto = false;
+        autoMover = new AutoMover();
         player_num = 1;
     }
 
@@ -278,6 +281,10 @@ public class GameBoard implements Serializable {
     }
 
     public boolean isAutoDual(){return auto_dual;}
+
+    public boolean isAuto(){
+        return is_auto;
+    }
 
     private GameBoard loadFromFile() throws Exception{
         FileInputStream fis = new FileInputStream(fileName);
