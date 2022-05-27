@@ -196,7 +196,7 @@ public class Renderer {
         }
         int count = 0;
         for (Point2D point2D : fruit) {
-            System.out.println("point2D = " + point2D);
+            //System.out.println("point2D = " + point2D);
             fruitPosition.pos.set((float) fruit.get(count).getX(), (float) fruit.get(count).getY(),0);
             shader.bind();
             shader.setUniform("sampler", 0);

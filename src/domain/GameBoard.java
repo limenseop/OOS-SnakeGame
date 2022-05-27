@@ -30,8 +30,10 @@ public class GameBoard implements Serializable {
     private transient List<Ranking> rankings;
     private String nickname;
 
+    private AutoMover autoMover;
     public GameBoard() {
         snakes = new ArrayList<>();
+        autoMover = new AutoMover();
         snakes.add(new Snake(0));
         fruitPosition = new ArrayList<>();
         scores = new ArrayList<>();
@@ -75,8 +77,8 @@ public class GameBoard implements Serializable {
 
     public void createFruit() {
 
-        int boundary_x = 75;
-        int boundary_y = -75;
+        int boundary_x = 70;
+        int boundary_y = -70;
 
         double startTime = System.currentTimeMillis();
 
@@ -103,7 +105,8 @@ public class GameBoard implements Serializable {
     }
 
     public void moveAutoSnake() {
-
+            Direction direction = autoMover.changeDirection(snakes.get(0), snakes.get(1), getFruitPosition(), (float)MAX_X, (float)MIN_Y, 10.0f);
+            change_Direction_Snake(direction, 0);
     }
 
     public synchronized boolean move_Snake() {
@@ -142,8 +145,8 @@ public class GameBoard implements Serializable {
         Point2D selected_fruit = fruitPosition.get(0);
         boolean set_x;
         set_x = (Math.abs(snake_pos.getX()-selected_fruit.getX())>1.0);
-        System.out.println("set_x = " + set_x);
-        System.out.println("snake_pos = " + (snake_pos.getX() - selected_fruit.getX()));
+        //System.out.println("set_x = " + set_x);
+        //System.out.println("snake_pos = " + (snake_pos.getX() - selected_fruit.getX()));
 
         //1. 먼저 x축을 맞추기 위해 move
         if(set_x){

@@ -14,7 +14,7 @@ public class Camera {
     private Vector3f position;
     private Matrix4f projection;
 
-    private final double MAX_CAM_VIEW = 2.3;
+    private final double MAX_CAM_VIEW = 4.5;
 
     public Camera(int width, int height) {
         this.width = width;

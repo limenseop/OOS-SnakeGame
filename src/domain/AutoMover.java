@@ -11,6 +11,7 @@ public class AutoMover {
     }
     public Direction changeDirection(Snake ownSnake, Snake otherSnake, List<Point2D> apples, float boardWidth, float boardHeight, float distancetoCheck) {
         //1순위 장애물 회피
+        //System.out.printf("Head pos: %f, %f\n", ownSnake.getHead().getPositionX(), ownSnake.getHead().getPositionY());
         Stream<snakeBody> snakeBodyStream = Stream.concat(ownSnake.getBody().stream().skip(3), otherSnake.getBody().stream());
         snakeBody filteredbody = getFilteredBody(ownSnake, snakeBodyStream.toList(), distancetoCheck);
 
@@ -20,13 +21,15 @@ public class AutoMover {
             } else {
                 return getDirectionbyCenter(ownSnake, boardWidth, boardHeight);
             }
+
         } else if (filteredbody != null) {
             return getDirectionbyBody(ownSnake, filteredbody);
         } else if (getDistancetoBoundary(ownSnake, boardWidth, boardHeight) < distancetoCheck) {
             return getDirectionbyCenter(ownSnake, boardWidth, boardHeight);
         }
+        return ownSnake.getHead().getDirection();
         //2순위 사과로 이동
-        return getDirectionbyApple(ownSnake, getClosedApple(ownSnake, apples));
+        //return getDirectionbyApple(ownSnake, getClosedApple(ownSnake, apples));
     }
     private Point2D getClosedApple(Snake ownSanke, List<Point2D> apples){
         double mindistance = Double.MAX_VALUE;
@@ -77,19 +80,20 @@ public class AutoMover {
         return filteredBody;
     }
     private Direction getDirectionbyCenter(Snake ownsnake, float boardWidth, float boardHeight) {
+        System.out.println("change direction by Center");
         switch(ownsnake.getHead().getDirection()) {
             case NORTH:
             case SOUTH:
-                if (ownsnake.getHead().getPositionX() >= boardWidth/2)
-                    return Direction.EAST;
-                else
+                if (ownsnake.getHead().getPositionY() >= boardHeight/2)
                     return Direction.WEST;
+                else
+                    return Direction.EAST;
             case EAST:
             case WEST:
-                if (ownsnake.getHead().getPositionY() >= boardHeight/2)
-                    return Direction.SOUTH;
-                else
+                if (ownsnake.getHead().getPositionX() >= boardWidth/2)
                     return Direction.NORTH;
+                else
+                    return Direction.SOUTH;
         }
         return ownsnake.getDirection();
     }
@@ -108,6 +112,7 @@ public class AutoMover {
                     return Direction.NORTH;
             }
         }
+        System.out.println("change direction by body");
         return ownsnake.getDirection();
     }
     private boolean detectAxlebyDirection(Snake ownsnake, snakeBody body) {
@@ -162,10 +167,10 @@ public class AutoMover {
             case SOUTH -> {
                 return Math.abs(ownsnake.getHead().getPositionY() - boardHeight);
             }
-            case WEST -> {
+            case EAST -> {
                 return Math.abs(ownsnake.getHead().getPositionX() - boardWidth);
             }
-            case EAST -> {
+            case WEST -> {
                 return Math.abs(ownsnake.getHead().getPositionX());
             }
         }

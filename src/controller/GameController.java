@@ -53,7 +53,7 @@ public class GameController {
         this.mainboard = board;
         tilerender = new TileRenderer();
         dualboard = new Board(board.getWidth()*2, board.getHeight()*2, board.getScale());
-        dualcam = new DualCamera(mainwindow.getWidth(), mainwindow.getHeight(), dualboard.getWidth()*2);
+        dualcam = new DualCamera(mainwindow.getWidth(), mainwindow.getHeight(), dualboard.getWidth());
     }
 
 
@@ -190,11 +190,12 @@ public class GameController {
                 case GAME_DUAL -> {
                     if (mainwindow.isUpdating()) {
                         mainwindow.update();
+                        //gameboard.moveAutoSnake();
                         gameboard.move_Snake();
                         gameboard.check_Fruit_Overlap();
                         gameboard.check_Game_Terminated();
-                        mainboard.correctCameara(dualcam);
-                        mainboard.render(tilerender, shader, dualcam);
+                        dualboard.correctCameara(dualcam);
+                        dualboard.render(tilerender, shader, dualcam);
                         renderer.renderforDual(shader,dualcam,mainboard);
                         renderer.scoreRender();
                         mainwindow.swapBuffer();
