@@ -67,16 +67,16 @@ public class GameController {
                 switch (state) {
                     case GAME_ACTIVE -> {
                         //snake 방향변경
-                        if (key == 262 && action == GLFW.GLFW_PRESS) {
+                        if (key == GLFW.GLFW_KEY_RIGHT && action == GLFW.GLFW_PRESS) {
                             gameboard.change_Direction_Snake(Direction.EAST,0);
                         }
-                        if (key == 263 && action == GLFW.GLFW_PRESS) {
+                        if (key == GLFW.GLFW_KEY_LEFT && action == GLFW.GLFW_PRESS) {
                             gameboard.change_Direction_Snake(Direction.WEST,0);
                         }
-                        if (key == 265 && action == GLFW.GLFW_PRESS) {
+                        if (key == GLFW.GLFW_KEY_UP && action == GLFW.GLFW_PRESS) {
                             gameboard.change_Direction_Snake(Direction.NORTH,0);
                         }
-                        if (key == 264 && action == GLFW.GLFW_PRESS) {
+                        if (key == GLFW.GLFW_KEY_DOWN && action == GLFW.GLFW_PRESS) {
                             gameboard.change_Direction_Snake(Direction.SOUTH,0);
                         }
 
@@ -91,16 +91,16 @@ public class GameController {
                         break;
                     }
                     case GAME_DUAL -> {
-                        if (key == 262 && action == GLFW.GLFW_PRESS) {
+                        if (key == GLFW.GLFW_KEY_RIGHT && action == GLFW.GLFW_PRESS) {
                             gameboard.change_Direction_Snake(Direction.EAST,1);
                         }
-                        if (key == 263 && action == GLFW.GLFW_PRESS) {
+                        if (key == GLFW.GLFW_KEY_LEFT && action == GLFW.GLFW_PRESS) {
                             gameboard.change_Direction_Snake(Direction.WEST,1);
                         }
-                        if (key == 265 && action == GLFW.GLFW_PRESS) {
+                        if (key == GLFW.GLFW_KEY_UP && action == GLFW.GLFW_PRESS) {
                             gameboard.change_Direction_Snake(Direction.NORTH,1);
                         }
-                        if (key == 264 && action == GLFW.GLFW_PRESS) {
+                        if (key == GLFW.GLFW_KEY_DOWN && action == GLFW.GLFW_PRESS) {
                             gameboard.change_Direction_Snake(Direction.SOUTH,1);
                         }
                         if (key == GLFW.GLFW_KEY_S && action == GLFW.GLFW_PRESS ){
@@ -126,16 +126,16 @@ public class GameController {
                         break;
                     }
                     case GAME_AUTO -> {
-                        if (key == 262 && action == GLFW.GLFW_PRESS) {
+                        if (key == GLFW.GLFW_KEY_RIGHT && action == GLFW.GLFW_PRESS) {
                             gameboard.change_Direction_Snake(Direction.EAST,1);
                         }
-                        if (key == 263 && action == GLFW.GLFW_PRESS) {
+                        if (key == GLFW.GLFW_KEY_LEFT && action == GLFW.GLFW_PRESS) {
                             gameboard.change_Direction_Snake(Direction.WEST,1);
                         }
-                        if (key == 265 && action == GLFW.GLFW_PRESS) {
+                        if (key == GLFW.GLFW_KEY_UP && action == GLFW.GLFW_PRESS) {
                             gameboard.change_Direction_Snake(Direction.NORTH,1);
                         }
-                        if (key == 264 && action == GLFW.GLFW_PRESS) {
+                        if (key == GLFW.GLFW_KEY_DOWN && action == GLFW.GLFW_PRESS) {
                             gameboard.change_Direction_Snake(Direction.SOUTH,1);
                         }
                         if (key == GLFW.GLFW_KEY_ESCAPE && action == GLFW.GLFW_PRESS) {
@@ -225,8 +225,8 @@ public class GameController {
                 case GAME_AUTO -> {
                     if (mainwindow.isUpdating()) {
                         mainwindow.update();
-                        gameboard.move_Snake();
                         gameboard.moveAutoSnake();
+                        gameboard.move_Snake();
                         gameboard.check_Fruit_Overlap();
                         gameboard.check_Game_Terminated();
                         dualboard.correctCameara(dualcam);

@@ -2,6 +2,7 @@ package src.domain;
 
 import java.awt.geom.Point2D;
 import java.util.List;
+import java.util.Queue;
 import java.util.stream.Stream;
 
 public class AutoMover {
@@ -9,11 +10,12 @@ public class AutoMover {
     private final float ERROR_RANGE;
     private final float BOARD_WIDTH;
     private final float BOARD_HEIGHT;
+
     public AutoMover(float boardWidth, float boardHeight, float errorRange, float detectingRange) {
+        BOARD_WIDTH = boardWidth;
+        BOARD_HEIGHT = boardHeight;
         ERROR_RANGE = errorRange;
         DETECTING_RANGE = detectingRange;
-        BOARD_HEIGHT = boardHeight;
-        BOARD_WIDTH = boardWidth;
     }
     public Direction getNextDirection(Snake ownSnake, Snake otherSnake, List<Point2D> fruits) {
         //1순위 장애물 회피
