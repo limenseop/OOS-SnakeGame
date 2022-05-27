@@ -74,21 +74,105 @@ public class GameController {
 			public void invoke(long window, int key, int scancode, int action, int mods) {
 				switch (state) {
 				case GAME_ACTIVE -> {
+					 
+					float fruit_X = gameboard.getFruitPositionX();
+					float fruit_Y = gameboard.getFruitPositionY();
+					float headX = Snake.getHead().getPositionX();
+					float headY = Snake.getHead().getPositionY();
+					Direction direction = snakeBody.getDirection();
 					
 					
-					if (key == 262 && action == GLFW.GLFW_PRESS) {
-						gameboard.change_Direction_Snake(Direction.EAST);
+					if (direction == Direction.WEST) {
+						if (fruit_X == headX) {
+							if (fruit_Y > headY)
+	
+								gameboard.change_Direction_Snake(Direction.NORTH);
+
+							if (fruit_Y < headY)
+								gameboard.change_Direction_Snake(Direction.SOUTH);
+						}
+						if (fruit_Y == headY) {
+							if (fruit_X < headX)
+								gameboard.change_Direction_Snake(Direction.NORTH);
+						}
+						if (fruit_X > headX) {
+							if (fruit_Y > headY)
+								gameboard.change_Direction_Snake(Direction.NORTH);
+							if (fruit_Y < headY)
+								gameboard.change_Direction_Snake(Direction.SOUTH);
+						}
+						
 					}
-					if (key == 263 && action == GLFW.GLFW_PRESS) {
-						gameboard.change_Direction_Snake(Direction.WEST);
+					if (direction == Direction.EAST) {
+						if (fruit_X == headX) { // Fruit¿Í SnakeHeadÀÇ xÁÂÇ¥ °ªÀÌ °°Áö¸¸ yÁÂÇ¥°¡ ´Ù¸¥ °æ¿ì
+							if (fruit_Y > headY)
+								gameboard.change_Direction_Snake(Direction.NORTH);
+							if (fruit_Y < headY)
+								gameboard.change_Direction_Snake(Direction.SOUTH);
+						}
+						if (fruit_Y == headY) {
+							if (fruit_X > headX)
+								gameboard.change_Direction_Snake(Direction.SOUTH);
+
+						}
+
+						if (fruit_X < headX) {
+							if (fruit_Y > headY)
+								gameboard.change_Direction_Snake(Direction.NORTH);
+							if (fruit_Y < headY)
+								gameboard.change_Direction_Snake(Direction.SOUTH);
+						}
+						
 					}
-					if (key == 265 && action == GLFW.GLFW_PRESS) {
-						gameboard.change_Direction_Snake(Direction.NORTH);
+					if (direction == Direction.NORTH) {
+						if (fruit_X == headX) {
+
+							if (fruit_Y < headY)
+								gameboard.change_Direction_Snake(Direction.EAST);
+						}
+						if (fruit_Y == headY) {
+							if (fruit_X > headX)
+								gameboard.change_Direction_Snake(Direction.EAST);
+							if (fruit_X < headX)
+								gameboard.change_Direction_Snake(Direction.WEST);
+						}
+						if (fruit_X > headX) {
+
+							if (fruit_Y < headY)
+								gameboard.change_Direction_Snake(Direction.EAST);
+						}
+						if (fruit_X < headX) {
+
+							if (fruit_Y < headY)
+								gameboard.change_Direction_Snake(Direction.WEST);
+						}
+						
 					}
-					if (key == 264 && action == GLFW.GLFW_PRESS) {
-						gameboard.change_Direction_Snake(Direction.SOUTH);
+					if (direction == Direction.SOUTH) {
+						if (fruit_X == headX) {
+							if (fruit_Y > headY)
+								gameboard.change_Direction_Snake(Direction.WEST);
+
+						}
+						if (fruit_Y == headY) {
+							if (fruit_X > headX)
+								gameboard.change_Direction_Snake(Direction.EAST);
+							if (fruit_X < headX)
+								gameboard.change_Direction_Snake(Direction.WEST);
+						}
+						if (fruit_X > headX) {
+							if (fruit_Y > headY)
+								gameboard.change_Direction_Snake(Direction.EAST);
+
+						}
+						if (fruit_X < headX) {
+							if (fruit_Y > headY)
+								gameboard.change_Direction_Snake(Direction.WEST);
+
+						}
+						
 					}
-					// ï§Žë¶¾ë±æ¿¡ï¿½ ï¿½ì” ï¿½ë£ž
+				
 					if (key == GLFW.GLFW_KEY_ESCAPE && action == GLFW.GLFW_PRESS) {
 						state = GameState.GAME_MENU;
 					}
@@ -183,6 +267,21 @@ public class GameController {
 					renderRankings();
 					mainwindow.swapBuffer();
 					mainwindow.timeHandle();
+					break;
+				}
+				case GAME_AUTOMODE -> {
+					if (mainwindow.isUpdating()) {
+						mainwindow.update();
+						gameboard.move_Snake();
+						gameboard.check_Fruit_Overlap();
+						gameboard.check_Game_Terminated();
+						renderer.setBoard(gameboard);
+						mainboard.correctCameara(cam, mainwindow);
+						mainboard.render(tilerender, shader, cam, mainwindow);
+						renderer.render(shader, cam, mainboard);
+						scoreRender();
+						mainwindow.swapBuffer();
+					}
 					break;
 				}
 				}

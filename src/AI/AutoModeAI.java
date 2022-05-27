@@ -74,13 +74,13 @@ public class AutoModeAI {
 					float fruit_X = gameboard.getFruitPositionX();
 					float fruit_Y = gameboard.getFruitPositionY();
 					List<Point2D> fruitPosition = gameboard.getFruitPosition();
-					float headX = Snake.getHead().getPositionX();
-					float headY = Snake.getHead().getPositionY();
+					float headX = 1;
+					float headY = 1;
 					Point2D Head = new Point2D.Float(headX, headY);
 					Direction direction = snakeBody.getDirection();
 					if (direction == Direction.WEST) {
 						if (fruit_X == headX) {
-							if (fruit_Y > headY)
+							if (fruit_Y > headY)	//과일 위치와 SnakeHead의 위치 및 방향를 비교해 다음 방향을 결정, 누락된 경우는 직진
 								gameboard.change_Direction_Snake(Direction.NORTH);
 							if (fruit_Y < headY)
 								gameboard.change_Direction_Snake(Direction.SOUTH);
@@ -95,16 +95,15 @@ public class AutoModeAI {
 							if (fruit_Y < headY)
 								gameboard.change_Direction_Snake(Direction.SOUTH);
 						}
-						if (headX < 4) {
+						if (headX < 4) {	//벽과의 위치를 임의로 4로 설정 후, 오른쪽으로 방향을 전환
 							if(headY > -42)
 								gameboard.change_Direction_Snake(Direction.SOUTH);
 							if (headY < -42)
 								gameboard.change_Direction_Snake(Direction.NORTH);
 						}
-
 					}
 					if (direction == Direction.EAST) {
-						if (fruit_X == headX) {
+						if (fruit_X == headX) { // Fruit와 SnakeHead의 x좌표 값이 같지만 y좌표가 다른 경우
 							if (fruit_Y > headY)
 								gameboard.change_Direction_Snake(Direction.NORTH);
 							if (fruit_Y < headY)

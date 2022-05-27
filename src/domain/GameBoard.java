@@ -13,16 +13,16 @@ public class GameBoard implements Serializable {
 
     private String fileName = "user.acc";
     private String RankingFile = "Rank.acc";
-    private Snake snake;
+    private static Snake snake;
 
-    private List<Point2D> fruitPosition;
+    private static List<Point2D> fruitPosition;
     private int score = 0;
     private boolean running = true;
     private boolean paused = false;
     private transient List<Ranking> rankings;
     private String nickname;
-    private float FRUITX;
-    private float FRUITY;
+    private static float FRUITX;
+    private static float FRUITY;
 
     public GameBoard(Snake snake) {
         this.snake = snake;
@@ -64,11 +64,11 @@ public class GameBoard implements Serializable {
         }
     }
 
-    public float getFruitPositionX() {
+    public static float getFruitPositionX() {
     	return FRUITX;
     }
 
-    public float getFruitPositionY() {
+    public static float getFruitPositionY() {
     	return FRUITY;
     }
     
@@ -79,6 +79,12 @@ public class GameBoard implements Serializable {
     }
 
     public boolean change_Direction_Snake(Direction direction) {
+
+        if (snake.change_Direction(direction)) return true;
+        else return false;
+
+    }
+    public boolean change_Direction_SnakeAI(Direction direction) {
 
         if (snake.change_Direction(direction)) return true;
         else return false;
@@ -142,7 +148,7 @@ public class GameBoard implements Serializable {
         oos.writeObject(this.rankings);
     }
 
-    public List<Point2D> getFruitPosition() {
+    public static List<Point2D> getFruitPosition() {
         return fruitPosition;
     }
 
