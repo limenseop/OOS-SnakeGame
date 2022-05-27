@@ -49,9 +49,6 @@ public class Camera {
         return dynamicheight;
     }
     protected void setViewsize(double size) {
-        /*
-        size는 1 ~ 4
-         */
         if (size > MAX_CAM_VIEW)
             size = MAX_CAM_VIEW;
         dynamicewidth = (int)(width * size);
