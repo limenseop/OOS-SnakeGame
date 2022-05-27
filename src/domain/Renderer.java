@@ -217,7 +217,7 @@ public class Renderer {
             String guiString = "score : " + score;
             fontRenderer.renderString(fontTexture,guiString,50 + 690*idx,10,new Vector3f(11,11,0));
             if(gameBoard.getRankings().isEmpty()){
-                return;
+                //return;
             }
             else if(score > gameBoard.getRankings().get(0).getScore() && gameBoard.getPlayer_num() == 1){
                 fontRenderer.renderString(fontTexture,"new record!",50,70,new Vector3f(11,11,0));
@@ -256,5 +256,46 @@ public class Renderer {
         }
         String pressESC = "Press ESC to back!";
         fontRenderer.renderString(fontTexture,pressESC,335,900,new Vector3f(11,11,0));
+    }
+
+    public void render_result(){
+        boolean is_dual = gameBoard.isAutoDual();
+        if(!is_dual){
+            //solo-mode의 result제공
+            int scored = gameBoard.getScores().get(0);
+            String gui_username = "<<" + gameBoard.getNickname()+">>";
+            fontRenderer.renderString(fontTexture,gui_username,350,400,new Vector3f(10,10,0));
+            String gui_string = "your score = " + scored;
+            fontRenderer.renderString(fontTexture,gui_string,350,500,new Vector3f(10,10,0));
+            String gui_ranking = "your ranking = " + gameBoard.ranking();
+            fontRenderer.renderString(fontTexture,gui_ranking,350,600,new Vector3f(10,10,0));
+
+        }
+        else{
+            int score_0 = gameBoard.getScores().get(0);
+            int score_1 = gameBoard.getScores().get(1);
+            int winner = 0;
+            boolean is_draw = false;
+            if(score_0>score_1) winner = 1;
+            else if(score_1>score_0) winner = 2;
+            else is_draw = true;
+            if(is_draw){
+                String gui_result_draw = "DRAW!!";
+                fontRenderer.renderString(fontTexture,gui_result_draw,350,550,new Vector3f(10,10,0));
+            }
+            else{
+                String gui_winner = "";
+                if(gameBoard.isAuto()){
+                    if(winner == 2)
+                    gui_winner = "You win!";
+                    else gui_winner = "You Lose!";
+                }
+                else
+                gui_winner = "winner is player" + winner;
+                fontRenderer.renderString(fontTexture,gui_winner,350,400,new Vector3f(10,10,0));
+                String gui_score_versis = score_0 + " vs " + score_1;
+                fontRenderer.renderString(fontTexture,gui_score_versis,350,500,new Vector3f(10,10,0));
+            }
+        }
     }
 }

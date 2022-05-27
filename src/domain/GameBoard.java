@@ -22,7 +22,6 @@ public class GameBoard implements Serializable {
 
     private List<Point2D> fruitPosition;
     private List<Integer> scores;
-    private int score = 0;
     private boolean running = true;
     private boolean paused = false;
     private boolean auto_dual = false;
@@ -66,7 +65,6 @@ public class GameBoard implements Serializable {
     public void loadGame() throws Exception{
         GameBoard saveData = loadFromFile();
         this.snakes = saveData.getSnake();
-        this.score = saveData.getScore();
         this.scores = saveData.getScores();
         this.paused = saveData.isPaused();
         this.running = saveData.isRunning();
@@ -139,7 +137,7 @@ public class GameBoard implements Serializable {
         return running;
     }
 
-    public void auto_Move_Determination(){
+    /*public void auto_Move_Determination(){
         //solo모드로 가정 -> snake.0를 handle
         Snake target = snakes.get(0);
         Point2D snake_pos = new Point2D.Float(target.getHead().getPositionX(),target.getHead().getPositionY());
@@ -173,10 +171,14 @@ public class GameBoard implements Serializable {
         //-> 새 apple이 생성되었음을 인식할 수 있어야됨
         //score의 diff로 판단하자!
 
-    }
+    }*/
 
     public void setNickname(String nickname) {
         this.nickname = nickname;
+    }
+
+    public String getNickname(){
+        return nickname;
     }
 
     public boolean gameRunning(){
@@ -185,7 +187,6 @@ public class GameBoard implements Serializable {
 
     public void re_Play(int num){
         running = true;
-        score = 0;
         scores.clear();
         fruitPosition.clear();
         snakes.clear();
@@ -216,7 +217,6 @@ public class GameBoard implements Serializable {
                 Point2D head = new Point2D.Float(headX, headY);
                 if (head.distance(fruit) < 1.3) {
                     fruitPosition.remove(s);
-                    score = score + 100;
                     scores.set(count, scores.get(count) + 100);
                     for (int i = 0; i < 8; i++)
                         snake.grow();
@@ -256,9 +256,6 @@ public class GameBoard implements Serializable {
         this.running =  false;
     }
 
-    public int getScore() {
-        return score;
-    }
 
     public List<Integer> getScores(){
         return scores;
@@ -286,6 +283,15 @@ public class GameBoard implements Serializable {
         return is_auto;
     }
 
+    public int ranking(){
+        int idx = 0;
+        for (Ranking ranking : rankings) {
+            if(scores.get(0) >= ranking.getScore()) return idx+1;
+            idx = idx + 1;
+        }
+        return 1;
+    }
+
     private GameBoard loadFromFile() throws Exception{
         FileInputStream fis = new FileInputStream(fileName);
         ObjectInputStream ois = new ObjectInputStream(fis);
@@ -307,7 +313,7 @@ public class GameBoard implements Serializable {
 
     private void recordRanking(){
         System.out.println("recorded!");
-        rankings.add(new Ranking(nickname,score));
+        rankings.add(new Ranking(nickname,scores.get(0)));
         sort_Ranking();
     }
 
