@@ -82,10 +82,8 @@ public class GameBoard implements Serializable {
 
         double startTime = System.currentTimeMillis();
 
-        System.out.println("player_num = " + player_num);
         float fruit_X = (float) ((Math.random() * boundary_x * player_num) + 2);
         float fruit_Y = (float) ((Math.random() * boundary_y * player_num) - 2);
-        System.out.println(boundary_x);
 
             while (fruitPosition.size()<player_num) {
                 for (Snake snake : snakes) {
@@ -216,7 +214,6 @@ public class GameBoard implements Serializable {
                 if (head.distance(fruit) < 1.3) {
                     fruitPosition.remove(s);
                     score = score + 100;
-                    System.out.println("count = " + count);
                     scores.set(count, scores.get(count) + 100);
                     for (int i = 0; i < 8; i++)
                         snake.grow();
@@ -280,7 +277,7 @@ public class GameBoard implements Serializable {
         return rankings;
     }
 
-    public boolean isAuto(){return auto_dual;}
+    public boolean isAutoDual(){return auto_dual;}
 
     private GameBoard loadFromFile() throws Exception{
         FileInputStream fis = new FileInputStream(fileName);
@@ -290,7 +287,6 @@ public class GameBoard implements Serializable {
     }
 
     private List<Ranking> load_Ranking() throws IOException, ClassNotFoundException {
-        System.out.println("i tried");
         FileInputStream fis = new FileInputStream(RankingFile);
         ObjectInputStream ois = new ObjectInputStream(fis);
         List<Ranking> loaded_Ranking = (List<Ranking>) ois.readObject();
