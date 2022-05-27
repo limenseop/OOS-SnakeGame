@@ -12,8 +12,8 @@ import java.util.List;
 public class GameBoard implements Serializable {
 
     private final int MIN_X = 0;
-    private final int MAX_X = 80;
-    private final int MIN_Y = -82;
+    private final int MAX_X = 160;
+    private final int MIN_Y = -164;
     private final int MAX_Y = -2;
 
     private String fileName = "user.acc";
@@ -30,10 +30,10 @@ public class GameBoard implements Serializable {
     private transient List<Ranking> rankings;
     private String nickname;
 
-    private AutoMover autoMover;
+    private final AutoMover autoMover;
     public GameBoard() {
         snakes = new ArrayList<>();
-        autoMover = new AutoMover();
+        autoMover = new AutoMover(MAX_X, MIN_Y, 2.0f, 12.0f);
         snakes.add(new Snake(0));
         fruitPosition = new ArrayList<>();
         scores = new ArrayList<>();
@@ -105,8 +105,8 @@ public class GameBoard implements Serializable {
     }
 
     public void moveAutoSnake() {
-            Direction direction = autoMover.changeDirection(snakes.get(0), snakes.get(1), getFruitPosition(), (float)MAX_X, (float)MIN_Y, 10.0f);
-            change_Direction_Snake(direction, 0);
+        Direction direction = autoMover.getNextDirection(snakes.get(0), snakes.get(1), getFruitPosition());
+        change_Direction_Snake(direction, 0);
     }
 
     public synchronized boolean move_Snake() {

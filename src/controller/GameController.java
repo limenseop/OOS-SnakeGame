@@ -190,7 +190,7 @@ public class GameController {
                 case GAME_DUAL -> {
                     if (mainwindow.isUpdating()) {
                         mainwindow.update();
-                        //gameboard.moveAutoSnake();
+                        gameboard.moveAutoSnake();
                         gameboard.move_Snake();
                         gameboard.check_Fruit_Overlap();
                         gameboard.check_Game_Terminated();
