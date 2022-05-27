@@ -6,16 +6,12 @@
 
 package src.controller;
 
-import org.joml.Vector3f;
 import org.lwjgl.glfw.*;
 import src.board.Board;
 import src.board.TileRenderer;
 import src.domain.GameBoard;
 import src.domain.Direction;
-import src.domain.Ranking;
 import src.domain.Renderer;
-import src.font.FontRenderer;
-import src.font.FontTexture;
 import src.models.Camera;
 import src.models.DualCamera;
 import src.models.Shader;
@@ -23,10 +19,8 @@ import src.windowhandle.MouseHandler;
 import src.windowhandle.Window;
 
 
-import java.awt.*;
 import java.awt.geom.Point2D;
 import java.io.IOException;
-import java.util.List;
 
 public class GameController {
 
@@ -132,6 +126,18 @@ public class GameController {
                         break;
                     }
                     case GAME_AUTO -> {
+                        if (key == 262 && action == GLFW.GLFW_PRESS) {
+                            gameboard.change_Direction_Snake(Direction.EAST,1);
+                        }
+                        if (key == 263 && action == GLFW.GLFW_PRESS) {
+                            gameboard.change_Direction_Snake(Direction.WEST,1);
+                        }
+                        if (key == 265 && action == GLFW.GLFW_PRESS) {
+                            gameboard.change_Direction_Snake(Direction.NORTH,1);
+                        }
+                        if (key == 264 && action == GLFW.GLFW_PRESS) {
+                            gameboard.change_Direction_Snake(Direction.SOUTH,1);
+                        }
                         if (key == GLFW.GLFW_KEY_ESCAPE && action == GLFW.GLFW_PRESS) {
                             state = GameState.GAME_MENU;
                         }
@@ -190,7 +196,6 @@ public class GameController {
                 case GAME_DUAL -> {
                     if (mainwindow.isUpdating()) {
                         mainwindow.update();
-                        gameboard.moveAutoSnake();
                         gameboard.move_Snake();
                         gameboard.check_Fruit_Overlap();
                         gameboard.check_Game_Terminated();
@@ -221,12 +226,12 @@ public class GameController {
                     if (mainwindow.isUpdating()) {
                         mainwindow.update();
                         gameboard.move_Snake();
-                        gameboard.auto_Move_Determination();
+                        gameboard.moveAutoSnake();
                         gameboard.check_Fruit_Overlap();
                         gameboard.check_Game_Terminated();
-                        mainboard.correctCameara(cam);
-                        mainboard.render(tilerender, shader, cam);
-                        renderer.render(shader,cam,mainboard);
+                        dualboard.correctCameara(dualcam);
+                        dualboard.render(tilerender, shader, dualcam);
+                        renderer.renderforDual(shader,dualcam,mainboard);
                         renderer.scoreRender();
                         mainwindow.swapBuffer();
                     }
@@ -297,7 +302,7 @@ public class GameController {
 
                 //automode
                 else if(cursorX>=167 && cursorX<=487 && cursorY>=339 && cursorY<=389) {
-                    gameboard.re_Play(1);
+                    gameboard.re_Play(2);
                     gameboard.set_Auto_Mode();
                     state = GameState.GAME_AUTO;
                     renderer.setBoard(gameboard);
@@ -308,11 +313,11 @@ public class GameController {
                         gameboard.loadGame();
                         mainboard.correctCameara(cam);
                         mainboard.render(tilerender, shader, cam);
-                        renderer.setBoard(gameboard);
                     }catch(Exception e){
                         System.out.println("e = " + e);
                         gameboard.re_Play(1);
                     }
+                    renderer.setBoard(gameboard);
                     state = GameState.GAME_ACTIVE;
                 }
 
@@ -332,17 +337,37 @@ public class GameController {
             }
             case GAME_MENU -> {
                 if(cursorX>=206 && cursorX<=441 && cursorY >=272 && cursorY<=320){
+                    if(gameboard.isAutoDual()){
+                        if(gameboard.isAutoDual()){
+                            if(gameboard.isAuto()) state = GameState.GAME_AUTO;
+                            else state = GameState.GAME_DUAL;
+                        }
+                    }
+                    else
                     state = GameState.GAME_ACTIVE;
                     //resume
                 }
                 else if(cursorX>=195 && cursorX<=445 && cursorY>=356 && cursorY<=405){
-                    gameboard.re_Play(1);
+                    boolean checker = false;
+                    System.out.println("replay option");
+                    System.out.println("gameboard = " + gameboard.isAutoDual());
+                    if(gameboard.isAutoDual()){
+                        if(gameboard.isAuto()) checker = true;
+                        gameboard.re_Play(2);
+                        state = GameState.GAME_DUAL;
+                        if(checker){
+                            gameboard.set_Auto_Mode();
+                            state = GameState.GAME_AUTO;
+                        }
+                    }
+                    else{
+                        gameboard.re_Play(1);
+                        state = GameState.GAME_ACTIVE;
+                    }
                     renderer.setBoard(gameboard);
-                    state = GameState.GAME_ACTIVE;
-                    //replay
                 }
                 else if(cursorX>=252 && cursorX<=395 && cursorY>=443 && cursorY<=492) {
-                    if (gameboard.isAuto()) {
+                    if (gameboard.isAutoDual()) {
                         state = GameState.GAME_INIT;
                     }
                     else {
@@ -355,7 +380,7 @@ public class GameController {
                         //game save
                     }
                 }
-                else if(!gameboard.isAuto()&&cursorX>=263 && cursorX<=385 && cursorY>=530 && cursorY<=574){
+                else if(!gameboard.isAutoDual()&&cursorX>=263 && cursorX<=385 && cursorY>=530 && cursorY<=574){
                     state = GameState.GAME_INIT;
                 }
                 break;

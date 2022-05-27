@@ -89,7 +89,6 @@ public class Renderer {
             head.add(snake.getHead());
             count = count + 1;
         }
-        System.out.println("head.get(0) = " + head.get(0));
         fruit = board.getFruitPosition();
     }
 
@@ -132,7 +131,7 @@ public class Renderer {
         shader.bind();
         shader.setUniform("sampler", 0);
         shader.setUniform("projection", new Matrix4f().setOrtho2D(-mainboard.getWidth() / 2, mainboard.getWidth() / 2, -mainboard.getHeight() / 2, mainboard.getHeight() / 2));
-        if(!gameBoard.isAuto())
+        if(!gameBoard.isAutoDual())
         pauseMenuTex.bind(0);
         else autoMenuTex.bind(0);
         meunmodel.render();
@@ -156,7 +155,6 @@ public class Renderer {
 
 
     private void setFocus(Camera camera, Board board){
-        System.out.println("head.get(0).getPositionY() = " + head.get(0).getPositionY());
         Transform focus = new Transform();
         focus.scale = new Vector3f(16,16,1);
         focus.pos = new Vector3f((float) head.get(0).getPositionX(), (float) head.get(0).getPositionY(),0);

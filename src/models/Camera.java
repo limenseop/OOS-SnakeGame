@@ -15,6 +15,7 @@ public class Camera {
     private Matrix4f projection;
 
     private final double MAX_CAM_VIEW = 4.5;
+    //TODO 넓게
 
     public Camera(int width, int height) {
         this.width = width;

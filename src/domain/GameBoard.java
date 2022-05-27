@@ -12,8 +12,8 @@ import java.util.List;
 public class GameBoard implements Serializable {
 
     private final int MIN_X = 0;
-    private final int MAX_X = 160;
-    private final int MIN_Y = -164;
+    private final int MAX_X = 80;
+    private final int MIN_Y = -82;
     private final int MAX_Y = -2;
 
     private String fileName = "user.acc";
@@ -26,14 +26,15 @@ public class GameBoard implements Serializable {
     private boolean running = true;
     private boolean paused = false;
     private boolean auto_dual = false;
+    private boolean is_auto = false;
     private int player_num = 1;
     private transient List<Ranking> rankings;
     private String nickname;
 
-    private final AutoMover autoMover;
+    private transient AutoMover autoMover;
     public GameBoard() {
         snakes = new ArrayList<>();
-        autoMover = new AutoMover(MAX_X, MIN_Y, 2.0f, 12.0f);
+        autoMover = new AutoMover();
         snakes.add(new Snake(0));
         fruitPosition = new ArrayList<>();
         scores = new ArrayList<>();
@@ -50,7 +51,6 @@ public class GameBoard implements Serializable {
         scores.clear();
         scores.add(0);
         scores.add(0);
-        System.out.println("paused = " + paused);
         snakes.clear();
         player_num = 2;
         snakes.add(new Snake(1));
@@ -59,7 +59,8 @@ public class GameBoard implements Serializable {
     }
 
     public void set_Auto_Mode(){
-        auto_dual = true;
+        set_Dual_mode();
+        is_auto = true;
     }
 
     public void loadGame() throws Exception{
@@ -72,6 +73,8 @@ public class GameBoard implements Serializable {
         fruitPosition.remove(0);
         fruitPosition.add(saveData.getFruitPosition().get(0));
         auto_dual = false;
+        is_auto = false;
+        autoMover = new AutoMover();
         player_num = 1;
     }
 
@@ -82,10 +85,8 @@ public class GameBoard implements Serializable {
 
         double startTime = System.currentTimeMillis();
 
-        System.out.println("player_num = " + player_num);
         float fruit_X = (float) ((Math.random() * boundary_x * player_num) + 2);
         float fruit_Y = (float) ((Math.random() * boundary_y * player_num) - 2);
-        System.out.println(boundary_x);
 
             while (fruitPosition.size()<player_num) {
                 for (Snake snake : snakes) {
@@ -105,8 +106,8 @@ public class GameBoard implements Serializable {
     }
 
     public void moveAutoSnake() {
-        Direction direction = autoMover.getNextDirection(snakes.get(0), snakes.get(1), getFruitPosition());
-        change_Direction_Snake(direction, 0);
+            Direction direction = autoMover.changeDirection(snakes.get(0), snakes.get(1), getFruitPosition(), (float)MAX_X, (float)MIN_Y, 10.0f);
+            change_Direction_Snake(direction, 0);
     }
 
     public synchronized boolean move_Snake() {
@@ -132,7 +133,7 @@ public class GameBoard implements Serializable {
 
             if (out_Of_Bounces(headX, headY) || snake.check_If_collapse() || check_Snake_Crossed()) {
                 running = false;
-                if(this.player_num == 1 && auto_dual == false)recordRanking();
+                if(auto_dual == false)recordRanking();
             }
         }
         return running;
@@ -208,7 +209,6 @@ public class GameBoard implements Serializable {
 
         int count = 0;
         for (Snake snake : snakes) {
-            //TODO : 2개 fruit에 대해 check_overlap
             for(int s = 0;s< fruitPosition.size();s++) {
                 Point2D fruit = fruitPosition.get(s);
                 float headX = snake.getHead().getPositionX();
@@ -217,7 +217,6 @@ public class GameBoard implements Serializable {
                 if (head.distance(fruit) < 1.3) {
                     fruitPosition.remove(s);
                     score = score + 100;
-                    System.out.println("count = " + count);
                     scores.set(count, scores.get(count) + 100);
                     for (int i = 0; i < 8; i++)
                         snake.grow();
@@ -281,7 +280,11 @@ public class GameBoard implements Serializable {
         return rankings;
     }
 
-    public boolean isAuto(){return auto_dual;}
+    public boolean isAutoDual(){return auto_dual;}
+
+    public boolean isAuto(){
+        return is_auto;
+    }
 
     private GameBoard loadFromFile() throws Exception{
         FileInputStream fis = new FileInputStream(fileName);
@@ -291,7 +294,6 @@ public class GameBoard implements Serializable {
     }
 
     private List<Ranking> load_Ranking() throws IOException, ClassNotFoundException {
-        System.out.println("i tried");
         FileInputStream fis = new FileInputStream(RankingFile);
         ObjectInputStream ois = new ObjectInputStream(fis);
         List<Ranking> loaded_Ranking = (List<Ranking>) ois.readObject();

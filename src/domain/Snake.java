@@ -164,6 +164,8 @@ public class Snake implements Serializable {
         }
         return false;
     }
+
+
     public void re_Init() {
         body.clear();
         System.out.println("Snake.setInit");
