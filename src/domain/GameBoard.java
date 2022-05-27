@@ -34,7 +34,7 @@ public class GameBoard implements Serializable {
     private transient AutoMover autoMover;
     public GameBoard() {
         snakes = new ArrayList<>();
-        autoMover = new AutoMover(MAX_X, MIN_Y, 1.5f, 12.0f);
+        autoMover = new AutoMover(MAX_X, MIN_Y, 0.7f, 12.0f);
         snakes.add(new Snake(0));
         fruitPosition = new ArrayList<>();
         scores = new ArrayList<>();

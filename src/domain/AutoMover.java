@@ -38,6 +38,7 @@ public class AutoMover {
             System.out.print(4 + ": Detecting the boundary get closed. Changing the direction.\n");
             return getDirectionbyCenter(ownSnake);
         }
+        //2순위 사과로 이동
         return getDirectionbyApple(ownSnake, getClosedApple(ownSnake, fruits));
     }
     private Point2D getClosedApple(Snake ownSanke, List<Point2D> apples){
@@ -46,31 +47,46 @@ public class AutoMover {
         Point2D head = new Point2D.Float(ownSanke.getHead().getPositionX(), ownSanke.getHead().getPositionY());
         for (Point2D apple : apples) {
             double distancetoHead = head.distance(apple);
-            if (distancetoHead < mindistance) {
+            if (distancetoHead < mindistance && filterApple(apple)) {
                 closedapple = apple;
                 mindistance = distancetoHead;
             }
         }
         return closedapple;
     }
+    private boolean filterApple(Point2D apple) {
+        if (apple.getX() > DETECTING_RANGE
+                && apple.getX() < BOARD_WIDTH - DETECTING_RANGE
+                && apple.getY() < -DETECTING_RANGE
+                && apple.getY() > BOARD_HEIGHT + DETECTING_RANGE) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
     private Direction getDirectionbyApple(Snake ownsnake, Point2D closedapple) {
-        double appleXpos = closedapple.getX();
-        double appleYpos = closedapple.getY();
-        double headXpos = ownsnake.getHead().getPositionX();
-        double headYpos = ownsnake.getHead().getPositionY();
+        try {
+            double appleXpos = closedapple.getX();
+            double appleYpos = closedapple.getY();
+            double headXpos = ownsnake.getHead().getPositionX();
+            double headYpos = ownsnake.getHead().getPositionY();
 
-        if (Math.abs(headXpos - appleXpos) >= 0.5) {
-            if (headXpos < appleXpos) {
-                return Direction.EAST;
+            if (Math.abs(headXpos - appleXpos) >= (ERROR_RANGE / 2)) {
+                if (headXpos < appleXpos) {
+                    return Direction.EAST;
+                } else {
+                    return Direction.WEST;
+                }
             } else {
-                return Direction.WEST;
+                if (headYpos < appleYpos) {
+                    return Direction.NORTH;
+                } else {
+                    return Direction.SOUTH;
+                }
             }
-        } else {
-            if (headYpos < appleYpos) {
-                return Direction.NORTH;
-            } else {
-                return Direction.SOUTH;
-            }
+        } catch (NullPointerException ne) {
+            return ownsnake.getHead().getDirection();
         }
     }
     private snakeBody getFilteredBody(Snake ownsnake, List<snakeBody> checkBodies) {
