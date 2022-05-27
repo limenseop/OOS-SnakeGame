@@ -238,8 +238,8 @@ public class Renderer {
         String text;
         if(ranks.size()>=5){
             for(int i = 0;i<5;i++){
-                id = ranks.get(0).getId();
-                score = ranks.get(0).getScore();
+                id = ranks.get(i).getId();
+                score = ranks.get(i).getScore();
                 text = "rank"+(i+1)+"   nickname = " + id + "   Score : " + score;
                 fontRenderer.renderString(fontTexture,text,100,300 + 100 * i,new Vector3f(11,11,0));
             }
@@ -297,5 +297,7 @@ public class Renderer {
                 fontRenderer.renderString(fontTexture,gui_score_versis,350,500,new Vector3f(10,10,0));
             }
         }
+        String pressESC = "Press ESC to go main menu!";
+        fontRenderer.renderString(fontTexture,pressESC,250,900,new Vector3f(11,11,0));
     }
 }

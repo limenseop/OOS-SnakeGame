@@ -34,4 +34,12 @@ public class Ranking implements Serializable,Comparable<Ranking>{
         }
         return 0;
     }
+
+    @Override
+    public String toString() {
+        return "Ranking{" +
+                "id='" + id + '\'' +
+                ", score=" + score +
+                '}';
+    }
 }
