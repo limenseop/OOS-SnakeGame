@@ -276,12 +276,14 @@ public class GameController {
                 }
             }
         }
-        mainwindow.update();
-        mainboard.correctCameara(cam);
-        renderer.rankingRendering(shader,mainboard);
-        renderer.render_result();
-        mainwindow.swapBuffer();
-        mainwindow.timeHandle();
+        if(on_Running) {
+            mainwindow.update();
+            mainboard.correctCameara(cam);
+            renderer.rankingRendering(shader, mainboard);
+            renderer.render_result();
+            mainwindow.swapBuffer();
+            mainwindow.timeHandle();
+        }
         }
     }
 
