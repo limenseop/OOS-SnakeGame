@@ -164,29 +164,4 @@ public class Snake implements Serializable {
         }
         return false;
     }
-
-
-    public void re_Init() {
-        body.clear();
-        System.out.println("Snake.setInit");
-        body.add(new snakeBody(42,-42,Direction.NORTH));
-        body.add(new snakeBody(42,-43,Direction.NORTH));
-        body.add(new snakeBody(42,-44,Direction.NORTH));
-        body.add(new snakeBody(42,-42,Direction.NORTH));
-        body.add(new snakeBody(42,-41,Direction.NORTH));
-        body.add(new snakeBody(42,-40,Direction.NORTH));
-        body.add(new snakeBody(42,-39,Direction.NORTH));
-        body.add(new snakeBody(42,-38,Direction.NORTH));
-        body.add(new snakeBody(42,-37,Direction.NORTH));
-        head = body.get(0);
-        System.out.println("this.head = " + this.head);
-    }
-
-    public void setSnake(Snake snakes){
-        body.clear();
-        for (snakeBody snakeBody : snakes.body) {
-            this.body.add(snakeBody);
-        }
-        head = this.body.get(0);
-    }
 }

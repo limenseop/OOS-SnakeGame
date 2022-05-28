@@ -90,7 +90,7 @@ public class GameBoard implements Serializable {
                 for (Snake snake : snakes) {
 
                     while (snake.check_If_Overlap(fruit_X, fruit_Y)
-                    ||(player_num == 2  && (!fruitPosition.isEmpty() && fruitPosition.get(0).distance(new Point2D.Float(fruit_X,fruit_Y))<1.3))) {
+                    ||(isAutoDual()  && (!fruitPosition.isEmpty() && fruitPosition.get(0).distance(new Point2D.Float(fruit_X,fruit_Y))<1.3))) {
 
                         fruit_X = (float) ((Math.random() * boundary_x * player_num) + 2);
                         fruit_Y = (float) ((Math.random() * boundary_y * player_num) - 2);
@@ -264,7 +264,9 @@ public class GameBoard implements Serializable {
     }
 
     private boolean out_Of_Bounces(int x, int y) {
-        if (x < MIN_X || x >=MAX_X * player_num || y < MIN_Y || y >= MAX_Y) return true;
+        System.out.println("x = " + x);
+        System.out.println("y = " + y);
+        if (x < MIN_X || x >=MAX_X * player_num || y < MIN_Y * player_num || y >= MAX_Y) return true;
         return false;
     }
 
