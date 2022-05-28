@@ -27,11 +27,11 @@ Guidelines to install and run our game
 - ranking : Recalls the locally played game's Ranking information saved in rank.acc.
 - exit : Exit the game.
 
-2) 게임 시작
+2) Game Start
 - Arrow Key : Change the snake's direction
 - esc & p : Recalls pause menu.
 
-3) menu
+3) Pause Menu
 - resume : Continues the game -> Restarts the game from the paused moment.
 - restart : Initialize all information includes score, fruitPosition, snake and restarts the game from beginning.
 - save : Save the current state of the game.
