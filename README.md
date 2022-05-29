@@ -28,13 +28,14 @@ Guidelines to install and run our game
 - exit : Exit the game.
 
 2) Game Start
-- Arrow Key : Change the snake's direction
+- Arrow Key : Change the (Single)snake's and (Dual)snake2's direction
+- WASD : Change the (Dual)snake1's direction
 - esc & p : Recalls pause menu.
 
 3) Pause Menu
 - resume : Continues the game -> Restarts the game from the paused moment.
 - restart : Initialize all information includes score, fruitPosition, snake and restarts the game from beginning.
-- save : Save the current state of the game.
+- save : Save the current state of the game. Only available at Single Play mode.
 - exit : Initialize all information and Returns to Main Menu.
 
 Class Explanation
