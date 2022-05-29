@@ -61,6 +61,10 @@ public class FontTexture {
 		return result.toString();
 	}
 
+	public void rollback_font(){
+		font = new Font("Time Roman", Font.PLAIN, 40);
+	}
+
 	private void buildTexture() {
 		BufferedImage img = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g2D = img.createGraphics();

@@ -19,8 +19,7 @@ public class FontRenderer {
 	public static final String FRAGMENT_SHADER = "src/TextShaders/fontFragmentShader.txt";
 	
 	private fontShader shader;
-	
-	// ���� font renderer������ ���� vao, vbo.
+
 	private int VAO;
 	private int VBO;
 	

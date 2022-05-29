@@ -64,6 +64,15 @@ public class GameController {
         GLFWKeyCallback keyCallback_ESC = new GLFWKeyCallback() {
             @Override
             public void invoke(long window, int key, int scancode, int action, int mods) {
+                if(gameboard.isRunning() == false){
+                    if(key == GLFW.GLFW_KEY_ESCAPE && action == GLFW.GLFW_PRESS){
+                        System.out.println("hello");
+                        state = GameState.GAME_INIT;
+                        gameboard.re_Play(1);
+                        renderer.setZeroFocus(cam,mainboard);
+                        renderer.setBoard(gameboard);
+                    }
+                }
                 switch (state) {
                     case GAME_ACTIVE -> {
                         //snake 방향변경
@@ -267,11 +276,14 @@ public class GameController {
                 }
             }
         }
-        state = GameState.GAME_INIT;
-        gameboard.re_Play(1);
-        renderer.setZeroFocus(cam,mainboard);
-        renderer.setBoard(gameboard);
-
+        if(on_Running) {
+            mainwindow.update();
+            mainboard.correctCameara(cam);
+            renderer.rankingRendering(shader, mainboard);
+            renderer.render_result();
+            mainwindow.swapBuffer();
+            mainwindow.timeHandle();
+        }
         }
     }
 

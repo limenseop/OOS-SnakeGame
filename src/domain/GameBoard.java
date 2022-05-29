@@ -22,7 +22,6 @@ public class GameBoard implements Serializable {
 
     private List<Point2D> fruitPosition;
     private List<Integer> scores;
-    private int score = 0;
     private boolean running = true;
     private boolean paused = false;
     private boolean auto_dual = false;
@@ -66,10 +65,10 @@ public class GameBoard implements Serializable {
     public void loadGame() throws Exception{
         GameBoard saveData = loadFromFile();
         this.snakes = saveData.getSnake();
-        this.score = saveData.getScore();
         this.scores = saveData.getScores();
         this.paused = saveData.isPaused();
         this.running = saveData.isRunning();
+        this.nickname = saveData.getNickname();
         fruitPosition.remove(0);
         fruitPosition.add(saveData.getFruitPosition().get(0));
         auto_dual = false;
@@ -83,7 +82,6 @@ public class GameBoard implements Serializable {
         int boundary_x = 70;
         int boundary_y = -70;
 
-        double startTime = System.currentTimeMillis();
 
         float fruit_X = (float) ((Math.random() * boundary_x * player_num) + 2);
         float fruit_Y = (float) ((Math.random() * boundary_y * player_num) - 2);
@@ -92,7 +90,7 @@ public class GameBoard implements Serializable {
                 for (Snake snake : snakes) {
 
                     while (snake.check_If_Overlap(fruit_X, fruit_Y)
-                    ||(player_num == 2  && (!fruitPosition.isEmpty() && fruitPosition.get(0).distance(new Point2D.Float(fruit_X,fruit_Y))<1.3))) {
+                    ||(isAutoDual()  && (!fruitPosition.isEmpty() && fruitPosition.get(0).distance(new Point2D.Float(fruit_X,fruit_Y))<1.3))) {
 
                         fruit_X = (float) ((Math.random() * boundary_x * player_num) + 2);
                         fruit_Y = (float) ((Math.random() * boundary_y * player_num) - 2);
@@ -100,9 +98,6 @@ public class GameBoard implements Serializable {
                 }
                 fruitPosition.add(new Point2D.Float(fruit_X, fruit_Y));
             }
-        //System.out.println("fruitPosition = " + fruitPosition.size());
-
-        //System.out.println("(System.currentTimeMillis() - startTime) = " + (System.currentTimeMillis() - startTime));
     }
 
     public void moveAutoSnake() {
@@ -139,44 +134,12 @@ public class GameBoard implements Serializable {
         return running;
     }
 
-    public void auto_Move_Determination(){
-        //solo모드로 가정 -> snake.0를 handle
-        Snake target = snakes.get(0);
-        Point2D snake_pos = new Point2D.Float(target.getHead().getPositionX(),target.getHead().getPositionY());
-        Point2D selected_fruit = fruitPosition.get(0);
-        boolean set_x;
-        set_x = (Math.abs(snake_pos.getX()-selected_fruit.getX())>1.0);
-        //System.out.println("set_x = " + set_x);
-        //System.out.println("snake_pos = " + (snake_pos.getX() - selected_fruit.getX()));
-
-        //1. 먼저 x축을 맞추기 위해 move
-        if(set_x){
-            System.out.println("x_setting");
-            if(snake_pos.getX()>selected_fruit.getX()){
-                target.change_Direction(Direction.WEST);
-            }else{
-                if(target.getDirection()!=Direction.EAST)
-                target.change_Direction(Direction.EAST);
-            }
-        }
-        else{
-            System.out.println("y_setting");
-            if(snake_pos.getY()> selected_fruit.getY()){
-                target.change_Direction(Direction.SOUTH);
-            }
-            else{
-                target.change_Direction(Direction.NORTH);
-            }
-        }
-
-        //additional determination : 만약 새 fruit이 생성됬는데 같은 x축일경우?
-        //-> 새 apple이 생성되었음을 인식할 수 있어야됨
-        //score의 diff로 판단하자!
-
-    }
-
     public void setNickname(String nickname) {
         this.nickname = nickname;
+    }
+
+    public String getNickname(){
+        return nickname;
     }
 
     public boolean gameRunning(){
@@ -185,7 +148,6 @@ public class GameBoard implements Serializable {
 
     public void re_Play(int num){
         running = true;
-        score = 0;
         scores.clear();
         fruitPosition.clear();
         snakes.clear();
@@ -205,8 +167,6 @@ public class GameBoard implements Serializable {
 
     public boolean check_Fruit_Overlap() {
 
-        double startTime = System.currentTimeMillis();
-
         int count = 0;
         for (Snake snake : snakes) {
             for(int s = 0;s< fruitPosition.size();s++) {
@@ -216,18 +176,15 @@ public class GameBoard implements Serializable {
                 Point2D head = new Point2D.Float(headX, headY);
                 if (head.distance(fruit) < 1.3) {
                     fruitPosition.remove(s);
-                    score = score + 100;
                     scores.set(count, scores.get(count) + 100);
                     for (int i = 0; i < 8; i++)
                         snake.grow();
                     createFruit();
-                    //System.out.println("(System.currentTimeMillis() - startTime) = " + (System.currentTimeMillis() - startTime));
                     return true;
                 }
             }
             count = count + 1;
         }
-        //System.out.println("(System.currentTimeMillis() - startTime) = " + (System.currentTimeMillis() - startTime));
         return false;
     }
 
@@ -256,9 +213,6 @@ public class GameBoard implements Serializable {
         this.running =  false;
     }
 
-    public int getScore() {
-        return score;
-    }
 
     public List<Integer> getScores(){
         return scores;
@@ -286,6 +240,15 @@ public class GameBoard implements Serializable {
         return is_auto;
     }
 
+    public int ranking(){
+        int idx = 0;
+        for (Ranking ranking : rankings) {
+            if(scores.get(0) >= ranking.getScore()) return idx+1;
+            idx = idx + 1;
+        }
+        return 1;
+    }
+
     private GameBoard loadFromFile() throws Exception{
         FileInputStream fis = new FileInputStream(fileName);
         ObjectInputStream ois = new ObjectInputStream(fis);
@@ -301,13 +264,16 @@ public class GameBoard implements Serializable {
     }
 
     private boolean out_Of_Bounces(int x, int y) {
-        if (x < MIN_X || x >=MAX_X * player_num || y < MIN_Y || y >= MAX_Y) return true;
+        System.out.println("x = " + x);
+        System.out.println("y = " + y);
+        if (x < MIN_X || x >=MAX_X * player_num || y < MIN_Y * player_num || y >= MAX_Y) return true;
         return false;
     }
 
     private void recordRanking(){
         System.out.println("recorded!");
-        rankings.add(new Ranking(nickname,score));
+        rankings.add(new Ranking(nickname,scores.get(0)));
+        System.out.println("rankings = " + rankings);
         sort_Ranking();
     }
 
