@@ -33,7 +33,7 @@ public class GameBoard implements Serializable {
     private transient AutoMover autoMover;
     public GameBoard() {
         snakes = new ArrayList<>();
-        autoMover = new AutoMover(MAX_X, MIN_Y, 0.7f, 12.0f);
+        autoMover = new AutoMover(MAX_X*2, MIN_Y*2, 0.7f, 12.0f);
         snakes.add(new Snake(0));
         fruitPosition = new ArrayList<>();
         scores = new ArrayList<>();
@@ -73,7 +73,7 @@ public class GameBoard implements Serializable {
         fruitPosition.add(saveData.getFruitPosition().get(0));
         auto_dual = false;
         is_auto = false;
-        autoMover = new AutoMover(MAX_X, MIN_Y, 1.5f, 12.0f);
+        autoMover = new AutoMover(MAX_X*2, MIN_Y*2, 1.5f, 12.0f);
         player_num = 1;
     }
 

@@ -14,7 +14,7 @@ public class Camera {
     private Vector3f position;
     private Matrix4f projection;
 
-    private final double MAX_CAM_VIEW = 2.0;
+    private final double MAX_CAM_VIEW = 4.0;
     //TODO 넓게
 
     public Camera(int width, int height) {
