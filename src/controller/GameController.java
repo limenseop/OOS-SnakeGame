@@ -46,7 +46,7 @@ public class GameController {
         this.gameboard = gameboard;
         this.mainboard = board;
         tilerender = new TileRenderer();
-        dualboard = new Board(board.getWidth()*2, board.getHeight()*2, board.getScale());
+        dualboard = new Board(board.getWidth()*2, board.getHeight()*2, board.getScale()/2);
         dualcam = new DualCamera(mainwindow.getWidth(), mainwindow.getHeight(), dualboard.getWidth());
     }
 
