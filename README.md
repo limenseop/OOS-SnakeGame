@@ -57,5 +57,13 @@ Class Explanation
 
 4. Controller
 - Class that mediates the interaction of gameBoard, renderer, and LWGJL window.
-- Defines the keyboard Event handler
+- Defines the keyboard Event handler and mode of the game
 - loop : practical operation
+
+5. Ranking
+- Class to control and recall ranking information including ID and score.
+- Method : Ranking, getId, getScore, compareTo, toString
+
+6. AutoMover
+- At Auto play mode in the game, this class controls the algorithm of opponent AI snake.
+- Method : AutoMover, getNextDirection, getClosedApple, getDirectionbyApple, getFilteredBody, getDirectionbyCenter, getDirectionbyBody, detectAxlebyDirection, getDistancefromPos, getDistancefromBody, getDistancetoBoundary(Snake)
